@@ -27,6 +27,7 @@ string? connectionString = builder.Configuration.GetConnectionString("SqliteConn
 
 builder.Services.AddDbContext(connectionString!);
 
+//Use ApiEndPoint
 //builder.Services.AddFastEndpoints();
 //builder.Services.AddFastEndpointsApiExplorer();
 
