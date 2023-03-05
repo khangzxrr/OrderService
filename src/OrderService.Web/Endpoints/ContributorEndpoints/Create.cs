@@ -1,10 +1,14 @@
 ﻿using OrderService.Core.ContributorAggregate;
 using OrderService.SharedKernel.Interfaces;
-using FastEndpoints;
+using Ardalis.ApiEndpoints;
+using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace OrderService.Web.Endpoints.ContributorEndpoints;
 
-public class Create : Endpoint<CreateContributorRequest, CreateContributorResponse>
+public class Create : EndpointBaseAsync
+  .WithRequest<CreateContributorRequest>
+  .WithActionResult<CreateContributorResponse>
 {
   private readonly IRepository<Contributor> _repository;
 
@@ -13,30 +17,33 @@ public class Create : Endpoint<CreateContributorRequest, CreateContributorRespon
     _repository = repository;
   }
 
-  public override void Configure()
-  {
-    Post(CreateContributorRequest.Route);
-    AllowAnonymous();
-    Options(x => x
-      .WithTags("ContributorEndpoints"));
-  }
-  public override async Task HandleAsync(
-    CreateContributorRequest request,
-    CancellationToken cancellationToken)
+  [HttpPost("/Contributors")]
+  [SwaggerOperation(
+    Summary = "Create a new Contributor",
+    Description = "Create a new Contributor",
+    OperationId = "Contributor.Create",
+    Tags = new[] { "ContributorEndPoints" }
+    )
+   ]
+  public override async Task<ActionResult<CreateContributorResponse>> HandleAsync(
+      CreateContributorRequest request,
+      CancellationToken cancellationToken = new())
   {
     if (request.Name == null)
     {
-      ThrowError("Name is required");
+      return BadRequest();
     }
 
     var newContributor = new Contributor(request.Name);
-    var createdItem = await _repository.AddAsync(newContributor, cancellationToken);
-    var response = new CreateContributorResponse
-    (
-      id: createdItem.Id,
-      name: createdItem.Name
-    );
+    var createdContributor = await _repository.AddAsync(newContributor, cancellationToken);
+    var response = new CreateContributorResponse(
+      id: createdContributor.Id,
+      name: createdContributor.Name
+      );
 
-    await SendAsync(response);
+    return Ok(response);
+
+
   }
+
 }

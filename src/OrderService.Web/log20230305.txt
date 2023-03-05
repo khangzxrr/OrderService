@@ -421,3 +421,83 @@ FROM "Projects" AS "p"
 2023-03-05 02:17:46.637 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57678/listservices - - - 200 - - 4.2289ms
 2023-03-05 02:17:55.586 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57678/_framework/aspnetcore-browser-refresh.js - -
 2023-03-05 02:17:55.587 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57678/_framework/aspnetcore-browser-refresh.js - - - 200 12002 application/javascript;+charset=utf-8 1.3774ms
+2023-03-05 02:52:47.029 +07:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "type" = 'table' AND "rootpage" IS NOT NULL;
+2023-03-05 02:52:47.147 +07:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "ToDoItems" AS "t")
+2023-03-05 02:52:47.187 +07:00 [INF] Now listening on: http://localhost:62455
+2023-03-05 02:52:47.188 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2023-03-05 02:52:47.188 +07:00 [INF] Hosting environment: Development
+2023-03-05 02:52:47.188 +07:00 [INF] Content root path: /Users/linhha/Desktop/OrderService/src/OrderService.Web
+2023-03-05 02:52:49.040 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:62455/ - -
+2023-03-05 02:52:49.055 +07:00 [WRN] Failed to determine the https port for redirect.
+2023-03-05 02:52:49.070 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:62455/ - - - 404 0 - 30.3983ms
+2023-03-05 02:53:11.033 +07:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "type" = 'table' AND "rootpage" IS NOT NULL;
+2023-03-05 02:53:11.146 +07:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "ToDoItems" AS "t")
+2023-03-05 02:53:30.510 +07:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "type" = 'table' AND "rootpage" IS NOT NULL;
+2023-03-05 02:53:30.622 +07:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "ToDoItems" AS "t")
+2023-03-05 02:53:30.659 +07:00 [INF] Now listening on: http://localhost:57679
+2023-03-05 02:53:30.660 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2023-03-05 02:53:30.660 +07:00 [INF] Hosting environment: Development
+2023-03-05 02:53:30.660 +07:00 [INF] Content root path: /Users/linhha/Desktop/OrderService/src/OrderService.Web
+2023-03-05 02:53:32.398 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/ - -
+2023-03-05 02:53:32.415 +07:00 [WRN] Failed to determine the https port for redirect.
+2023-03-05 02:53:32.431 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/ - - - 404 0 - 34.2419ms
+2023-03-05 02:53:38.000 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/swagger/ - -
+2023-03-05 02:53:38.002 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/swagger/ - - - 301 0 - 2.5904ms
+2023-03-05 02:53:38.008 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/swagger/index.html - -
+2023-03-05 02:53:38.063 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/swagger/index.html - - - 200 - text/html;charset=utf-8 54.4878ms
+2023-03-05 02:53:38.076 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/swagger/swagger-ui.css - -
+2023-03-05 02:53:38.099 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/swagger/swagger-ui-bundle.js - -
+2023-03-05 02:53:38.099 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/swagger/swagger-ui-standalone-preset.js - -
+2023-03-05 02:53:38.392 +07:00 [INF] Sending file. Request path: '/swagger-ui.css'. Physical path: 'N/A'
+2023-03-05 02:53:38.392 +07:00 [INF] Sending file. Request path: '/swagger-ui-bundle.js'. Physical path: 'N/A'
+2023-03-05 02:53:38.392 +07:00 [INF] Sending file. Request path: '/swagger-ui-standalone-preset.js'. Physical path: 'N/A'
+2023-03-05 02:53:38.395 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/swagger/swagger-ui.css - - - 200 143943 text/css 318.4340ms
+2023-03-05 02:53:38.395 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/swagger/swagger-ui-bundle.js - - - 200 1096145 text/javascript 316.0219ms
+2023-03-05 02:53:38.395 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/swagger/swagger-ui-standalone-preset.js - - - 200 339486 text/javascript 295.4502ms
+2023-03-05 02:53:38.491 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/swagger/v1/swagger.json - -
+2023-03-05 02:53:38.498 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/swagger/favicon-32x32.png - -
+2023-03-05 02:53:38.498 +07:00 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2023-03-05 02:53:38.499 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/swagger/favicon-32x32.png - - - 200 628 image/png 0.8795ms
+2023-03-05 02:53:38.562 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 71.2155ms
+2023-03-05 02:53:42.565 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/Projects - -
+2023-03-05 02:53:42.571 +07:00 [INF] Executing endpoint 'OrderService.Web.Endpoints.ProjectEndpoints.List.HandleAsync (OrderService.Web)'
+2023-03-05 02:53:42.597 +07:00 [INF] Route matched with {action = "Handle", controller = "List"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[OrderService.Web.Endpoints.ProjectEndpoints.ProjectListResponse]] HandleAsync(System.Threading.CancellationToken) on controller OrderService.Web.Endpoints.ProjectEndpoints.List (OrderService.Web).
+2023-03-05 02:53:42.668 +07:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "p"."Id", "p"."Name", "p"."Priority"
+FROM "Projects" AS "p"
+2023-03-05 02:53:42.694 +07:00 [INF] Executing OkObjectResult, writing value of type 'OrderService.Web.Endpoints.ProjectEndpoints.ProjectListResponse'.
+2023-03-05 02:53:42.698 +07:00 [INF] Executed action OrderService.Web.Endpoints.ProjectEndpoints.List.HandleAsync (OrderService.Web) in 99.2884ms
+2023-03-05 02:53:42.698 +07:00 [INF] Executed endpoint 'OrderService.Web.Endpoints.ProjectEndpoints.List.HandleAsync (OrderService.Web)'
+2023-03-05 02:53:42.700 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/Projects - - - 200 - application/json;+charset=utf-8 134.7112ms
+2023-03-05 09:37:48.538 +07:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "type" = 'table' AND "rootpage" IS NOT NULL;
+2023-03-05 09:37:48.651 +07:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "ToDoItems" AS "t")
+2023-03-05 09:37:48.686 +07:00 [INF] Now listening on: http://localhost:57679
+2023-03-05 09:37:48.686 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2023-03-05 09:37:48.687 +07:00 [INF] Hosting environment: Development
+2023-03-05 09:37:48.687 +07:00 [INF] Content root path: /Users/linhha/Desktop/OrderService/src/OrderService.Web
+2023-03-05 09:37:49.797 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/ - -
+2023-03-05 09:37:49.814 +07:00 [WRN] Failed to determine the https port for redirect.
+2023-03-05 09:37:49.826 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/ - - - 404 0 - 29.6712ms
+2023-03-05 09:37:53.300 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/swagger/index.html - -
+2023-03-05 09:37:53.360 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/swagger/index.html - - - 200 - text/html;charset=utf-8 59.5579ms
+2023-03-05 09:37:53.375 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/swagger/swagger-ui-bundle.js - -
+2023-03-05 09:37:53.540 +07:00 [INF] Sending file. Request path: '/swagger-ui-bundle.js'. Physical path: 'N/A'
+2023-03-05 09:37:53.542 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/swagger/swagger-ui-bundle.js - - - 200 1096145 text/javascript 166.8429ms
+2023-03-05 09:37:53.619 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/swagger/v1/swagger.json - -
+2023-03-05 09:37:53.695 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 76.2602ms
