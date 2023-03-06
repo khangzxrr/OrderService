@@ -1,10 +1,14 @@
-﻿using FastEndpoints;
-using Ardalis.Result;
+﻿using Ardalis.Result;
 using OrderService.Core.Interfaces;
+using Ardalis.ApiEndpoints;
+using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace OrderService.Web.Endpoints.ContributorEndpoints;
 
-public class Delete : Endpoint<DeleteContributorRequest>
+public class Delete : EndpointBaseAsync
+  .WithRequest<DeleteContributorRequest>
+  .WithoutResult
 {
 
   private readonly IDeleteContributorService _deleteContributorService;
@@ -14,14 +18,14 @@ public class Delete : Endpoint<DeleteContributorRequest>
     _deleteContributorService = service;
   }
 
-  public override void Configure()
-  {
-    Delete(DeleteContributorRequest.Route);
-    AllowAnonymous();
-    Options(x => x
-      .WithTags("ContributorEndpoints"));
-  }
-  public override async Task HandleAsync(
+  [HttpDelete(DeleteContributorRequest.Route)]
+  [SwaggerOperation(
+      Summary = "Deletes a contributor",
+      Description = "Deletes a contributor",
+      OperationId = "Contributors.Delete",
+      Tags = new[] { "ContributorEndpoints" })
+    ]
+  public override async Task<ActionResult> HandleAsync(
     DeleteContributorRequest request,
     CancellationToken cancellationToken)
   {
@@ -29,10 +33,9 @@ public class Delete : Endpoint<DeleteContributorRequest>
 
     if (result.Status == ResultStatus.NotFound)
     {
-      await SendNotFoundAsync();
-      return;
+      return NotFound();
     }
 
-    await SendNoContentAsync();
+    return NoContent();
   }
 }
