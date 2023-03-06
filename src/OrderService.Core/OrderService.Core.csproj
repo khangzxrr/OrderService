@@ -20,4 +20,12 @@
     <ProjectReference Include="..\OrderService.SharedKernel\OrderService.SharedKernel.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="UserAggregate\" />
+    <None Remove="UserAggregate\Events\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="UserAggregate\" />
+    <Folder Include="UserAggregate\Events\" />
+  </ItemGroup>
 </Project>
