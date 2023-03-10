@@ -12,8 +12,8 @@ using OrderService.Infrastructure.Data;
 namespace OrderService.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230310081037_removeCustomerIdFromOrder")]
-    partial class removeCustomerIdFromOrder
+    [Migration("20230310094844_AddProduct2")]
+    partial class AddProduct2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,6 +41,26 @@ namespace OrderService.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Contributors");
+                });
+
+            modelBuilder.Entity("OrderService.Core.CurrencyAggregate.CurrencyExchange", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("fromCurrency")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("rate")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CurrencyExchange");
                 });
 
             modelBuilder.Entity("OrderService.Core.OrderAggregate.Order", b =>
@@ -121,6 +141,127 @@ namespace OrderService.Infrastructure.Migrations
                     b.HasIndex("OrderId");
 
                     b.ToTable("OrderPayment");
+                });
+
+            modelBuilder.Entity("OrderService.Core.ProductAggregate.Product", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("currencyExchangeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("productCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("productDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("productImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("productName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<float>("productPrice")
+                        .HasColumnType("real");
+
+                    b.Property<string>("productReturnDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("productReturnDuration")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("productReturnable")
+                        .HasColumnType("bit");
+
+                    b.Property<float>("productSellerAddress")
+                        .HasMaxLength(200)
+                        .HasColumnType("real");
+
+                    b.Property<float>("productSellerEmail")
+                        .HasMaxLength(200)
+                        .HasColumnType("real");
+
+                    b.Property<int>("productShipCostId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("productURL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("productWarrantable")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("productWarrantyDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("productWarrantyDuration")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("productWeight")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("currencyExchangeId");
+
+                    b.HasIndex("productCategoryId");
+
+                    b.HasIndex("productShipCostId");
+
+                    b.ToTable("Product");
+                });
+
+            modelBuilder.Entity("OrderService.Core.ProductAggregate.ProductCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("productCategoryName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProductCategory");
+                });
+
+            modelBuilder.Entity("OrderService.Core.ProductAggregate.ProductShipCost", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<float>("cost")
+                        .HasColumnType("real");
+
+                    b.Property<int>("productCategoryId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("productCategoryId")
+                        .IsUnique();
+
+                    b.ToTable("ProductShipCost");
                 });
 
             modelBuilder.Entity("OrderService.Core.ProjectAggregate.Project", b =>
@@ -242,6 +383,44 @@ namespace OrderService.Infrastructure.Migrations
                         .HasForeignKey("OrderId");
                 });
 
+            modelBuilder.Entity("OrderService.Core.ProductAggregate.Product", b =>
+                {
+                    b.HasOne("OrderService.Core.CurrencyAggregate.CurrencyExchange", "currencyExchange")
+                        .WithMany()
+                        .HasForeignKey("currencyExchangeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OrderService.Core.ProductAggregate.ProductCategory", "productCategory")
+                        .WithMany()
+                        .HasForeignKey("productCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OrderService.Core.ProductAggregate.ProductShipCost", "productShipCost")
+                        .WithMany()
+                        .HasForeignKey("productShipCostId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("currencyExchange");
+
+                    b.Navigation("productCategory");
+
+                    b.Navigation("productShipCost");
+                });
+
+            modelBuilder.Entity("OrderService.Core.ProductAggregate.ProductShipCost", b =>
+                {
+                    b.HasOne("OrderService.Core.ProductAggregate.ProductCategory", "productCategory")
+                        .WithOne("productShipCost")
+                        .HasForeignKey("OrderService.Core.ProductAggregate.ProductShipCost", "productCategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("productCategory");
+                });
+
             modelBuilder.Entity("OrderService.Core.ProjectAggregate.ToDoItem", b =>
                 {
                     b.HasOne("OrderService.Core.ProjectAggregate.Project", null)
@@ -252,6 +431,12 @@ namespace OrderService.Infrastructure.Migrations
             modelBuilder.Entity("OrderService.Core.OrderAggregate.Order", b =>
                 {
                     b.Navigation("orderPayments");
+                });
+
+            modelBuilder.Entity("OrderService.Core.ProductAggregate.ProductCategory", b =>
+                {
+                    b.Navigation("productShipCost")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("OrderService.Core.ProjectAggregate.Project", b =>

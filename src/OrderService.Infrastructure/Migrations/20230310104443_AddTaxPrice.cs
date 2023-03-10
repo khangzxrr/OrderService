@@ -5,25 +5,25 @@
 namespace OrderService.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitUserEntity2 : Migration
+    public partial class AddTaxPrice : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "guid",
-                table: "Users",
-                type: "nvarchar(max)",
+            migrationBuilder.AddColumn<float>(
+                name: "taxPrice",
+                table: "ProductTax",
+                type: "real",
                 nullable: false,
-                defaultValue: "");
+                defaultValue: 0f);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "guid",
-                table: "Users");
+                name: "taxPrice",
+                table: "ProductTax");
         }
     }
 }

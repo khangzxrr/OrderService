@@ -1,11 +1,13 @@
 ﻿
 using Ardalis.GuardClauses;
+using OrderService.Core.ChatAggregate;
 using OrderService.SharedKernel;
 using OrderService.SharedKernel.Interfaces;
 
 namespace OrderService.Core.OrderAggregate;
 public class Order : EntityBase, IAggregateRoot
 {
+  public Chat chat { get; set; }
   public DateTime orderDate { get; }
   public OrderStatus status { get; }
   public string orderDescription { get; }
@@ -18,8 +20,18 @@ public class Order : EntityBase, IAggregateRoot
   private readonly List<OrderPayment> _orderPayment = new List<OrderPayment>();
   public IReadOnlyCollection<OrderPayment> orderPayments => _orderPayment.AsReadOnly();
 
+  private readonly List<OrderDetail> _orderDetails = new List<OrderDetail>();
+  public IReadOnlyCollection<OrderDetail> orderDetails => _orderDetails.AsReadOnly();
+
+  public void addOrderDetail(OrderDetail orderDetail)
+  {
+    Guard.Against.Null(orderDetail);
+    _orderDetails.Add(orderDetail);
+  }
 
 
+
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
   public Order(
     DateTime orderDate, 
     OrderStatus status,

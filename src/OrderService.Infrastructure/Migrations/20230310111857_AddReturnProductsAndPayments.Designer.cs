@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OrderService.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using OrderService.Infrastructure.Data;
 namespace OrderService.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230310111857_AddReturnProductsAndPayments")]
+    partial class AddReturnProductsAndPayments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,54 +24,6 @@ namespace OrderService.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("OrderService.Core.ChatAggregate.Chat", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("customerId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("employeeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("customerId");
-
-                    b.HasIndex("employeeId");
-
-                    b.ToTable("Chat");
-                });
-
-            modelBuilder.Entity("OrderService.Core.ChatAggregate.ChatMessage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("ChatId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("isFromEmployee")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("message")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ChatId");
-
-                    b.ToTable("ChatMessage");
-                });
 
             modelBuilder.Entity("OrderService.Core.ContributorAggregate.Contributor", b =>
                 {
@@ -139,9 +94,6 @@ namespace OrderService.Infrastructure.Migrations
                     b.Property<int?>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<int>("chatId")
-                        .HasColumnType("int");
-
                     b.Property<string>("contactPhonenumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -175,8 +127,6 @@ namespace OrderService.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
-
-                    b.HasIndex("chatId");
 
                     b.ToTable("Order");
                 });
@@ -686,45 +636,11 @@ namespace OrderService.Infrastructure.Migrations
                     b.ToTable("ProductProductTax");
                 });
 
-            modelBuilder.Entity("OrderService.Core.ChatAggregate.Chat", b =>
-                {
-                    b.HasOne("OrderService.Core.UserAggregate.User", "customer")
-                        .WithMany()
-                        .HasForeignKey("customerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("OrderService.Core.UserAggregate.User", "employee")
-                        .WithMany()
-                        .HasForeignKey("employeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("customer");
-
-                    b.Navigation("employee");
-                });
-
-            modelBuilder.Entity("OrderService.Core.ChatAggregate.ChatMessage", b =>
-                {
-                    b.HasOne("OrderService.Core.ChatAggregate.Chat", null)
-                        .WithMany("chatMessages")
-                        .HasForeignKey("ChatId");
-                });
-
             modelBuilder.Entity("OrderService.Core.OrderAggregate.Order", b =>
                 {
                     b.HasOne("OrderService.Core.UserAggregate.User", null)
                         .WithMany("orders")
                         .HasForeignKey("UserId");
-
-                    b.HasOne("OrderService.Core.ChatAggregate.Chat", "chat")
-                        .WithMany()
-                        .HasForeignKey("chatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("chat");
                 });
 
             modelBuilder.Entity("OrderService.Core.OrderAggregate.OrderDetail", b =>
@@ -875,11 +791,6 @@ namespace OrderService.Infrastructure.Migrations
                         .HasForeignKey("productsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("OrderService.Core.ChatAggregate.Chat", b =>
-                {
-                    b.Navigation("chatMessages");
                 });
 
             modelBuilder.Entity("OrderService.Core.OrderAggregate.Order", b =>
