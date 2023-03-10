@@ -42,7 +42,7 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
           .GetRequiredService<ILogger<CustomWebApplicationFactory<TStartup>>>();
 
       // Ensure the database is created.
-      db.Database.EnsureCreated();
+      //db.Database.EnsureCreated();
 
       try
       {
@@ -50,7 +50,7 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
         //if (!db.ToDoItems.Any())
         //{
         // Seed the database with test data.
-        SeedData.PopulateTestData(db);
+        //SeedData.PopulateTestData(db);
         //}
       }
       catch (Exception ex)

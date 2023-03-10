@@ -1,16 +1,13 @@
-﻿using System;
-using Ardalis.SmartEnum;
-using OrderService.Core.ProjectAggregate;
+﻿using Ardalis.SmartEnum;
 
-namespace OrderService.Core.UserAggregate
+namespace OrderService.Core.UserAggregate;
+
+public class UserVerify : SmartEnum<UserVerify>
 {
-  public class UserVerify : SmartEnum<UserVerify>
-  {
-    public static readonly UserVerify actived = new(nameof(actived),1);
-    public static readonly UserVerify disabled = new(nameof(disabled), 0);
+  public static readonly UserVerify actived = new(nameof(actived),1);
+  public static readonly UserVerify disabled = new(nameof(disabled), 0);
 
-    protected UserVerify(string name, int value) : base(name, value) { }
+  protected UserVerify(string name, int value) : base(name, value) { }
 
-  }
 }
 

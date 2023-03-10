@@ -4,6 +4,7 @@ using OrderService.Core.ProjectAggregate;
 using OrderService.SharedKernel;
 using OrderService.SharedKernel.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using OrderService.Core.UserAggregate;
 
 namespace OrderService.Infrastructure.Data;
 
@@ -21,6 +22,8 @@ public class AppDbContext : DbContext
   public DbSet<ToDoItem> ToDoItems => Set<ToDoItem>();
   public DbSet<Project> Projects => Set<Project>();
   public DbSet<Contributor> Contributors => Set<Contributor>(); 
+
+  public DbSet<User> Users => Set<User>();
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
