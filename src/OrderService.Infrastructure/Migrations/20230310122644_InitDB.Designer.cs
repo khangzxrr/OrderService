@@ -12,8 +12,8 @@ using OrderService.Infrastructure.Data;
 namespace OrderService.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230310111857_AddReturnProductsAndPayments")]
-    partial class AddReturnProductsAndPayments
+    [Migration("20230310122644_InitDB")]
+    partial class InitDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,54 @@ namespace OrderService.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("OrderService.Core.ChatAggregate.Chat", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("customerId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("employeeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("customerId");
+
+                    b.HasIndex("employeeId");
+
+                    b.ToTable("Chat");
+                });
+
+            modelBuilder.Entity("OrderService.Core.ChatAggregate.ChatMessage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ChatId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("isFromEmployee")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChatId");
+
+                    b.ToTable("ChatMessage");
+                });
 
             modelBuilder.Entity("OrderService.Core.ContributorAggregate.Contributor", b =>
                 {
@@ -94,6 +142,9 @@ namespace OrderService.Infrastructure.Migrations
                     b.Property<int?>("UserId")
                         .HasColumnType("int");
 
+                    b.Property<int>("chatId")
+                        .HasColumnType("int");
+
                     b.Property<string>("contactPhonenumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -127,6 +178,8 @@ namespace OrderService.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
+
+                    b.HasIndex("chatId");
 
                     b.ToTable("Order");
                 });
@@ -271,6 +324,43 @@ namespace OrderService.Infrastructure.Migrations
                     b.HasIndex("ProductReturnId");
 
                     b.ToTable("ReturnPayment");
+                });
+
+            modelBuilder.Entity("OrderService.Core.OrderShippingAggregate.OrderShipping", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("orderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("orderShippingStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int>("shipperId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("shippingDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("shippingUsing3rd")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("signatureImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("orderId");
+
+                    b.HasIndex("shipperId");
+
+                    b.ToTable("OrderShipping");
                 });
 
             modelBuilder.Entity("OrderService.Core.ProductAggregate.Product", b =>
@@ -554,6 +644,38 @@ namespace OrderService.Infrastructure.Migrations
                     b.ToTable("ToDoItems");
                 });
 
+            modelBuilder.Entity("OrderService.Core.ShipperAggregate.Shipper", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("shippingDistrict")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("shippingEndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("shippingStartTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("shippingStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int>("userId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("userId")
+                        .IsUnique();
+
+                    b.ToTable("Shipper");
+                });
+
             modelBuilder.Entity("OrderService.Core.UserAggregate.User", b =>
                 {
                     b.Property<int>("Id")
@@ -636,11 +758,43 @@ namespace OrderService.Infrastructure.Migrations
                     b.ToTable("ProductProductTax");
                 });
 
+            modelBuilder.Entity("OrderService.Core.ChatAggregate.Chat", b =>
+                {
+                    b.HasOne("OrderService.Core.UserAggregate.User", "customer")
+                        .WithMany()
+                        .HasForeignKey("customerId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("OrderService.Core.UserAggregate.User", "employee")
+                        .WithMany()
+                        .HasForeignKey("employeeId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("customer");
+
+                    b.Navigation("employee");
+                });
+
+            modelBuilder.Entity("OrderService.Core.ChatAggregate.ChatMessage", b =>
+                {
+                    b.HasOne("OrderService.Core.ChatAggregate.Chat", null)
+                        .WithMany("chatMessages")
+                        .HasForeignKey("ChatId");
+                });
+
             modelBuilder.Entity("OrderService.Core.OrderAggregate.Order", b =>
                 {
                     b.HasOne("OrderService.Core.UserAggregate.User", null)
                         .WithMany("orders")
                         .HasForeignKey("UserId");
+
+                    b.HasOne("OrderService.Core.ChatAggregate.Chat", "chat")
+                        .WithMany()
+                        .HasForeignKey("chatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("chat");
                 });
 
             modelBuilder.Entity("OrderService.Core.OrderAggregate.OrderDetail", b =>
@@ -685,6 +839,25 @@ namespace OrderService.Infrastructure.Migrations
                     b.HasOne("OrderService.Core.OrderAggregate.ProductReturn", null)
                         .WithMany("returnPayments")
                         .HasForeignKey("ProductReturnId");
+                });
+
+            modelBuilder.Entity("OrderService.Core.OrderShippingAggregate.OrderShipping", b =>
+                {
+                    b.HasOne("OrderService.Core.OrderAggregate.Order", "order")
+                        .WithMany()
+                        .HasForeignKey("orderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OrderService.Core.ShipperAggregate.Shipper", "shipper")
+                        .WithMany("OrderShippings")
+                        .HasForeignKey("shipperId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("order");
+
+                    b.Navigation("shipper");
                 });
 
             modelBuilder.Entity("OrderService.Core.ProductAggregate.Product", b =>
@@ -763,6 +936,17 @@ namespace OrderService.Infrastructure.Migrations
                         .HasForeignKey("ProjectId");
                 });
 
+            modelBuilder.Entity("OrderService.Core.ShipperAggregate.Shipper", b =>
+                {
+                    b.HasOne("OrderService.Core.UserAggregate.User", "user")
+                        .WithOne("shipper")
+                        .HasForeignKey("OrderService.Core.ShipperAggregate.Shipper", "userId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("user");
+                });
+
             modelBuilder.Entity("ProductHistoryProductTax", b =>
                 {
                     b.HasOne("OrderService.Core.ProductAggregate.ProductHistory", null)
@@ -791,6 +975,11 @@ namespace OrderService.Infrastructure.Migrations
                         .HasForeignKey("productsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("OrderService.Core.ChatAggregate.Chat", b =>
+                {
+                    b.Navigation("chatMessages");
                 });
 
             modelBuilder.Entity("OrderService.Core.OrderAggregate.Order", b =>
@@ -826,9 +1015,16 @@ namespace OrderService.Infrastructure.Migrations
                     b.Navigation("Items");
                 });
 
+            modelBuilder.Entity("OrderService.Core.ShipperAggregate.Shipper", b =>
+                {
+                    b.Navigation("OrderShippings");
+                });
+
             modelBuilder.Entity("OrderService.Core.UserAggregate.User", b =>
                 {
                     b.Navigation("orders");
+
+                    b.Navigation("shipper");
                 });
 #pragma warning restore 612, 618
         }

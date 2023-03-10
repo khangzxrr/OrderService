@@ -1,6 +1,7 @@
 ﻿
 using Ardalis.GuardClauses;
 using OrderService.Core.OrderAggregate;
+using OrderService.Core.ShipperAggregate;
 using OrderService.SharedKernel;
 using OrderService.SharedKernel.Interfaces;
 
@@ -20,6 +21,9 @@ public class User: EntityBase, IAggregateRoot
   public UserRole role { get; }
 
   private List<Order> _orders = new List<Order>();
+
+  public Shipper? shipper { get; private set; }
+
   public IReadOnlyCollection<Order> orders => _orders.AsReadOnly();
   public User(
     string guid,
