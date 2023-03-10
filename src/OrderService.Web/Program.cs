@@ -26,9 +26,15 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
 string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");  
 builder.Services.AddDbContext(connectionString!);
 
-//Use ApiEndPoint
-//builder.Services.AddFastEndpoints();
-//builder.Services.AddFastEndpointsApiExplorer();
+var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
+builder.Services.AddCors(options =>
+{
+  options.AddPolicy(name: myAllowSpecificOrigins,
+                    policy =>
+                    {
+                      policy.WithOrigins("http://localhost:5173");
+                    });
+});
 
 builder.Services.AddControllers(); 
 
@@ -74,6 +80,8 @@ app.UseRouting();
 app.MapControllers();
 app.UseHttpsRedirection();
 app.UseCookiePolicy();
+
+app.UseCors(myAllowSpecificOrigins);
 
 // Enable middleware to serve generated Swagger as a JSON endpoint.
 app.UseSwagger();
