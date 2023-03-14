@@ -1,0 +1,464 @@
+2023-03-14 12:23:02.626 +07:00 [INF] Executed DbCommand (20ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2023-03-14 12:23:02.764 +07:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+
+IF EXISTS
+    (SELECT *
+     FROM [sys].[objects] o
+     WHERE [o].[type] = 'U'
+     AND [o].[is_ms_shipped] = 0
+     AND NOT EXISTS (SELECT *
+         FROM [sys].[extended_properties] AS [ep]
+         WHERE [ep].[major_id] = [o].[object_id]
+             AND [ep].[minor_id] = 0
+             AND [ep].[class] = 1
+             AND [ep].[name] = N'microsoft_database_tools_support'
+    )
+)
+SELECT 1 ELSE SELECT 0
+2023-03-14 12:23:03.013 +07:00 [INF] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [ToDoItems] AS [t]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2023-03-14 12:23:03.066 +07:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Name], [p].[Priority]
+FROM [Projects] AS [p]
+2023-03-14 12:23:03.076 +07:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [t].[Id], [t].[ContributorId], [t].[Description], [t].[IsDone], [t].[ProjectId], [t].[Title]
+FROM [ToDoItems] AS [t]
+2023-03-14 12:23:03.085 +07:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[Name]
+FROM [Contributors] AS [c]
+2023-03-14 12:23:03.344 +07:00 [INF] Executed DbCommand (63ms) [Parameters=[@p0='?' (Size = 100), @p1='?' (Size = 100)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+MERGE [Contributors] USING (
+VALUES (@p0, 0),
+(@p1, 1)) AS i ([Name], _Position) ON 1=0
+WHEN NOT MATCHED THEN
+INSERT ([Name])
+VALUES (i.[Name])
+OUTPUT INSERTED.[Id], i._Position;
+2023-03-14 12:23:03.515 +07:00 [INF] Executed DbCommand (4ms) [Parameters=[@p0='?' (Size = 100), @p1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Projects] ([Name], [Priority])
+OUTPUT INSERTED.[Id]
+VALUES (@p0, @p1);
+2023-03-14 12:23:03.536 +07:00 [INF] Executed DbCommand (9ms) [Parameters=[@p2='?' (DbType = Int32), @p3='?' (Size = 4000), @p4='?' (DbType = Boolean), @p5='?' (DbType = Int32), @p6='?' (Size = 4000), @p7='?' (DbType = Int32), @p8='?' (Size = 4000), @p9='?' (DbType = Boolean), @p10='?' (DbType = Int32), @p11='?' (Size = 4000), @p12='?' (DbType = Int32), @p13='?' (Size = 4000), @p14='?' (DbType = Boolean), @p15='?' (DbType = Int32), @p16='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+MERGE [ToDoItems] USING (
+VALUES (@p2, @p3, @p4, @p5, @p6, 0),
+(@p7, @p8, @p9, @p10, @p11, 1),
+(@p12, @p13, @p14, @p15, @p16, 2)) AS i ([ContributorId], [Description], [IsDone], [ProjectId], [Title], _Position) ON 1=0
+WHEN NOT MATCHED THEN
+INSERT ([ContributorId], [Description], [IsDone], [ProjectId], [Title])
+VALUES (i.[ContributorId], i.[Description], i.[IsDone], i.[ProjectId], i.[Title])
+OUTPUT INSERTED.[Id], i._Position;
+2023-03-14 12:23:03.711 +07:00 [INF] Now listening on: http://localhost:57679
+2023-03-14 12:23:03.715 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2023-03-14 12:23:03.717 +07:00 [INF] Hosting environment: Development
+2023-03-14 12:23:03.718 +07:00 [INF] Content root path: D:\OrderService\src\OrderService.Web
+2023-03-14 12:23:04.356 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/ - -
+2023-03-14 12:23:04.428 +07:00 [WRN] Failed to determine the https port for redirect.
+2023-03-14 12:23:04.466 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/ - - - 404 0 - 112.7122ms
+2023-03-14 12:23:10.813 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/swagger/ - -
+2023-03-14 12:23:10.819 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/swagger/ - - - 301 0 - 6.3786ms
+2023-03-14 12:23:10.825 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/swagger/index.html - -
+2023-03-14 12:23:11.049 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/swagger/index.html - - - 200 - text/html;charset=utf-8 223.4326ms
+2023-03-14 12:23:11.089 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/_vs/browserLink - -
+2023-03-14 12:23:11.090 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/_framework/aspnetcore-browser-refresh.js - -
+2023-03-14 12:23:11.099 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/_framework/aspnetcore-browser-refresh.js - - - 200 12002 application/javascript;+charset=utf-8 8.2194ms
+2023-03-14 12:23:11.158 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 68.6576ms
+2023-03-14 12:23:11.209 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/swagger/favicon-32x32.png - -
+2023-03-14 12:23:11.223 +07:00 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2023-03-14 12:23:11.225 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/swagger/favicon-32x32.png - - - 0 628 image/png 16.5898ms
+2023-03-14 12:23:11.316 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/swagger/v1/swagger.json - -
+2023-03-14 12:23:11.461 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 144.9462ms
+2023-03-14 12:27:06.629 +07:00 [INF] Executed DbCommand (19ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2023-03-14 12:27:06.747 +07:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+
+IF EXISTS
+    (SELECT *
+     FROM [sys].[objects] o
+     WHERE [o].[type] = 'U'
+     AND [o].[is_ms_shipped] = 0
+     AND NOT EXISTS (SELECT *
+         FROM [sys].[extended_properties] AS [ep]
+         WHERE [ep].[major_id] = [o].[object_id]
+             AND [ep].[minor_id] = 0
+             AND [ep].[class] = 1
+             AND [ep].[name] = N'microsoft_database_tools_support'
+    )
+)
+SELECT 1 ELSE SELECT 0
+2023-03-14 12:27:06.960 +07:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [ToDoItems] AS [t]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2023-03-14 12:27:07.102 +07:00 [INF] Now listening on: http://localhost:57679
+2023-03-14 12:27:07.105 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2023-03-14 12:27:07.107 +07:00 [INF] Hosting environment: Development
+2023-03-14 12:27:07.107 +07:00 [INF] Content root path: D:\OrderService\src\OrderService.Web
+2023-03-14 12:27:07.841 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679//swagger - -
+2023-03-14 12:27:07.917 +07:00 [WRN] Failed to determine the https port for redirect.
+2023-03-14 12:27:07.964 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679//swagger - - - 404 0 - 125.3135ms
+2023-03-14 12:27:11.697 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/swagger/index.html - -
+2023-03-14 12:27:11.860 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/swagger/index.html - - - 200 - text/html;charset=utf-8 163.7058ms
+2023-03-14 12:27:11.897 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/_framework/aspnetcore-browser-refresh.js - -
+2023-03-14 12:27:11.901 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/_vs/browserLink - -
+2023-03-14 12:27:11.903 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/_framework/aspnetcore-browser-refresh.js - - - 200 12002 application/javascript;+charset=utf-8 5.5023ms
+2023-03-14 12:27:11.922 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 20.6636ms
+2023-03-14 12:27:12.018 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/swagger/favicon-32x32.png - -
+2023-03-14 12:27:12.027 +07:00 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2023-03-14 12:27:12.029 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/swagger/favicon-32x32.png - - - 0 628 image/png 10.9783ms
+2023-03-14 12:27:12.105 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/swagger/v1/swagger.json - -
+2023-03-14 12:27:12.239 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 133.6239ms
+2023-03-14 12:27:23.791 +07:00 [INF] Executed DbCommand (18ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2023-03-14 12:27:23.855 +07:00 [INF] Executed DbCommand (16ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+
+IF EXISTS
+    (SELECT *
+     FROM [sys].[objects] o
+     WHERE [o].[type] = 'U'
+     AND [o].[is_ms_shipped] = 0
+     AND NOT EXISTS (SELECT *
+         FROM [sys].[extended_properties] AS [ep]
+         WHERE [ep].[major_id] = [o].[object_id]
+             AND [ep].[minor_id] = 0
+             AND [ep].[class] = 1
+             AND [ep].[name] = N'microsoft_database_tools_support'
+    )
+)
+SELECT 1 ELSE SELECT 0
+2023-03-14 12:27:24.099 +07:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [ToDoItems] AS [t]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2023-03-14 12:27:24.226 +07:00 [INF] Now listening on: http://localhost:57679
+2023-03-14 12:27:24.230 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2023-03-14 12:27:24.231 +07:00 [INF] Hosting environment: Development
+2023-03-14 12:27:24.232 +07:00 [INF] Content root path: D:\OrderService\src\OrderService.Web
+2023-03-14 12:27:25.384 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/swagger/index.html - -
+2023-03-14 12:27:25.459 +07:00 [WRN] Failed to determine the https port for redirect.
+2023-03-14 12:27:25.671 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/swagger/index.html - - - 200 - text/html;charset=utf-8 289.8040ms
+2023-03-14 12:27:25.712 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/swagger/swagger-ui.css - -
+2023-03-14 12:27:25.726 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/_vs/browserLink - -
+2023-03-14 12:27:25.728 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/_framework/aspnetcore-browser-refresh.js - -
+2023-03-14 12:27:25.739 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/_framework/aspnetcore-browser-refresh.js - - - 200 12002 application/javascript;+charset=utf-8 10.8513ms
+2023-03-14 12:27:25.746 +07:00 [INF] Sending file. Request path: '/swagger-ui.css'. Physical path: 'N/A'
+2023-03-14 12:27:25.750 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/swagger/swagger-ui.css - - - 0 143943 text/css 37.7551ms
+2023-03-14 12:27:25.769 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 42.8061ms
+2023-03-14 12:27:25.865 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/swagger/favicon-32x32.png - -
+2023-03-14 12:27:25.867 +07:00 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2023-03-14 12:27:25.869 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/swagger/favicon-32x32.png - - - 0 628 image/png 4.4136ms
+2023-03-14 12:27:25.977 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/swagger/v1/swagger.json - -
+2023-03-14 12:27:26.113 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 136.5804ms
+2023-03-14 12:44:51.706 +07:00 [INF] Executed DbCommand (17ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2023-03-14 12:44:51.768 +07:00 [INF] Executed DbCommand (20ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2023-03-14 12:44:51.770 +07:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2023-03-14 12:44:51.771 +07:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2023-03-14 12:44:51.791 +07:00 [INF] Executed DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2023-03-14 12:44:51.803 +07:00 [INF] Applying migration '20230314054326_AddRoleTable'.
+2023-03-14 12:44:52.266 +07:00 [INF] Executed DbCommand (292ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+EXEC sp_rename N'[Users].[role]', N'roleId', N'COLUMN';
+2023-03-14 12:44:52.276 +07:00 [INF] Executed DbCommand (10ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Roles] (
+    [Id] int NOT NULL IDENTITY,
+    [roleName] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_Roles] PRIMARY KEY ([Id])
+);
+2023-03-14 12:44:52.281 +07:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Users_roleId] ON [Users] ([roleId]);
+2023-03-14 12:44:52.287 +07:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [Users] ADD CONSTRAINT [FK_Users_Roles_roleId] FOREIGN KEY ([roleId]) REFERENCES [Roles] ([Id]) ON DELETE CASCADE;
+2023-03-14 12:44:52.289 +07:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20230314054326_AddRoleTable', N'7.0.1');
+2023-03-14 12:51:33.741 +07:00 [INF] Executed DbCommand (17ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2023-03-14 12:51:33.869 +07:00 [INF] Executed DbCommand (83ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+
+IF EXISTS
+    (SELECT *
+     FROM [sys].[objects] o
+     WHERE [o].[type] = 'U'
+     AND [o].[is_ms_shipped] = 0
+     AND NOT EXISTS (SELECT *
+         FROM [sys].[extended_properties] AS [ep]
+         WHERE [ep].[major_id] = [o].[object_id]
+             AND [ep].[minor_id] = 0
+             AND [ep].[class] = 1
+             AND [ep].[name] = N'microsoft_database_tools_support'
+    )
+)
+SELECT 1 ELSE SELECT 0
+2023-03-14 12:51:34.138 +07:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Roles] AS [r]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2023-03-14 12:51:34.337 +07:00 [INF] Executed DbCommand (42ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000), @p2='?' (Size = 4000), @p3='?' (Size = 4000), @p4='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+MERGE [Roles] USING (
+VALUES (@p0, 0),
+(@p1, 1),
+(@p2, 2),
+(@p3, 3),
+(@p4, 4)) AS i ([roleName], _Position) ON 1=0
+WHEN NOT MATCHED THEN
+INSERT ([roleName])
+VALUES (i.[roleName])
+OUTPUT INSERTED.[Id], i._Position;
+2023-03-14 12:51:34.519 +07:00 [INF] Now listening on: http://localhost:57679
+2023-03-14 12:51:34.523 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2023-03-14 12:51:34.525 +07:00 [INF] Hosting environment: Development
+2023-03-14 12:51:34.527 +07:00 [INF] Content root path: D:\OrderService\src\OrderService.Web
+2023-03-14 12:51:35.185 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/swagger/index.html - -
+2023-03-14 12:51:35.256 +07:00 [WRN] Failed to determine the https port for redirect.
+2023-03-14 12:51:35.494 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/swagger/index.html - - - 200 - text/html;charset=utf-8 310.9339ms
+2023-03-14 12:51:35.552 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/_vs/browserLink - -
+2023-03-14 12:51:35.554 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/_framework/aspnetcore-browser-refresh.js - -
+2023-03-14 12:51:35.563 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/_framework/aspnetcore-browser-refresh.js - - - 200 12002 application/javascript;+charset=utf-8 8.5192ms
+2023-03-14 12:51:35.586 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 34.1326ms
+2023-03-14 12:51:35.678 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/swagger/favicon-32x32.png - -
+2023-03-14 12:51:35.690 +07:00 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2023-03-14 12:51:35.692 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/swagger/favicon-32x32.png - - - 0 628 image/png 14.5491ms
+2023-03-14 12:51:35.795 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/swagger/v1/swagger.json - -
+2023-03-14 12:51:35.950 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 155.5744ms
+2023-03-14 14:39:36.888 +07:00 [INF] Executed DbCommand (22ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2023-03-14 14:39:37.030 +07:00 [INF] Executed DbCommand (88ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+
+IF EXISTS
+    (SELECT *
+     FROM [sys].[objects] o
+     WHERE [o].[type] = 'U'
+     AND [o].[is_ms_shipped] = 0
+     AND NOT EXISTS (SELECT *
+         FROM [sys].[extended_properties] AS [ep]
+         WHERE [ep].[major_id] = [o].[object_id]
+             AND [ep].[minor_id] = 0
+             AND [ep].[class] = 1
+             AND [ep].[name] = N'microsoft_database_tools_support'
+    )
+)
+SELECT 1 ELSE SELECT 0
+2023-03-14 14:39:37.311 +07:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Roles] AS [r]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2023-03-14 14:39:37.468 +07:00 [INF] Now listening on: http://localhost:57679
+2023-03-14 14:39:37.474 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2023-03-14 14:39:37.477 +07:00 [INF] Hosting environment: Development
+2023-03-14 14:39:37.478 +07:00 [INF] Content root path: D:\OrderService\src\OrderService.Web
+2023-03-14 14:39:38.363 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/swagger/index.html - -
+2023-03-14 14:39:38.454 +07:00 [WRN] Failed to determine the https port for redirect.
+2023-03-14 14:39:38.795 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/swagger/index.html - - - 200 - text/html;charset=utf-8 433.9890ms
+2023-03-14 14:39:38.858 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/_framework/aspnetcore-browser-refresh.js - -
+2023-03-14 14:39:38.859 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/_vs/browserLink - -
+2023-03-14 14:39:38.867 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/_framework/aspnetcore-browser-refresh.js - - - 200 12002 application/javascript;+charset=utf-8 9.2507ms
+2023-03-14 14:39:38.959 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 99.6038ms
+2023-03-14 14:39:39.025 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/swagger/favicon-32x32.png - -
+2023-03-14 14:39:39.045 +07:00 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2023-03-14 14:39:39.047 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/swagger/favicon-32x32.png - - - 0 628 image/png 22.1810ms
+2023-03-14 14:39:39.122 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/swagger/v1/swagger.json - -
+2023-03-14 14:39:39.377 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 255.8405ms
+2023-03-14 14:39:43.212 +07:00 [INF] Request starting HTTP/1.1 POST http://localhost:57679/categories application/json 30
+2023-03-14 14:39:43.216 +07:00 [INF] CORS policy execution failed.
+2023-03-14 14:39:43.220 +07:00 [INF] Request origin http://localhost:57679 does not have permission to access the resource.
+2023-03-14 14:39:43.223 +07:00 [INF] Executing endpoint 'OrderService.Web.Endpoints.ProductCatalogEndpoints.Create.HandleAsync (OrderService.Web)'
+2023-03-14 14:39:43.247 +07:00 [INF] Route matched with {action = "Handle", controller = "Create"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[OrderService.Web.Endpoints.ProductCatalogEndpoints.CreateProductCatalogResponse]] HandleAsync(OrderService.Web.Endpoints.ProductCatalogEndpoints.CreateProductCatalogRequest, System.Threading.CancellationToken) on controller OrderService.Web.Endpoints.ProductCatalogEndpoints.Create (OrderService.Web).
+2023-03-14 14:39:43.805 +07:00 [INF] Executed DbCommand (76ms) [Parameters=[@p0='?' (Size = 100)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [ProductCategory] ([productCategoryName])
+OUTPUT INSERTED.[Id]
+VALUES (@p0);
+2023-03-14 14:39:43.869 +07:00 [INF] Executing OkObjectResult, writing value of type 'OrderService.Web.Endpoints.ProductCatalogEndpoints.CreateProductCatalogResponse'.
+2023-03-14 14:39:43.878 +07:00 [INF] Executed action OrderService.Web.Endpoints.ProductCatalogEndpoints.Create.HandleAsync (OrderService.Web) in 622.8573ms
+2023-03-14 14:39:43.882 +07:00 [INF] Executed endpoint 'OrderService.Web.Endpoints.ProductCatalogEndpoints.Create.HandleAsync (OrderService.Web)'
+2023-03-14 14:39:43.888 +07:00 [INF] Request finished HTTP/1.1 POST http://localhost:57679/categories application/json 30 - 200 - application/json;+charset=utf-8 676.4703ms
+2023-03-14 14:39:49.834 +07:00 [INF] Request starting HTTP/1.1 POST http://localhost:57679/categories application/json 30
+2023-03-14 14:39:49.836 +07:00 [INF] CORS policy execution failed.
+2023-03-14 14:39:49.837 +07:00 [INF] Request origin http://localhost:57679 does not have permission to access the resource.
+2023-03-14 14:39:49.839 +07:00 [INF] Executing endpoint 'OrderService.Web.Endpoints.ProductCatalogEndpoints.Create.HandleAsync (OrderService.Web)'
+2023-03-14 14:39:49.841 +07:00 [INF] Route matched with {action = "Handle", controller = "Create"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[OrderService.Web.Endpoints.ProductCatalogEndpoints.CreateProductCatalogResponse]] HandleAsync(OrderService.Web.Endpoints.ProductCatalogEndpoints.CreateProductCatalogRequest, System.Threading.CancellationToken) on controller OrderService.Web.Endpoints.ProductCatalogEndpoints.Create (OrderService.Web).
+2023-03-14 14:39:53.838 +07:00 [INF] Executed DbCommand (3ms) [Parameters=[@p0='?' (Size = 100)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [ProductCategory] ([productCategoryName])
+OUTPUT INSERTED.[Id]
+VALUES (@p0);
+2023-03-14 14:41:06.727 +07:00 [INF] Executed DbCommand (16ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2023-03-14 14:41:06.845 +07:00 [INF] Executed DbCommand (75ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+
+IF EXISTS
+    (SELECT *
+     FROM [sys].[objects] o
+     WHERE [o].[type] = 'U'
+     AND [o].[is_ms_shipped] = 0
+     AND NOT EXISTS (SELECT *
+         FROM [sys].[extended_properties] AS [ep]
+         WHERE [ep].[major_id] = [o].[object_id]
+             AND [ep].[minor_id] = 0
+             AND [ep].[class] = 1
+             AND [ep].[name] = N'microsoft_database_tools_support'
+    )
+)
+SELECT 1 ELSE SELECT 0
+2023-03-14 14:41:07.069 +07:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Roles] AS [r]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2023-03-14 14:41:07.187 +07:00 [INF] Now listening on: http://localhost:57679
+2023-03-14 14:41:07.191 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2023-03-14 14:41:07.194 +07:00 [INF] Hosting environment: Development
+2023-03-14 14:41:07.195 +07:00 [INF] Content root path: D:\OrderService\src\OrderService.Web
+2023-03-14 14:41:07.908 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/swagger/index.html - -
+2023-03-14 14:41:08.002 +07:00 [WRN] Failed to determine the https port for redirect.
+2023-03-14 14:41:08.187 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/swagger/index.html - - - 200 - text/html;charset=utf-8 283.0057ms
+2023-03-14 14:41:08.239 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/_vs/browserLink - -
+2023-03-14 14:41:08.240 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/_framework/aspnetcore-browser-refresh.js - -
+2023-03-14 14:41:08.253 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/_framework/aspnetcore-browser-refresh.js - - - 200 12002 application/javascript;+charset=utf-8 13.7044ms
+2023-03-14 14:41:08.295 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 56.0559ms
+2023-03-14 14:41:08.387 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/swagger/favicon-32x32.png - -
+2023-03-14 14:41:08.405 +07:00 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2023-03-14 14:41:08.408 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/swagger/favicon-32x32.png - - - 0 628 image/png 20.5445ms
+2023-03-14 14:41:08.523 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/swagger/v1/swagger.json - -
+2023-03-14 14:41:08.667 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 143.4905ms
+2023-03-14 14:41:12.409 +07:00 [INF] Request starting HTTP/1.1 POST http://localhost:57679/categories application/json 30
+2023-03-14 14:41:12.414 +07:00 [INF] CORS policy execution failed.
+2023-03-14 14:41:12.416 +07:00 [INF] Request origin http://localhost:57679 does not have permission to access the resource.
+2023-03-14 14:41:12.422 +07:00 [INF] Executing endpoint 'OrderService.Web.Endpoints.ProductCatalogEndpoints.Create.HandleAsync (OrderService.Web)'
+2023-03-14 14:41:12.456 +07:00 [INF] Route matched with {action = "Handle", controller = "Create"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[OrderService.Web.Endpoints.ProductCatalogEndpoints.CreateProductCatalogResponse]] HandleAsync(OrderService.Web.Endpoints.ProductCatalogEndpoints.CreateProductCatalogRequest, System.Threading.CancellationToken) on controller OrderService.Web.Endpoints.ProductCatalogEndpoints.Create (OrderService.Web).
+2023-03-14 14:41:15.883 +07:00 [INF] Executed DbCommand (56ms) [Parameters=[@p0='?' (Size = 100)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [ProductCategory] ([productCategoryName])
+OUTPUT INSERTED.[Id]
+VALUES (@p0);
+2023-03-14 14:41:15.948 +07:00 [INF] Executing OkObjectResult, writing value of type 'OrderService.Web.Endpoints.ProductCatalogEndpoints.CreateProductCatalogResponse'.
+2023-03-14 14:41:15.961 +07:00 [INF] Executed action OrderService.Web.Endpoints.ProductCatalogEndpoints.Create.HandleAsync (OrderService.Web) in 3496.0013ms
+2023-03-14 14:41:15.968 +07:00 [INF] Executed endpoint 'OrderService.Web.Endpoints.ProductCatalogEndpoints.Create.HandleAsync (OrderService.Web)'
+2023-03-14 14:41:15.987 +07:00 [INF] Request finished HTTP/1.1 POST http://localhost:57679/categories application/json 30 - 200 - application/json;+charset=utf-8 3576.9360ms
+2023-03-14 14:49:10.136 +07:00 [INF] Executed DbCommand (16ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2023-03-14 14:49:10.270 +07:00 [INF] Executed DbCommand (88ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+
+IF EXISTS
+    (SELECT *
+     FROM [sys].[objects] o
+     WHERE [o].[type] = 'U'
+     AND [o].[is_ms_shipped] = 0
+     AND NOT EXISTS (SELECT *
+         FROM [sys].[extended_properties] AS [ep]
+         WHERE [ep].[major_id] = [o].[object_id]
+             AND [ep].[minor_id] = 0
+             AND [ep].[class] = 1
+             AND [ep].[name] = N'microsoft_database_tools_support'
+    )
+)
+SELECT 1 ELSE SELECT 0
+2023-03-14 14:49:10.509 +07:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Roles] AS [r]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2023-03-14 14:49:10.623 +07:00 [INF] Now listening on: http://localhost:57679
+2023-03-14 14:49:10.628 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2023-03-14 14:49:10.630 +07:00 [INF] Hosting environment: Development
+2023-03-14 14:49:10.632 +07:00 [INF] Content root path: D:\OrderService\src\OrderService.Web
+2023-03-14 14:49:11.201 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/swagger/index.html - -
+2023-03-14 14:49:11.276 +07:00 [WRN] Failed to determine the https port for redirect.
+2023-03-14 14:49:11.470 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/swagger/index.html - - - 200 - text/html;charset=utf-8 271.6471ms
+2023-03-14 14:49:11.526 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/_framework/aspnetcore-browser-refresh.js - -
+2023-03-14 14:49:11.531 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/_vs/browserLink - -
+2023-03-14 14:49:11.533 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/_framework/aspnetcore-browser-refresh.js - - - 200 12002 application/javascript;+charset=utf-8 7.1605ms
+2023-03-14 14:49:11.558 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 27.0843ms
+2023-03-14 14:49:11.646 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/swagger/favicon-32x32.png - -
+2023-03-14 14:49:11.657 +07:00 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2023-03-14 14:49:11.660 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/swagger/favicon-32x32.png - - - 0 628 image/png 13.9787ms
+2023-03-14 14:49:11.748 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/swagger/v1/swagger.json - -
+2023-03-14 14:49:11.879 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 130.9075ms
+2023-03-14 14:49:15.108 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/categories - -
+2023-03-14 14:49:15.115 +07:00 [INF] Executing endpoint 'OrderService.Web.Endpoints.ProductCatalogEndpoints.Get.HandleAsync (OrderService.Web)'
+2023-03-14 14:49:15.144 +07:00 [INF] Route matched with {action = "Handle", controller = "Get"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[OrderService.Web.Endpoints.ProductCatalogEndpoints.GetProductCategoriesResponse]] HandleAsync(System.Threading.CancellationToken) on controller OrderService.Web.Endpoints.ProductCatalogEndpoints.Get (OrderService.Web).
+2023-03-14 14:49:15.408 +07:00 [INF] Executed DbCommand (14ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[productCategoryName]
+FROM [ProductCategory] AS [p]
+2023-03-14 14:49:15.434 +07:00 [INF] Executing OkObjectResult, writing value of type 'OrderService.Web.Endpoints.ProductCatalogEndpoints.GetProductCategoriesResponse'.
+2023-03-14 14:49:15.447 +07:00 [INF] Executed action OrderService.Web.Endpoints.ProductCatalogEndpoints.Get.HandleAsync (OrderService.Web) in 295.8523ms
+2023-03-14 14:49:15.451 +07:00 [INF] Executed endpoint 'OrderService.Web.Endpoints.ProductCatalogEndpoints.Get.HandleAsync (OrderService.Web)'
+2023-03-14 14:49:15.457 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/categories - - - 200 - application/json;+charset=utf-8 348.3347ms
+2023-03-14 14:49:30.569 +07:00 [INF] Request starting HTTP/1.1 POST http://localhost:57679/categories application/json 30
+2023-03-14 14:49:30.573 +07:00 [INF] CORS policy execution failed.
+2023-03-14 14:49:30.575 +07:00 [INF] Request origin http://localhost:57679 does not have permission to access the resource.
+2023-03-14 14:49:30.577 +07:00 [INF] Executing endpoint 'OrderService.Web.Endpoints.ProductCatalogEndpoints.Create.HandleAsync (OrderService.Web)'
+2023-03-14 14:49:30.583 +07:00 [INF] Route matched with {action = "Handle", controller = "Create"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[OrderService.Web.Endpoints.ProductCatalogEndpoints.CreateProductCatalogResponse]] HandleAsync(OrderService.Web.Endpoints.ProductCatalogEndpoints.CreateProductCatalogRequest, System.Threading.CancellationToken) on controller OrderService.Web.Endpoints.ProductCatalogEndpoints.Create (OrderService.Web).
+2023-03-14 14:49:30.792 +07:00 [INF] Executed DbCommand (24ms) [Parameters=[@p0='?' (Size = 100)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [ProductCategory] ([productCategoryName])
+OUTPUT INSERTED.[Id]
+VALUES (@p0);
+2023-03-14 14:49:30.840 +07:00 [INF] Executing OkObjectResult, writing value of type 'OrderService.Web.Endpoints.ProductCatalogEndpoints.CreateProductCatalogResponse'.
+2023-03-14 14:49:30.844 +07:00 [INF] Executed action OrderService.Web.Endpoints.ProductCatalogEndpoints.Create.HandleAsync (OrderService.Web) in 257.2628ms
+2023-03-14 14:49:30.847 +07:00 [INF] Executed endpoint 'OrderService.Web.Endpoints.ProductCatalogEndpoints.Create.HandleAsync (OrderService.Web)'
+2023-03-14 14:49:30.852 +07:00 [INF] Request finished HTTP/1.1 POST http://localhost:57679/categories application/json 30 - 200 - application/json;+charset=utf-8 282.9583ms
+2023-03-14 14:49:35.029 +07:00 [INF] Request starting HTTP/1.1 POST http://localhost:57679/categories application/json 31
+2023-03-14 14:49:35.032 +07:00 [INF] CORS policy execution failed.
+2023-03-14 14:49:35.034 +07:00 [INF] Request origin http://localhost:57679 does not have permission to access the resource.
+2023-03-14 14:49:35.036 +07:00 [INF] Executing endpoint 'OrderService.Web.Endpoints.ProductCatalogEndpoints.Create.HandleAsync (OrderService.Web)'
+2023-03-14 14:49:35.038 +07:00 [INF] Route matched with {action = "Handle", controller = "Create"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[OrderService.Web.Endpoints.ProductCatalogEndpoints.CreateProductCatalogResponse]] HandleAsync(OrderService.Web.Endpoints.ProductCatalogEndpoints.CreateProductCatalogRequest, System.Threading.CancellationToken) on controller OrderService.Web.Endpoints.ProductCatalogEndpoints.Create (OrderService.Web).
+2023-03-14 14:49:35.051 +07:00 [INF] Executed DbCommand (3ms) [Parameters=[@p0='?' (Size = 100)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [ProductCategory] ([productCategoryName])
+OUTPUT INSERTED.[Id]
+VALUES (@p0);
+2023-03-14 14:49:35.055 +07:00 [INF] Executing OkObjectResult, writing value of type 'OrderService.Web.Endpoints.ProductCatalogEndpoints.CreateProductCatalogResponse'.
+2023-03-14 14:49:35.057 +07:00 [INF] Executed action OrderService.Web.Endpoints.ProductCatalogEndpoints.Create.HandleAsync (OrderService.Web) in 15.001ms
+2023-03-14 14:49:35.060 +07:00 [INF] Executed endpoint 'OrderService.Web.Endpoints.ProductCatalogEndpoints.Create.HandleAsync (OrderService.Web)'
+2023-03-14 14:49:35.061 +07:00 [INF] Request finished HTTP/1.1 POST http://localhost:57679/categories application/json 31 - 200 - application/json;+charset=utf-8 32.1980ms
+2023-03-14 14:49:37.888 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57679/categories - -
+2023-03-14 14:49:37.891 +07:00 [INF] Executing endpoint 'OrderService.Web.Endpoints.ProductCatalogEndpoints.Get.HandleAsync (OrderService.Web)'
+2023-03-14 14:49:37.893 +07:00 [INF] Route matched with {action = "Handle", controller = "Get"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[OrderService.Web.Endpoints.ProductCatalogEndpoints.GetProductCategoriesResponse]] HandleAsync(System.Threading.CancellationToken) on controller OrderService.Web.Endpoints.ProductCatalogEndpoints.Get (OrderService.Web).
+2023-03-14 14:49:37.899 +07:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[productCategoryName]
+FROM [ProductCategory] AS [p]
+2023-03-14 14:49:37.906 +07:00 [INF] Executing OkObjectResult, writing value of type 'OrderService.Web.Endpoints.ProductCatalogEndpoints.GetProductCategoriesResponse'.
+2023-03-14 14:49:37.909 +07:00 [INF] Executed action OrderService.Web.Endpoints.ProductCatalogEndpoints.Get.HandleAsync (OrderService.Web) in 13.1667ms
+2023-03-14 14:49:37.911 +07:00 [INF] Executed endpoint 'OrderService.Web.Endpoints.ProductCatalogEndpoints.Get.HandleAsync (OrderService.Web)'
+2023-03-14 14:49:37.913 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/categories - - - 200 - application/json;+charset=utf-8 25.0829ms
