@@ -21,12 +21,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
       )
       .IsRequired();
 
-    builder.Property(u => u.role)
-      .HasConversion(
-        s => s.Value,
-        s => UserRole.FromValue(s)
-      )
-      .IsRequired();
+    builder.HasOne(u => u.role).WithMany().IsRequired();
 
     builder.HasMany(u => u.orders).WithOne();
   }

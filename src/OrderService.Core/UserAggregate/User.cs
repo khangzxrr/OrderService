@@ -18,13 +18,14 @@ public class User: EntityBase, IAggregateRoot
   public string address { get; private set; }
 
   public UserVerify verify { get; }
-  public UserRole role { get; }
+  public Role role { get; private set; } = null!; //role is not null, regardless of senceario
 
   private List<Order> _orders = new List<Order>();
+  public IReadOnlyCollection<Order> orders => _orders.AsReadOnly();
 
   public Shipper? shipper { get; private set; }
 
-  public IReadOnlyCollection<Order> orders => _orders.AsReadOnly();
+  
   public User(
     string guid,
     string passwordHash,
@@ -33,8 +34,7 @@ public class User: EntityBase, IAggregateRoot
     string lastname,
     DateTime dateOfBirth,
     string address,
-    UserVerify verify,
-    UserRole role
+    UserVerify verify
     )
   {
     this.guid = Guard.Against.NullOrEmpty(guid, nameof(guid));
@@ -46,7 +46,11 @@ public class User: EntityBase, IAggregateRoot
     this.address = Guard.Against.NullOrEmpty(address, nameof(address));
 
     this.verify = verify;
-    this.role = role;
+  }
+
+  public void setRole(Role role)
+  {
+    this.role = Guard.Against.Null(role);
   }
 }
 

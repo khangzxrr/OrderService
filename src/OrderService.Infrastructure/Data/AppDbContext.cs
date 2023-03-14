@@ -24,6 +24,7 @@ public class AppDbContext : DbContext
   public DbSet<Contributor> Contributors => Set<Contributor>(); 
 
   public DbSet<User> Users => Set<User>();
+  public DbSet<Role> Roles => Set<Role>();
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
