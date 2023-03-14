@@ -21,7 +21,7 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
   options.MinimumSameSitePolicy = SameSiteMode.None;
 });
 
-string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");  
+string? connectionString = builder.Configuration.GetConnectionString("AzureConnection");  
 builder.Services.AddDbContext(connectionString!);
 
 var myAllowSpecificOrigins = "_myAllowSpecificOrigins";

@@ -123,9 +123,9 @@ You should **clone this repository** if you're one of the contributors and you h
 
 ## Running Migrations
 
-In Visual Studio, open the Package Manager Console, and run `Add-Migration InitialMigrationName -StartupProject Your.ProjectName.Web -Context AppDbContext -Project Your.ProjectName.Infrastructure`.
+`Add-Migration InitialMigrationName -StartupProject OrderService.Web -Context AppDbContext -Project OrderService.Infrastructure`.
 
-To use SqlServer, change `options.UseSqlite(connectionString));` to `options.UseSqlServer(connectionString));` in the `Your.ProjectName.Infrastructure.StartupSetup` file. Also remember to replace the `SqliteConnection` with `DefaultConnection` in the `Your.ProjectName.Web.Program` file, which points to your Database Server.
+`Update-Database -StartupProject OrderService.Web -Context AppDbContext -Project OrderService.Infrastructure`
 
 # Goals
 

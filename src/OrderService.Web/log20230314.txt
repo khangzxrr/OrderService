@@ -462,3 +462,344 @@ FROM [ProductCategory] AS [p]
 2023-03-14 14:49:37.909 +07:00 [INF] Executed action OrderService.Web.Endpoints.ProductCatalogEndpoints.Get.HandleAsync (OrderService.Web) in 13.1667ms
 2023-03-14 14:49:37.911 +07:00 [INF] Executed endpoint 'OrderService.Web.Endpoints.ProductCatalogEndpoints.Get.HandleAsync (OrderService.Web)'
 2023-03-14 14:49:37.913 +07:00 [INF] Request finished HTTP/1.1 GET http://localhost:57679/categories - - - 200 - application/json;+charset=utf-8 25.0829ms
+2023-03-14 15:39:17.941 +07:00 [INF] Executed DbCommand (276ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2023-03-14 15:39:18.250 +07:00 [INF] Executed DbCommand (269ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2023-03-14 15:39:18.510 +07:00 [INF] Executed DbCommand (259ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2023-03-14 15:39:18.939 +07:00 [INF] Executed DbCommand (341ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [__EFMigrationsHistory] (
+    [MigrationId] nvarchar(150) NOT NULL,
+    [ProductVersion] nvarchar(32) NOT NULL,
+    CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
+);
+2023-03-14 15:39:19.199 +07:00 [INF] Executed DbCommand (259ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2023-03-14 15:39:19.461 +07:00 [INF] Executed DbCommand (262ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2023-03-14 15:39:19.739 +07:00 [INF] Executed DbCommand (274ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2023-03-14 15:39:19.769 +07:00 [INF] Applying migration '20230310122644_InitDB'.
+2023-03-14 15:39:20.440 +07:00 [INF] Executed DbCommand (265ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [AdditionalCost] (
+    [Id] int NOT NULL IDENTITY,
+    [condition] nvarchar(max) NOT NULL,
+    [cost] real NOT NULL,
+    CONSTRAINT [PK_AdditionalCost] PRIMARY KEY ([Id])
+);
+2023-03-14 15:39:20.703 +07:00 [INF] Executed DbCommand (262ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Contributors] (
+    [Id] int NOT NULL IDENTITY,
+    [Name] nvarchar(100) NOT NULL,
+    CONSTRAINT [PK_Contributors] PRIMARY KEY ([Id])
+);
+2023-03-14 15:39:20.965 +07:00 [INF] Executed DbCommand (261ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [CurrencyExchange] (
+    [Id] int NOT NULL IDENTITY,
+    [fromCurrency] nvarchar(max) NOT NULL,
+    [rate] real NOT NULL,
+    CONSTRAINT [PK_CurrencyExchange] PRIMARY KEY ([Id])
+);
+2023-03-14 15:39:21.227 +07:00 [INF] Executed DbCommand (262ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ProductCategory] (
+    [Id] int NOT NULL IDENTITY,
+    [productCategoryName] nvarchar(100) NOT NULL,
+    CONSTRAINT [PK_ProductCategory] PRIMARY KEY ([Id])
+);
+2023-03-14 15:39:21.489 +07:00 [INF] Executed DbCommand (261ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ProductTax] (
+    [Id] int NOT NULL IDENTITY,
+    [taxName] nvarchar(100) NOT NULL,
+    [taxPrice] real NOT NULL,
+    CONSTRAINT [PK_ProductTax] PRIMARY KEY ([Id])
+);
+2023-03-14 15:39:21.752 +07:00 [INF] Executed DbCommand (262ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Projects] (
+    [Id] int NOT NULL IDENTITY,
+    [Name] nvarchar(100) NOT NULL,
+    [Priority] int NOT NULL,
+    CONSTRAINT [PK_Projects] PRIMARY KEY ([Id])
+);
+2023-03-14 15:39:22.014 +07:00 [INF] Executed DbCommand (262ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Users] (
+    [Id] int NOT NULL IDENTITY,
+    [guid] nvarchar(100) NOT NULL,
+    [passwordHash] nvarchar(300) NOT NULL,
+    [passwordSalt] nvarchar(100) NOT NULL,
+    [firstname] nvarchar(100) NOT NULL,
+    [lastname] nvarchar(100) NOT NULL,
+    [dateOfBirth] datetime2 NOT NULL,
+    [address] nvarchar(300) NOT NULL,
+    [verify] int NOT NULL,
+    [role] int NOT NULL,
+    CONSTRAINT [PK_Users] PRIMARY KEY ([Id])
+);
+2023-03-14 15:39:22.277 +07:00 [INF] Executed DbCommand (263ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ProductShipCost] (
+    [Id] int NOT NULL IDENTITY,
+    [cost] real NOT NULL,
+    [productCategoryId] int NOT NULL,
+    CONSTRAINT [PK_ProductShipCost] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ProductShipCost_ProductCategory_productCategoryId] FOREIGN KEY ([productCategoryId]) REFERENCES [ProductCategory] ([Id]) ON DELETE NO ACTION
+);
+2023-03-14 15:39:22.540 +07:00 [INF] Executed DbCommand (263ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ToDoItems] (
+    [Id] int NOT NULL IDENTITY,
+    [Title] nvarchar(max) NOT NULL,
+    [Description] nvarchar(max) NOT NULL,
+    [ContributorId] int NULL,
+    [IsDone] bit NOT NULL,
+    [ProjectId] int NULL,
+    CONSTRAINT [PK_ToDoItems] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ToDoItems_Projects_ProjectId] FOREIGN KEY ([ProjectId]) REFERENCES [Projects] ([Id])
+);
+2023-03-14 15:39:22.805 +07:00 [INF] Executed DbCommand (264ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Chat] (
+    [Id] int NOT NULL IDENTITY,
+    [customerId] int NULL,
+    [employeeId] int NULL,
+    CONSTRAINT [PK_Chat] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Chat_Users_customerId] FOREIGN KEY ([customerId]) REFERENCES [Users] ([Id]) ON DELETE NO ACTION,
+    CONSTRAINT [FK_Chat_Users_employeeId] FOREIGN KEY ([employeeId]) REFERENCES [Users] ([Id]) ON DELETE NO ACTION
+);
+2023-03-14 15:39:23.067 +07:00 [INF] Executed DbCommand (262ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Shipper] (
+    [Id] int NOT NULL IDENTITY,
+    [shippingDistrict] nvarchar(max) NOT NULL,
+    [shippingStartTime] datetime2 NOT NULL,
+    [shippingEndTime] datetime2 NOT NULL,
+    [shippingStatus] int NOT NULL,
+    [userId] int NOT NULL,
+    CONSTRAINT [PK_Shipper] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Shipper_Users_userId] FOREIGN KEY ([userId]) REFERENCES [Users] ([Id]) ON DELETE NO ACTION
+);
+2023-03-14 15:39:23.336 +07:00 [INF] Executed DbCommand (269ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Product] (
+    [Id] int NOT NULL IDENTITY,
+    [productCategoryId] int NOT NULL,
+    [productShipCostId] int NOT NULL,
+    [productName] nvarchar(200) NOT NULL,
+    [productImageUrl] nvarchar(max) NOT NULL,
+    [productDescription] nvarchar(max) NOT NULL,
+    [productPrice] real NOT NULL,
+    [productURL] nvarchar(max) NOT NULL,
+    [productWeight] real NOT NULL,
+    [productSellerAddress] nvarchar(200) NOT NULL,
+    [productSellerEmail] nvarchar(200) NOT NULL,
+    [productWarrantable] bit NOT NULL,
+    [productWarrantyDescription] nvarchar(max) NOT NULL,
+    [productWarrantyDuration] int NOT NULL,
+    [productReturnable] bit NOT NULL,
+    [productReturnDescription] nvarchar(max) NOT NULL,
+    [productReturnDuration] int NOT NULL,
+    [currencyExchangeId] int NOT NULL,
+    CONSTRAINT [PK_Product] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Product_CurrencyExchange_currencyExchangeId] FOREIGN KEY ([currencyExchangeId]) REFERENCES [CurrencyExchange] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_Product_ProductCategory_productCategoryId] FOREIGN KEY ([productCategoryId]) REFERENCES [ProductCategory] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_Product_ProductShipCost_productShipCostId] FOREIGN KEY ([productShipCostId]) REFERENCES [ProductShipCost] ([Id]) ON DELETE NO ACTION
+);
+2023-03-14 15:39:23.598 +07:00 [INF] Executed DbCommand (262ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ChatMessage] (
+    [Id] int NOT NULL IDENTITY,
+    [isFromEmployee] bit NOT NULL,
+    [message] nvarchar(max) NOT NULL,
+    [ChatId] int NULL,
+    CONSTRAINT [PK_ChatMessage] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ChatMessage_Chat_ChatId] FOREIGN KEY ([ChatId]) REFERENCES [Chat] ([Id])
+);
+2023-03-14 15:39:23.863 +07:00 [INF] Executed DbCommand (265ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Order] (
+    [Id] int NOT NULL IDENTITY,
+    [chatId] int NOT NULL,
+    [orderDate] datetime2 NOT NULL,
+    [status] int NOT NULL,
+    [orderDescription] nvarchar(300) NOT NULL,
+    [customerDescription] nvarchar(300) NOT NULL,
+    [deliveryAddress] nvarchar(max) NOT NULL,
+    [contactPhonenumber] nvarchar(max) NOT NULL,
+    [shippingEstimatedDays] int NOT NULL,
+    [UserId] int NULL,
+    [price] real NOT NULL,
+    CONSTRAINT [PK_Order] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Order_Chat_chatId] FOREIGN KEY ([chatId]) REFERENCES [Chat] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_Order_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id])
+);
+2023-03-14 15:39:24.129 +07:00 [INF] Executed DbCommand (265ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ProductHistory] (
+    [Id] int NOT NULL IDENTITY,
+    [productCategoryId] int NOT NULL,
+    [changeDate] datetime2 NOT NULL,
+    [productName] nvarchar(max) NOT NULL,
+    [productImageUrl] nvarchar(max) NOT NULL,
+    [productDescription] nvarchar(max) NOT NULL,
+    [productPrice] real NOT NULL,
+    [productURL] nvarchar(max) NOT NULL,
+    [productWeight] real NOT NULL,
+    [productShipCostId] int NOT NULL,
+    [productSellerAddress] nvarchar(max) NOT NULL,
+    [productSellerEmail] nvarchar(max) NOT NULL,
+    [productWarrantable] bit NOT NULL,
+    [productWarrantyDescription] nvarchar(max) NOT NULL,
+    [productWarrantyDuration] int NOT NULL,
+    [productReturnable] bit NOT NULL,
+    [productReturnDescription] nvarchar(max) NOT NULL,
+    [productReturnDuration] int NOT NULL,
+    [currencyExchangeId] int NOT NULL,
+    [ProductId] int NULL,
+    CONSTRAINT [PK_ProductHistory] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ProductHistory_CurrencyExchange_currencyExchangeId] FOREIGN KEY ([currencyExchangeId]) REFERENCES [CurrencyExchange] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_ProductHistory_ProductCategory_productCategoryId] FOREIGN KEY ([productCategoryId]) REFERENCES [ProductCategory] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_ProductHistory_ProductShipCost_productShipCostId] FOREIGN KEY ([productShipCostId]) REFERENCES [ProductShipCost] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_ProductHistory_Product_ProductId] FOREIGN KEY ([ProductId]) REFERENCES [Product] ([Id])
+);
+2023-03-14 15:39:24.392 +07:00 [INF] Executed DbCommand (262ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ProductProductTax] (
+    [productTaxesId] int NOT NULL,
+    [productsId] int NOT NULL,
+    CONSTRAINT [PK_ProductProductTax] PRIMARY KEY ([productTaxesId], [productsId]),
+    CONSTRAINT [FK_ProductProductTax_ProductTax_productTaxesId] FOREIGN KEY ([productTaxesId]) REFERENCES [ProductTax] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_ProductProductTax_Product_productsId] FOREIGN KEY ([productsId]) REFERENCES [Product] ([Id]) ON DELETE CASCADE
+);
+2023-03-14 15:39:24.654 +07:00 [INF] Executed DbCommand (262ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [OrderPayment] (
+    [Id] int NOT NULL IDENTITY,
+    [paymentStatus] int NOT NULL,
+    [paymentCost] real NOT NULL,
+    [paymentDate] datetime2 NOT NULL,
+    [paymentDescription] nvarchar(300) NOT NULL,
+    [OrderId] int NULL,
+    CONSTRAINT [PK_OrderPayment] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_OrderPayment_Order_OrderId] FOREIGN KEY ([OrderId]) REFERENCES [Order] ([Id])
+);
+2023-03-14 15:39:24.916 +07:00 [INF] Executed DbCommand (262ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [OrderShipping] (
+    [Id] int NOT NULL IDENTITY,
+    [orderId] int NOT NULL,
+    [shipperId] int NOT NULL,
+    [shippingUsing3rd] bit NOT NULL,
+    [orderShippingStatus] int NOT NULL,
+    [shippingDescription] nvarchar(max) NOT NULL,
+    [signatureImageUrl] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_OrderShipping] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_OrderShipping_Order_orderId] FOREIGN KEY ([orderId]) REFERENCES [Order] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_OrderShipping_Shipper_shipperId] FOREIGN KEY ([shipperId]) REFERENCES [Shipper] ([Id]) ON DELETE CASCADE
+);
+2023-03-14 15:39:25.180 +07:00 [INF] Executed DbCommand (263ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [OrderDetail] (
+    [Id] int NOT NULL IDENTITY,
+    [productId] int NOT NULL,
+    [additionalCostId] int NOT NULL,
+    [processCost] real NOT NULL,
+    [quantity] int NOT NULL,
+    [OrderId] int NULL,
+    CONSTRAINT [PK_OrderDetail] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_OrderDetail_AdditionalCost_additionalCostId] FOREIGN KEY ([additionalCostId]) REFERENCES [AdditionalCost] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_OrderDetail_Order_OrderId] FOREIGN KEY ([OrderId]) REFERENCES [Order] ([Id]),
+    CONSTRAINT [FK_OrderDetail_ProductHistory_productId] FOREIGN KEY ([productId]) REFERENCES [ProductHistory] ([Id]) ON DELETE CASCADE
+);
+2023-03-14 15:39:26.090 +07:00 [INF] Executed DbCommand (262ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ProductHistoryProductTax] (
+    [productHistoriesId] int NOT NULL,
+    [productTaxesId] int NOT NULL,
+    CONSTRAINT [PK_ProductHistoryProductTax] PRIMARY KEY ([productHistoriesId], [productTaxesId]),
+    CONSTRAINT [FK_ProductHistoryProductTax_ProductHistory_productHistoriesId] FOREIGN KEY ([productHistoriesId]) REFERENCES [ProductHistory] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_ProductHistoryProductTax_ProductTax_productTaxesId] FOREIGN KEY ([productTaxesId]) REFERENCES [ProductTax] ([Id]) ON DELETE CASCADE
+);
+2023-03-14 15:39:26.354 +07:00 [INF] Executed DbCommand (263ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ProductReturn] (
+    [Id] int NOT NULL IDENTITY,
+    [isExchangeForNewProduct] bit NOT NULL,
+    [returnQuantity] int NOT NULL,
+    [returnReason] nvarchar(max) NOT NULL,
+    [customerMessage] nvarchar(max) NOT NULL,
+    [supplierMessage] nvarchar(max) NOT NULL,
+    [shippingStatus] int NOT NULL,
+    [shippingEstimatedDay] int NOT NULL,
+    [returnCost] real NOT NULL,
+    [returnDate] datetime2 NOT NULL,
+    [OrderDetailId] int NULL,
+    CONSTRAINT [PK_ProductReturn] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ProductReturn_OrderDetail_OrderDetailId] FOREIGN KEY ([OrderDetailId]) REFERENCES [OrderDetail] ([Id])
+);
+2023-03-14 15:39:26.622 +07:00 [INF] Executed DbCommand (268ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ReturnPayment] (
+    [Id] int NOT NULL IDENTITY,
+    [cost] real NOT NULL,
+    [paymentDate] datetime2 NOT NULL,
+    [paymentDescription] nvarchar(max) NOT NULL,
+    [ProductReturnId] int NULL,
+    CONSTRAINT [PK_ReturnPayment] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ReturnPayment_ProductReturn_ProductReturnId] FOREIGN KEY ([ProductReturnId]) REFERENCES [ProductReturn] ([Id])
+);
+2023-03-14 15:39:26.884 +07:00 [INF] Executed DbCommand (261ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Chat_customerId] ON [Chat] ([customerId]);
+2023-03-14 15:39:27.145 +07:00 [INF] Executed DbCommand (261ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Chat_employeeId] ON [Chat] ([employeeId]);
+2023-03-14 15:39:27.405 +07:00 [INF] Executed DbCommand (260ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ChatMessage_ChatId] ON [ChatMessage] ([ChatId]);
+2023-03-14 15:39:27.666 +07:00 [INF] Executed DbCommand (260ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Order_chatId] ON [Order] ([chatId]);
+2023-03-14 15:39:27.926 +07:00 [INF] Executed DbCommand (260ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Order_UserId] ON [Order] ([UserId]);
+2023-03-14 15:39:28.193 +07:00 [INF] Executed DbCommand (267ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_OrderDetail_additionalCostId] ON [OrderDetail] ([additionalCostId]);
+2023-03-14 15:39:28.454 +07:00 [INF] Executed DbCommand (260ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_OrderDetail_OrderId] ON [OrderDetail] ([OrderId]);
+2023-03-14 15:39:28.714 +07:00 [INF] Executed DbCommand (260ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_OrderDetail_productId] ON [OrderDetail] ([productId]);
+2023-03-14 15:39:28.976 +07:00 [INF] Executed DbCommand (262ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_OrderPayment_OrderId] ON [OrderPayment] ([OrderId]);
+2023-03-14 15:39:29.236 +07:00 [INF] Executed DbCommand (260ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_OrderShipping_orderId] ON [OrderShipping] ([orderId]);
+2023-03-14 15:39:29.497 +07:00 [INF] Executed DbCommand (261ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_OrderShipping_shipperId] ON [OrderShipping] ([shipperId]);
+2023-03-14 15:39:29.758 +07:00 [INF] Executed DbCommand (260ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Product_currencyExchangeId] ON [Product] ([currencyExchangeId]);
+2023-03-14 15:39:30.018 +07:00 [INF] Executed DbCommand (260ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Product_productCategoryId] ON [Product] ([productCategoryId]);
+2023-03-14 15:39:30.280 +07:00 [INF] Executed DbCommand (261ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Product_productShipCostId] ON [Product] ([productShipCostId]);
+2023-03-14 15:39:30.542 +07:00 [INF] Executed DbCommand (262ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ProductHistory_currencyExchangeId] ON [ProductHistory] ([currencyExchangeId]);
+2023-03-14 15:39:30.802 +07:00 [INF] Executed DbCommand (260ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ProductHistory_productCategoryId] ON [ProductHistory] ([productCategoryId]);
+2023-03-14 15:39:31.063 +07:00 [INF] Executed DbCommand (260ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ProductHistory_ProductId] ON [ProductHistory] ([ProductId]);
+2023-03-14 15:39:31.333 +07:00 [INF] Executed DbCommand (270ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ProductHistory_productShipCostId] ON [ProductHistory] ([productShipCostId]);
+2023-03-14 15:39:31.594 +07:00 [INF] Executed DbCommand (260ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ProductHistoryProductTax_productTaxesId] ON [ProductHistoryProductTax] ([productTaxesId]);
+2023-03-14 15:39:31.854 +07:00 [INF] Executed DbCommand (260ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ProductProductTax_productsId] ON [ProductProductTax] ([productsId]);
+2023-03-14 15:39:32.115 +07:00 [INF] Executed DbCommand (261ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ProductReturn_OrderDetailId] ON [ProductReturn] ([OrderDetailId]);
+2023-03-14 15:39:32.376 +07:00 [INF] Executed DbCommand (260ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_ProductShipCost_productCategoryId] ON [ProductShipCost] ([productCategoryId]);
+2023-03-14 15:39:32.637 +07:00 [INF] Executed DbCommand (261ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ReturnPayment_ProductReturnId] ON [ReturnPayment] ([ProductReturnId]);
+2023-03-14 15:39:32.898 +07:00 [INF] Executed DbCommand (260ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_Shipper_userId] ON [Shipper] ([userId]);
+2023-03-14 15:39:33.159 +07:00 [INF] Executed DbCommand (260ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ToDoItems_ProjectId] ON [ToDoItems] ([ProjectId]);
+2023-03-14 15:39:33.421 +07:00 [INF] Executed DbCommand (262ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20230310122644_InitDB', N'7.0.1');
+2023-03-14 15:39:33.704 +07:00 [INF] Applying migration '20230314054326_AddRoleTable'.
+2023-03-14 15:39:37.869 +07:00 [INF] Executed DbCommand (3,800ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+EXEC sp_rename N'[Users].[role]', N'roleId', N'COLUMN';
+2023-03-14 15:39:38.130 +07:00 [INF] Executed DbCommand (261ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Roles] (
+    [Id] int NOT NULL IDENTITY,
+    [roleName] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_Roles] PRIMARY KEY ([Id])
+);
+2023-03-14 15:39:38.395 +07:00 [INF] Executed DbCommand (264ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Users_roleId] ON [Users] ([roleId]);
+2023-03-14 15:39:38.656 +07:00 [INF] Executed DbCommand (262ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [Users] ADD CONSTRAINT [FK_Users_Roles_roleId] FOREIGN KEY ([roleId]) REFERENCES [Roles] ([Id]) ON DELETE CASCADE;
+2023-03-14 15:39:38.916 +07:00 [INF] Executed DbCommand (259ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20230314054326_AddRoleTable', N'7.0.1');
