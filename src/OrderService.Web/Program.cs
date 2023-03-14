@@ -5,11 +5,9 @@ using OrderService.Core;
 using OrderService.Infrastructure;
 using OrderService.Infrastructure.Data;
 using OrderService.Web;
-using FastEndpoints;
-using FastEndpoints.Swagger.Swashbuckle;
-using FastEndpoints.ApiExplorer;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using Microsoft.AspNetCore.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,6 +52,8 @@ builder.Services.Configure<ServiceConfig>(config =>
   // optional - default path to view services is /listallservices - recommended to choose your own path
   config.Path = "/listservices";
 });
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 
 builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>

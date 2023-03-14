@@ -3,7 +3,7 @@ using OrderService.SharedKernel;
 using OrderService.SharedKernel.Interfaces;
 
 namespace OrderService.Core.ProductAggregate;
-public class ProductCategory : EntityBase
+public class ProductCategory : EntityBase, IAggregateRoot
 {
   public string productCategoryName { get; } 
 
