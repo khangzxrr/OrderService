@@ -33,7 +33,6 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Folder Include="Endpoints\OrderEndpoints\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
   

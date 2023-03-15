@@ -31,6 +31,18 @@ public static class SeedData
     dbContext.CurrencyExchanges.Add(US);
   }
 
+  public static void PopulateEmployee(AppDbContext dbContext)
+  {
+    var employee = new User("employee@fastship.com", "b45cffe084dd3d20d928bee85e7b0f21", "123123", "Khang", "Ngoc", DateTime.Now, "159 aaa bbb");
+    employee.setRole(dbContext.Roles.Where(r => r.roleName == RoleEnum.EMPLOYEE.ToString()).First());
+
+    var customer = new User("customer@gmail.com", "b45cffe084dd3d20d928bee85e7b0f21", "123123", "Khang", "Ngoc", DateTime.Now, "159 aaa bbb");
+    customer.setRole(dbContext.Roles.Where(r => r.roleName == RoleEnum.CUSTOMER.ToString()).First());
+
+    dbContext.Users.Add(employee);
+    dbContext.Users.Add(customer);
+  }
+
   public static void PopulateRoles(AppDbContext dbContext)
   {
     var admin = new Role(nameof(RoleEnum.ADMIN));
@@ -51,10 +63,16 @@ public static class SeedData
     if (!dbContext.Roles.Any())
     {
       PopulateRoles(dbContext);
+      dbContext.SaveChanges();
     }
     if (!dbContext.CurrencyExchanges.Any())
     {
       PopulateCurrencies(dbContext);
+      dbContext.SaveChanges();
+    }
+    if (!dbContext.Users.Any())
+    {
+      PopulateEmployee(dbContext);
     }
 
     dbContext.SaveChanges();
