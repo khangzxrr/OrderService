@@ -7,6 +7,7 @@ public class ProductShipCostConfiguration : IEntityTypeConfiguration<ProductShip
 {
   public void Configure(EntityTypeBuilder<ProductShipCost> builder)
   {
-    builder.Property(p =>p.cost).IsRequired();  
+    builder.Property(p =>p.shipCost).IsRequired();  
+    builder.Property(p => p.costPerWeight).IsRequired();
   }
 }

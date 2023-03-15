@@ -17,8 +17,6 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
     builder.Property(p => p.productURL).IsRequired();
     builder.Property(p => p.productWeight).IsRequired();
 
-    builder.HasOne(p => p.productShipCost).WithMany().OnDelete(DeleteBehavior.Restrict).IsRequired();
-
     builder.Property(p => p.productSellerAddress).HasMaxLength(200).IsRequired();
     builder.Property(p => p.productSellerEmail).HasMaxLength(200).IsRequired();
 

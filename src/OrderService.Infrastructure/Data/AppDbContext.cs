@@ -5,6 +5,7 @@ using OrderService.SharedKernel;
 using OrderService.SharedKernel.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using OrderService.Core.UserAggregate;
+using OrderService.Core.CurrencyAggregate;
 
 namespace OrderService.Infrastructure.Data;
 
@@ -25,6 +26,8 @@ public class AppDbContext : DbContext
 
   public DbSet<User> Users => Set<User>();
   public DbSet<Role> Roles => Set<Role>();
+
+  public DbSet<CurrencyExchange> CurrencyExchanges => Set<CurrencyExchange>();
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
