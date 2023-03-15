@@ -1,5 +1,14 @@
 version: '3.6'
 services:
+  rabbitmq:
+    image: rabbitmq:3.11.10-management-alpine
+    container_name: 'rabbitmq'
+    ports:
+        - 5672:5672
+        - 15672:15672
+    volumes:
+        - rb_data:/var/lib/rabbitmq/
+        - rb_data:/var/log/rabbitmq
   postgres:
     image: postgres:14
     restart: always
@@ -30,3 +39,4 @@ services:
       # HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
 volumes:
   pg_data:
+  rb_data:
