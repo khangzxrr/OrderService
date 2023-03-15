@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OrderService.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using OrderService.Infrastructure.Data;
 namespace OrderService.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230315112452_CurrencyExchangesToDbSet")]
+    partial class CurrencyExchangesToDbSet
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -410,6 +413,9 @@ namespace OrderService.Infrastructure.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<int>("productShipCostId")
+                        .HasColumnType("int");
+
                     b.Property<string>("productURL")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -432,6 +438,8 @@ namespace OrderService.Infrastructure.Migrations
                     b.HasIndex("currencyExchangeId");
 
                     b.HasIndex("productCategoryId");
+
+                    b.HasIndex("productShipCostId");
 
                     b.ToTable("Product");
                 });
@@ -548,14 +556,11 @@ namespace OrderService.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<float>("costPerWeight")
+                    b.Property<float>("cost")
                         .HasColumnType("real");
 
                     b.Property<int>("productCategoryId")
                         .HasColumnType("int");
-
-                    b.Property<float>("shipCost")
-                        .HasColumnType("real");
 
                     b.HasKey("Id");
 
@@ -888,9 +893,17 @@ namespace OrderService.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("OrderService.Core.ProductAggregate.ProductShipCost", "productShipCost")
+                        .WithMany()
+                        .HasForeignKey("productShipCostId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("currencyExchange");
 
                     b.Navigation("productCategory");
+
+                    b.Navigation("productShipCost");
                 });
 
             modelBuilder.Entity("OrderService.Core.ProductAggregate.ProductHistory", b =>
