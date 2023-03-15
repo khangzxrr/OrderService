@@ -19,5 +19,11 @@ public class DefaultCoreModule : Module
 
     builder.RegisterType<CreateOrderService>()
         .As<ICreateOrderService>().InstancePerLifetimeScope();
+
+    builder.RegisterType<AddOrderDetailService>()
+        .As<IAddOrderDetailService>().InstancePerLifetimeScope();
+
+    builder.RegisterType<AuthenticationService>()
+        .As<IAuthenticationService>().InstancePerLifetimeScope();
   }
 }

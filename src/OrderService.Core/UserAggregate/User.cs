@@ -10,6 +10,7 @@ namespace OrderService.Core.UserAggregate;
 public class User: EntityBase, IAggregateRoot
 {
   public string guid { get; private set; }
+  public string email { get; private set; }
   public string passwordHash { get; private set; }
   public string passwordSalt { get; private set; }
   public string firstname { get; private set; }
@@ -25,19 +26,20 @@ public class User: EntityBase, IAggregateRoot
 
   public Shipper? shipper { get; private set; }
 
-  
+
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
   public User(
-    string guid,
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    string email,
     string passwordHash,
     string passwordSalt,
     string firstname,
     string lastname,
     DateTime dateOfBirth,
-    string address,
-    UserVerify verify
+    string address
     )
   {
-    this.guid = Guard.Against.NullOrEmpty(guid, nameof(guid));
+    this.email = Guard.Against.NullOrEmpty(email);
     this.passwordHash = Guard.Against.NullOrEmpty(passwordHash, nameof(passwordHash));
     this.passwordSalt = Guard.Against.NullOrEmpty(passwordSalt, nameof(passwordSalt));
     this.firstname = Guard.Against.NullOrEmpty(firstname, nameof(firstname));
@@ -45,7 +47,9 @@ public class User: EntityBase, IAggregateRoot
     this.dateOfBirth = Guard.Against.OutOfSQLDateRange(dateOfBirth, nameof(dateOfBirth));
     this.address = Guard.Against.NullOrEmpty(address, nameof(address));
 
-    this.verify = verify;
+    this.guid = "NOT_USING_GOOGLE";
+
+    this.verify = UserVerify.disabled;
   }
 
   public void setRole(Role role)

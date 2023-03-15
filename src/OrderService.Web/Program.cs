@@ -7,6 +7,11 @@ using OrderService.Infrastructure.Data;
 using OrderService.Web;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using OrderService.Web.Interfaces;
+using OrderService.Web.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,6 +66,32 @@ builder.Services.Configure<ServiceConfig>(config =>
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 
+
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+
+
+builder.Services.AddHttpContextAccessor();
+//Use ApiEndPoint
+//builder.Services.AddFastEndpoints();
+//builder.Services.AddFastEndpointsApiExplorer();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+{
+  options.SaveToken = true;
+
+  string key = builder.Configuration.GetSection("Jwt:Key").Get<String>()!;
+
+  options.TokenValidationParameters = new TokenValidationParameters()
+  {
+    ValidateIssuer = true,
+    ValidateAudience = true,
+    ValidAudience = builder.Configuration["Jwt:Audience"],
+    ValidIssuer = builder.Configuration["Jwt:Issuer"],
+    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
+  };
+});
+
 builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 {
   containerBuilder.RegisterModule(new DefaultCoreModule());
@@ -85,6 +116,9 @@ app.UseRouting();
 app.MapControllers();
 app.UseHttpsRedirection();
 app.UseCookiePolicy();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseCors(myAllowSpecificOrigins);
 

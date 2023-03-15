@@ -1,0 +1,90 @@
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
+using Ardalis.GuardClauses;
+using Ardalis.Result;
+using OrderService.Core.Interfaces;
+using OrderService.Core.UserAggregate;
+using OrderService.Core.UserAggregate.Specifications;
+using OrderService.SharedKernel.Interfaces;
+
+namespace OrderService.Core.Services;
+internal class AuthenticationService : IAuthenticationService
+{
+
+  private readonly IRepository<User> _userRepository;
+  private readonly IRepository<Role> _roleRepository;
+
+  public AuthenticationService(IRepository<User> userRepository, IRepository<Role> roleRepository)
+  {
+    _userRepository = userRepository;
+    _roleRepository = roleRepository;
+  }
+
+
+  private string GenerateMD5(string text)
+  {
+    var hashPassword = "";
+
+    using (MD5 hash = MD5.Create())
+    {
+      hashPassword = String.Join
+      (
+          "",
+          from ba in hash.ComputeHash
+          (
+              Encoding.UTF8.GetBytes(text)
+          )
+          select ba.ToString("x2")
+      );
+    }
+
+    return hashPassword;
+  }
+
+  public async Task<Result<User>> AuthenticationAsync(string email, string password)
+  {
+    Guard.Against.NullOrEmpty(email, nameof(email));  
+    Guard.Against.NullOrEmpty(password, nameof(password));
+
+    var generatedHashPassword = GenerateMD5(password);
+
+    var userSpec = new UserByEmailPassword(email, generatedHashPassword);
+    var user = await _userRepository.FirstOrDefaultAsync(userSpec);
+
+    Guard.Against.Null(user, nameof(user));
+
+    return Result.Success(user);
+  }
+
+  public async Task<Result<User>> CreateNewUserAsync(string email, string password, string firstName, string lastName, DateTime dateofbirth, string address)
+  {
+    Guard.Against.NullOrEmpty(email, nameof(email));
+    Guard.Against.NullOrEmpty(password, nameof(password));
+
+
+    var userByEmailSpec = new UserByEmailSpec(email);
+    var user = await _userRepository.FirstOrDefaultAsync(userByEmailSpec);
+
+    if (user != null)
+    {
+      return Result.Error("email is exist");
+    }
+
+    var roleSpec = new RoleByNameSpec(RoleEnum.CUSTOMER);
+    var role = await _roleRepository.FirstOrDefaultAsync(roleSpec);
+    if (role == null)
+    {
+      return Result.Error("Role is not exist");
+    }
+
+    user = new User(email, GenerateMD5(password), "salt", firstName, lastName, dateofbirth, address);
+    user.setRole(role!);
+
+    await _userRepository.AddAsync(user);
+    await _userRepository.SaveChangesAsync();
+    
+    return Result.Success(user);
+  }
+}
