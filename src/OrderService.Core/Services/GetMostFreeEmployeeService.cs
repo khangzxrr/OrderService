@@ -16,16 +16,16 @@ public class GetMostFreeEmployeeService : IGetMostFreeEmployeeService
     _repository = repository;
   }
   
-  public Result<User> GetMostFreeEmployee()
+  public async Task<Result<User>> GetMostFreeEmployee()
   {
     var spec = new UserByRoleSpec(RoleEnum.EMPLOYEE);
-    var employee = _repository.FirstOrDefaultAsync(spec);
+    var employee = await _repository.FirstOrDefaultAsync(spec);
 
     if (employee == null)
     {
       return Result<User>.NotFound();
     }
 
-    return employee;
+    return new Result<User>(employee!);
   }
 }

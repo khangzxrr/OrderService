@@ -77,7 +77,7 @@ public class CreateOrderService : ICreateOrderService
       return Result<Order>.Invalid(errors);
     }
 
-    var employee = _getMostFreeEmployeeService.GetMostFreeEmployee();
+    var employee = await _getMostFreeEmployeeService.GetMostFreeEmployee();
     if (employee == null)
     {
       return Result<Order>.Error($"{nameof(employee)} is not found (company has no employee?)");
@@ -93,7 +93,7 @@ public class CreateOrderService : ICreateOrderService
 
     var chat = new Chat();
     chat.SetCustomer(customer);
-    chat.SetEmployee(employee);
+    chat.SetEmployee(employee.Value);
 
     order.SetChat(chat);
 
