@@ -30,15 +30,10 @@ namespace OrderService.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("customerId")
-                        .HasColumnType("int");
-
                     b.Property<int>("employeeId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("customerId");
 
                     b.HasIndex("employeeId");
 
@@ -758,19 +753,11 @@ namespace OrderService.Infrastructure.Migrations
 
             modelBuilder.Entity("OrderService.Core.ChatAggregate.Chat", b =>
                 {
-                    b.HasOne("OrderService.Core.UserAggregate.User", "customer")
-                        .WithMany()
-                        .HasForeignKey("customerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("OrderService.Core.UserAggregate.User", "employee")
                         .WithMany()
                         .HasForeignKey("employeeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("customer");
 
                     b.Navigation("employee");
                 });
@@ -896,13 +883,11 @@ namespace OrderService.Infrastructure.Migrations
 
             modelBuilder.Entity("OrderService.Core.ProductAggregate.ProductShipCost", b =>
                 {
-                    b.HasOne("OrderService.Core.ProductAggregate.ProductCategory", "productCategory")
+                    b.HasOne("OrderService.Core.ProductAggregate.ProductCategory", null)
                         .WithOne("productShipCost")
                         .HasForeignKey("OrderService.Core.ProductAggregate.ProductShipCost", "productCategoryId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("productCategory");
                 });
 
             modelBuilder.Entity("OrderService.Core.ProjectAggregate.ToDoItem", b =>
