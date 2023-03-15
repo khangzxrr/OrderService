@@ -49,12 +49,19 @@ public class User: EntityBase, IAggregateRoot
 
     this.guid = "NOT_USING_GOOGLE";
 
-    this.verify = UserVerify.disabled;
+    this.verify = UserVerify.actived;
   }
 
   public void setRole(Role role)
   {
     this.role = Guard.Against.Null(role);
+  }
+
+
+  public void addOrder(Order order)
+  {
+    Guard.Against.Null(order);
+    _orders.Add(order);
   }
 }
 
