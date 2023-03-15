@@ -13,7 +13,6 @@ public class Product: EntityBase, IAggregateRoot
 {
   public ProductCategory productCategory { get; private set; }
 
-  public ProductShipCost productShipCost { get; private set; }
 
   private List<ProductHistory> _productHistories = new List<ProductHistory>();
   public IReadOnlyCollection<ProductHistory> ProductHistories => _productHistories.AsReadOnly();
@@ -86,11 +85,6 @@ public class Product: EntityBase, IAggregateRoot
   public void setProductCategory(ProductCategory productCategory)
   {
     this.productCategory = Guard.Against.Null(productCategory);
-  }
-
-  public void setProductShipCost(ProductShipCost productShipCost)
-  {
-    this.productShipCost = Guard.Against.Null(productShipCost);
   }
 
   public void setCurrencyExchange(CurrencyExchange currencyExchange)
