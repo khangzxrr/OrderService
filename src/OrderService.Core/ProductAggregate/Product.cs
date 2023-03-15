@@ -82,6 +82,13 @@ public class Product: EntityBase, IAggregateRoot
     
   }
 
+  public void addProductHistory(ProductHistory product)
+  {
+    Guard.Against.Null(product);
+
+    this._productHistories.Add(product);
+  }
+
   public void setProductCategory(ProductCategory productCategory)
   {
     this.productCategory = Guard.Against.Null(productCategory);
