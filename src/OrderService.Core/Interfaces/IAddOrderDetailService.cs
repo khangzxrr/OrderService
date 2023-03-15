@@ -5,5 +5,5 @@ using OrderService.Core.ProductAggregate;
 namespace OrderService.Core.Interfaces;
 public interface IAddOrderDetailService
 {
-  public Task<Result> AddOrderDetail(Order order, Product product, int quantity);
+  public Task<Result> AddOrderDetail(Order order, string productUrl, int quantity);
 }
