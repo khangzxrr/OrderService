@@ -9,7 +9,8 @@ public class OrderDetail : EntityBase
   public ProductHistory productHistory { get; private set; }
 
   public float additionalCost { get; private set; }
-
+  public float shipCost { get; private set; }
+  public float productCost { get; private set; }
   public float processCost { get; private set; }
   public int quantity { get; private set; }
 
@@ -18,7 +19,11 @@ public class OrderDetail : EntityBase
 
   public void setProduct(ProductHistory product)
   {
+    Guard.Against.Null(product.productCategory);
+
     productHistory = Guard.Against.Null(product);
+    productCost = Guard.Against.Negative(productHistory.productPrice);
+    shipCost = Guard.Against.Negative(productHistory.productCategory.productShipCost.shipCost);
   }
 
   public void setAdditionalCost(float additionalCost)
