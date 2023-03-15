@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OrderService.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using OrderService.Infrastructure.Data;
 namespace OrderService.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230315131700_RemoveChangeDateFromProductHistories")]
+    partial class RemoveChangeDateFromProductHistories
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -108,6 +111,26 @@ namespace OrderService.Infrastructure.Migrations
                     b.ToTable("CurrencyExchanges");
                 });
 
+            modelBuilder.Entity("OrderService.Core.OrderAggregate.AdditionalCost", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("condition")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("cost")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AdditionalCost");
+                });
+
             modelBuilder.Entity("OrderService.Core.OrderAggregate.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -172,13 +195,13 @@ namespace OrderService.Infrastructure.Migrations
                     b.Property<int?>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<float>("additionalCost")
-                        .HasColumnType("real");
+                    b.Property<int>("additionalCostId")
+                        .HasColumnType("int");
 
                     b.Property<float>("processCost")
                         .HasColumnType("real");
 
-                    b.Property<int>("productHistoryId")
+                    b.Property<int>("productId")
                         .HasColumnType("int");
 
                     b.Property<int>("quantity")
@@ -188,7 +211,9 @@ namespace OrderService.Infrastructure.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.HasIndex("productHistoryId");
+                    b.HasIndex("additionalCostId");
+
+                    b.HasIndex("productId");
 
                     b.ToTable("OrderDetail");
                 });
@@ -518,10 +543,6 @@ namespace OrderService.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("additionalCostCondition")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<float>("costPerWeight")
                         .HasColumnType("real");
 
@@ -791,13 +812,21 @@ namespace OrderService.Infrastructure.Migrations
                         .WithMany("orderDetails")
                         .HasForeignKey("OrderId");
 
-                    b.HasOne("OrderService.Core.ProductAggregate.ProductHistory", "productHistory")
+                    b.HasOne("OrderService.Core.OrderAggregate.AdditionalCost", "additionalCost")
                         .WithMany()
-                        .HasForeignKey("productHistoryId")
+                        .HasForeignKey("additionalCostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("productHistory");
+                    b.HasOne("OrderService.Core.ProductAggregate.ProductHistory", "product")
+                        .WithMany()
+                        .HasForeignKey("productId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("additionalCost");
+
+                    b.Navigation("product");
                 });
 
             modelBuilder.Entity("OrderService.Core.OrderAggregate.OrderPayment", b =>
