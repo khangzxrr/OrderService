@@ -1,4 +1,5 @@
-﻿using Ardalis.ApiEndpoints;
+﻿using System.Collections.Generic;
+using Ardalis.ApiEndpoints;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using OrderService.Core.ProductAggregate;
@@ -24,26 +25,39 @@ public class GetByUrl : EndpointBaseAsync
 
   [HttpGet(GetByUrlRequest.Route)]
   [SwaggerOperation(
-    Summary = "Get a product by url",
-    Description = "Get if a product by url",
+    Summary = "Get a product by urls",
+    Description = "Get if a product by urls",
     OperationId = "Product.Get",
     Tags = new[] { "ProductEndpoints" })
   ]
   public override async Task<ActionResult<ProductRecord>> HandleAsync([FromQuery] GetByUrlRequest request, CancellationToken cancellationToken = default)
   {
-    if (request.Url == null) { 
-      return BadRequest(request.Url);
+    if (request.Urls == null) { 
+      return BadRequest(request.Urls);
     }
 
-    var spec = new ProductByUrlSpec(request.Url);
-    var product = await _productRepository.FirstOrDefaultAsync(spec);
 
-    if (product == null)
+    List<Product> products = new List<Product>();
+
+    foreach(string url in request.Urls)
     {
-      return NotFound("please hold on, if you already peek a product then waiting a little more...server is fetching product");
+      var spec = new ProductByUrlSpec(url);
+      var product = await _productRepository.FirstOrDefaultAsync(spec);
+
+      if (product != null)
+      {
+        products.Add(product);
+      }
     }
 
-    var productRecord = _mapper.Map<ProductRecord>(product);
-    return Ok(productRecord);
+    if (products.Count < request.Urls.Length)
+    {
+      return NotFound($"server is fetching product {products.Count}/{request.Urls.Length}");
+    }
+
+    var productRecords = products.Select(p => _mapper.Map<ProductRecord>(p));
+    var response = new GetByUrlResponse(productRecords);
+
+    return Ok(response);
   }
 }
