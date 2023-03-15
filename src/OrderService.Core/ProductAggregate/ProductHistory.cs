@@ -7,15 +7,12 @@ namespace OrderService.Core.ProductAggregate;
 public class ProductHistory : EntityBase
 {
   public ProductCategory productCategory { get; set; }
-
-  public DateTime changeDate {get; set;}
   public string productName { get; set; }
   public string productImageUrl { get; set; }
   public string productDescription { get; set; }
   public float productPrice { get; set; }
   public string productURL { get; set; }
   public float productWeight { get; set; }
-  public ProductShipCost productShipCost { get; set; }
 
   public string productSellerAddress { get; set; }
   public string productSellerEmail { get; set; }
@@ -36,7 +33,6 @@ public class ProductHistory : EntityBase
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
   public ProductHistory(
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-    DateTime changeDate,
     string productName,
     string productImageUrl,
     string productDescription,
@@ -53,8 +49,6 @@ public class ProductHistory : EntityBase
     int productReturnDuration
 )
   {
-
-    this.changeDate = Guard.Against.Null(changeDate);
 
     this.productName = Guard.Against.NullOrEmpty(productName);
     this.productImageUrl = Guard.Against.NullOrEmpty(productImageUrl);
@@ -76,11 +70,6 @@ public class ProductHistory : EntityBase
   public void SetProductCategory(ProductCategory productCategory)
   {
     this.productCategory = Guard.Against.Null(productCategory);
-  }
-
-  public void SetProductShipCost(ProductShipCost productShipCost)
-  {
-    this.productShipCost = Guard.Against.Null(productShipCost);
   }
 
   public void SetCurrencyExchange(CurrencyExchange currencyExchange)

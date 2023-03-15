@@ -1,12 +1,13 @@
 ﻿using Ardalis.GuardClauses;
 using OrderService.SharedKernel;
-using OrderService.SharedKernel.Interfaces;
 
 namespace OrderService.Core.ProductAggregate;
 public class ProductShipCost : EntityBase
 {
   public float shipCost { get; set; }
   public float costPerWeight { get; set; }
+
+  public string additionalCostCondition { get; set; }
 
   public int productCategoryId { get; set; }
   public ProductCategory productCategory { get; set; }
