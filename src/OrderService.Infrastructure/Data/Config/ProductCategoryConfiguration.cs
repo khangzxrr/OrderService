@@ -10,8 +10,8 @@ public class ProductCategoryConfiguration : IEntityTypeConfiguration<ProductCate
     builder.Property(p => p.productCategoryName).HasMaxLength(100).IsRequired();
 
     //specific WithOne(p => p.productCategory) to remove auto-generate foreign key
-    builder.HasOne(p => p.productShipCost).WithOne(p => p.productCategory)
-      .HasForeignKey<ProductShipCost>(sc => sc.productCategoryId)
-      .OnDelete(DeleteBehavior.Restrict);
+    //builder.HasOne(p => p.productShipCost).WithOne(p => p.productCategory)
+    //  .HasForeignKey<ProductShipCost>(sc => sc.productCategoryId)
+    //  .OnDelete(DeleteBehavior.Restrict);
   }
 }

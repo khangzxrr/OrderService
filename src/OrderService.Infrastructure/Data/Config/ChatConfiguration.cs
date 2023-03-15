@@ -7,7 +7,6 @@ public class ChatConfiguration : IEntityTypeConfiguration<Chat>
 {
   public void Configure(EntityTypeBuilder<Chat> builder)
   {
-    builder.HasOne(c => c.customer).WithMany().OnDelete(DeleteBehavior.Restrict);
     builder.HasOne(c => c.employee).WithMany().OnDelete(DeleteBehavior.Restrict);
   }
 }
