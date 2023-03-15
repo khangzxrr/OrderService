@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿
+using System.Dynamic;
 using Ardalis.Result;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using OrderService.Core.Interfaces;
 using OrderService.Core.OrderAggregate;
 using OrderService.Core.ProductAggregate;
+using OrderService.Core.ProductAggregate.Specifications;
 using OrderService.SharedKernel.Interfaces;
-using RulesEngine;
 using RulesEngine.Extensions;
 using RulesEngine.Models;
 
@@ -22,20 +24,30 @@ public class AddOrderDetailService : IAddOrderDetailService
     _orderRepository = orderRepository;
   }
 
-  public async Task<Result> AddOrderDetail(Order order, Product product, int quantity)
+  public async Task<Result> AddOrderDetail(Order order, string productUrl, int quantity)
   {
     if (order == null)
     {
       return Result.Error($"{nameof(order)} cannot be null.");
     }
-    if (product == null)
+    if (productUrl.IsNullOrEmpty())
     {
-      return Result.Error($"{nameof(product)} cannot be null.");
+      return Result.Error($"{nameof(productUrl)} cannot be null or empty");
     }
     if (quantity < 1)
     {
       return Result.Error($"{nameof(quantity)} cannot be 0 or negative.");
     }
+
+    var productSpec = new ProductByUrlSpec(productUrl);
+    var product = await _productRepository.FirstOrDefaultAsync(productSpec);
+
+    if (product == null)
+    {
+      return Result.Error($"{nameof(product)} is not found.");
+    }
+
+
 
     var productHistory = new ProductHistory(product.productName,
         product.productImageUrl,
@@ -55,16 +67,11 @@ public class AddOrderDetailService : IAddOrderDetailService
     productHistory.SetCurrencyExchange(product.currencyExchange);
     productHistory.SetProductCategory(product.productCategory);
 
-    product.addProductHistory(productHistory);
-    await _productRepository.UpdateAsync(product);
-
-    await _productRepository.SaveChangesAsync();
-
-
     var orderDetail = new OrderDetail();
     orderDetail.setProduct(productHistory);
     orderDetail.setQuantity(quantity);
 
+    
 
     var conditionString = productHistory.productCategory.productShipCost.additionalCostCondition;
     var workflow = JsonConvert.DeserializeObject<List<Workflow>>(conditionString);
@@ -72,32 +79,31 @@ public class AddOrderDetailService : IAddOrderDetailService
     var re = new RulesEngine.RulesEngine(workflow!.ToArray(), null);
 
 
-
-    var inputs = new dynamic[]
+    var rule1 = new RuleParameter("orderDetail", new
     {
-      orderDetail
+      productCost = orderDetail.productCost
+    });
+    List<RuleParameter> ruleParameters = new List<RuleParameter>
+    {
+      rule1 
     };
 
-    List<RuleResultTree> result = await re.ExecuteAllRulesAsync("AdditionalCost", inputs);
+    var result = await re.ExecuteActionWorkflowAsync("AdditionalCost", "Price_over", ruleParameters.ToArray());
 
-    bool isValidRule = result.TrueForAll(r => r.IsSuccess);
-
-    result.OnSuccess((successEvent) =>
-    {
-      Console.WriteLine(successEvent);
-      orderDetail.setAdditionalCost(5);
-    });
-
-    result.OnFail(() =>
-    {
-      orderDetail.setAdditionalCost(0);
-    });
-
+    Console.WriteLine(result.Output);
+    float additionalCost = (float)(double)result.Output;
+    orderDetail.setAdditionalCost(additionalCost);
 
     order.addOrderDetail(orderDetail);
-    await _orderRepository.UpdateAsync(order);
 
-    await _orderRepository.SaveChangesAsync();
+
+    //clone product
+    product.addProductHistory(productHistory);
+    //await _productRepository.UpdateAsync(product);
+    //await _productRepository.SaveChangesAsync();
+
+    //await _orderRepository.AddAsync(order);
+    //await _orderRepository.SaveChangesAsync();
 
     return Result.Success();
   }
