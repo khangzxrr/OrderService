@@ -54,6 +54,12 @@ public class DefaultInfrastructureModule : Module
 
   private void RegisterCommonDependencies(ContainerBuilder builder)
   {
+
+    builder.RegisterType<ConsumeProductResultHostedService>()
+        .As<IConsumeProductResultHostedService>()
+        .SingleInstance();
+    
+
     builder.RegisterGeneric(typeof(EfRepository<>))
       .As(typeof(IRepository<>))
       .As(typeof(IReadRepository<>))
