@@ -26,7 +26,6 @@
     <None Remove="UserAggregate\Events\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="UserAggregate\" />
     <Folder Include="UserAggregate\Events\" />
   </ItemGroup>
 </Project>

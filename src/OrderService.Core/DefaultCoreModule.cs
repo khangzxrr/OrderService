@@ -13,5 +13,11 @@ public class DefaultCoreModule : Module
 
     builder.RegisterType<DeleteContributorService>()
         .As<IDeleteContributorService>().InstancePerLifetimeScope();
+
+    builder.RegisterType<GetMostFreeEmployeeService>()
+        .As<IGetMostFreeEmployeeService>().InstancePerLifetimeScope();
+
+    builder.RegisterType<CreateOrderService>()
+        .As<ICreateOrderService>().InstancePerLifetimeScope();
   }
 }
