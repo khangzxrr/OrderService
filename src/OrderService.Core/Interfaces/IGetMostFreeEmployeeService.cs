@@ -9,5 +9,5 @@ using OrderService.Core.UserAggregate;
 namespace OrderService.Core.Interfaces;
 public interface IGetMostFreeEmployeeService
 {
-  public Result<User> GetMostFreeEmployee();
+  public Task<Result<User>> GetMostFreeEmployee();
 }
