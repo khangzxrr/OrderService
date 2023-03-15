@@ -7,11 +7,16 @@ using OrderService.Infrastructure.Data;
 using OrderService.Web;
 using Microsoft.OpenApi.Models;
 using Serilog;
-using Microsoft.AspNetCore.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
+  .ConfigureServices((hostContext, services) =>
+  {
+    StartupSetup.AddConsumerProductResult(services);
+  });
+
+
 
 builder.Host.UseSerilog((_, config) => config.ReadFrom.Configuration(builder.Configuration));
 
@@ -21,7 +26,7 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
   options.MinimumSameSitePolicy = SameSiteMode.None;
 });
 
-string? connectionString = builder.Configuration.GetConnectionString("AzureConnection");  
+string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");  
 builder.Services.AddDbContext(connectionString!);
 
 var myAllowSpecificOrigins = "_myAllowSpecificOrigins";

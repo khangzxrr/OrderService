@@ -3,6 +3,7 @@ using OrderService.Core.ProjectAggregate;
 using OrderService.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using OrderService.Core.UserAggregate;
+using OrderService.Core.CurrencyAggregate;
 
 namespace OrderService.Web;
 
@@ -21,6 +22,13 @@ public static class SeedData
 
 
     }
+  }
+
+  public static void PopulateCurrencies(AppDbContext dbContext)
+  {
+    var US = new CurrencyExchange("US", 24.5f);
+
+    dbContext.CurrencyExchanges.Add(US);
   }
 
   public static void PopulateRoles(AppDbContext dbContext)
@@ -43,6 +51,10 @@ public static class SeedData
     if (!dbContext.Roles.Any())
     {
       PopulateRoles(dbContext);
+    }
+    if (!dbContext.CurrencyExchanges.Any())
+    {
+      PopulateCurrencies(dbContext);
     }
 
     dbContext.SaveChanges();
