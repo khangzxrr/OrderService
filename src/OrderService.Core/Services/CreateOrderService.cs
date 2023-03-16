@@ -1,8 +1,10 @@
 ﻿using Ardalis.GuardClauses;
 using Ardalis.Result;
+using MediatR;
 using OrderService.Core.ChatAggregate;
 using OrderService.Core.Interfaces;
 using OrderService.Core.OrderAggregate;
+using OrderService.Core.OrderAggregate.Events;
 using OrderService.Core.UserAggregate;
 using OrderService.SharedKernel.Interfaces;
 
@@ -14,10 +16,13 @@ public class CreateOrderService : ICreateOrderService
 
   private readonly IRepository<User> _userRepository;
 
-  public CreateOrderService(IGetMostFreeEmployeeService getMostFreeEmployeeService, IRepository<User> userRepository)
+  private readonly IMediator _mediator;
+
+  public CreateOrderService(IGetMostFreeEmployeeService getMostFreeEmployeeService, IRepository<User> userRepository, IMediator mediator)
   {
     _userRepository = userRepository;
     _getMostFreeEmployeeService = getMostFreeEmployeeService;
+    _mediator = mediator;
   }
 
   public async Task<Result<Order>> SaveNewOrder(int customerId, Order order)
@@ -29,8 +34,10 @@ public class CreateOrderService : ICreateOrderService
     }
 
     customer.addOrder(order);
-
     await _userRepository.SaveChangesAsync();
+
+    var domainEvent = new OrderCreatedEvent(order.Id);
+    await _mediator.Publish(domainEvent);
 
     return new Result<Order>(order);
   }
