@@ -1,5 +1,4 @@
 ﻿using Ardalis.GuardClauses;
-using OrderService.Core.ProductAggregate;
 using OrderService.SharedKernel;
 
 namespace OrderService.Core.OrderAggregate;
