@@ -16,12 +16,10 @@ public class AddOrderDetailService : IAddOrderDetailService
 {
 
   private readonly IRepository<Product> _productRepository;
-  private readonly IRepository<Order> _orderRepository;
 
-  public AddOrderDetailService(IRepository<Product> productRepository, IRepository<Order> orderRepository)
+  public AddOrderDetailService(IRepository<Product> productRepository)
   {
     _productRepository = productRepository;
-    _orderRepository = orderRepository;
   }
 
   public async Task<Result> AddOrderDetail(Order order, string productUrl, int quantity)
@@ -46,8 +44,6 @@ public class AddOrderDetailService : IAddOrderDetailService
     {
       return Result.Error($"{nameof(product)} is not found.");
     }
-
-
 
     var productHistory = new ProductHistory(product.productName,
         product.productImageUrl,
@@ -95,15 +91,6 @@ public class AddOrderDetailService : IAddOrderDetailService
     orderDetail.setAdditionalCost(additionalCost);
 
     order.addOrderDetail(orderDetail);
-
-
-    //clone product
-    product.addProductHistory(productHistory);
-    //await _productRepository.UpdateAsync(product);
-    //await _productRepository.SaveChangesAsync();
-
-    //await _orderRepository.AddAsync(order);
-    //await _orderRepository.SaveChangesAsync();
 
     return Result.Success();
   }
