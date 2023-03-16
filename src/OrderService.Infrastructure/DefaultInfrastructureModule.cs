@@ -54,6 +54,9 @@ public class DefaultInfrastructureModule : Module
 
   private void RegisterCommonDependencies(ContainerBuilder builder)
   {
+    builder.RegisterType<PaymentService>().As<IPaymentService>()
+      .InstancePerLifetimeScope();
+
 
     builder.RegisterType<ConsumeProductResultHostedService>()
         .As<IConsumeProductResultHostedService>()
