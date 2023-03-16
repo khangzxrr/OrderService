@@ -34,18 +34,17 @@ public class AuthenLogin : EndpointBaseAsync
   ]
   public override async Task<ActionResult<AuthenResponse>> HandleAsync(AuthenRequest request, CancellationToken cancellationToken = default)
   {
-    try
-    {
-      var user = await _authenticationService.AuthenticationAsync(request.Email, request.Password);
-      string token = _tokenService.GenerateToken(user);
+    var user = await _authenticationService.AuthenticationAsync(request.Email, request.Password);
 
-      var response = new AuthenResponse(token);
-
-      return Ok(response);
-    }
-    catch(Exception)
+    if (user.Errors.Any())
     {
-      return NotFound("Wrong email or password");
+      return BadRequest(user.Errors);
     }
+
+    string token = _tokenService.GenerateToken(user);
+
+    var response = new AuthenResponse(token);
+
+    return Ok(response);
   }
 }

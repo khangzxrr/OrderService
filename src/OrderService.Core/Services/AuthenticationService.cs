@@ -45,15 +45,21 @@ internal class AuthenticationService : IAuthenticationService
 
   public async Task<Result<User>> AuthenticationAsync(string email, string password)
   {
-    Guard.Against.NullOrEmpty(email, nameof(email));  
-    Guard.Against.NullOrEmpty(password, nameof(password));
+    if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+    {
+      return Result.Error("email or password not must be null or empty");
+    }
 
     var generatedHashPassword = GenerateMD5(password);
 
     var userSpec = new UserByEmailPassword(email, generatedHashPassword);
     var user = await _userRepository.FirstOrDefaultAsync(userSpec);
 
-    Guard.Against.Null(user, nameof(user));
+    if (user == null)
+    {
+      return Result.Error("Wrong email or password");
+    }
+
 
     return Result.Success(user);
   }
