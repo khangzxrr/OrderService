@@ -8,7 +8,6 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
   public void Configure(EntityTypeBuilder<Product> builder)
   {
     builder.HasOne(p => p.productCategory).WithMany().IsRequired();
-    builder.HasMany(p => p.ProductHistories).WithOne();
 
     builder.Property(p => p.productName).HasMaxLength(200).IsRequired();
     builder.Property(p => p.productImageUrl).IsRequired();
