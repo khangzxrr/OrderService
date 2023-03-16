@@ -1,4 +1,5 @@
 ﻿using Ardalis.ApiEndpoints;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OrderService.Core.Interfaces;
@@ -9,18 +10,20 @@ namespace OrderService.Web.Endpoints.OrderEndpoints;
 
 public class Create : EndpointBaseAsync
   .WithRequest<CreateOrderRequest>
-  .WithActionResult
+  .WithActionResult<CreateOrderResponse>
 {
 
   private readonly ICreateOrderService _createOrderService;
   private readonly IAddOrderDetailService _addOrderDetailService;
   private readonly ICurrentUserService _currentUserService;
+  private readonly IMapper _mapper;
 
-  public Create(ICreateOrderService createOrderService, IAddOrderDetailService addOrderDetailService, ICurrentUserService currentUserService)
+  public Create(ICreateOrderService createOrderService, IAddOrderDetailService addOrderDetailService, ICurrentUserService currentUserService, IMapper mapper)
   {
     _createOrderService = createOrderService;
     _addOrderDetailService = addOrderDetailService;
     _currentUserService = currentUserService;
+    _mapper = mapper;
   }
 
   [HttpPost(CreateOrderRequest.Route)]
@@ -31,7 +34,7 @@ public class Create : EndpointBaseAsync
     OperationId = "Order.Create",
     Tags = new[] { "OrderEndpoints" })
   ]
-  public override async Task<ActionResult> HandleAsync(CreateOrderRequest request, CancellationToken cancellationToken = default)
+  public override async Task<ActionResult<CreateOrderResponse>> HandleAsync(CreateOrderRequest request, CancellationToken cancellationToken = default)
   {
     if (!request.products.Any())
     {
@@ -58,7 +61,7 @@ public class Create : EndpointBaseAsync
       return StatusCode(500, "failed to create a new order");
     }
 
-    foreach(var product in request.products)
+    foreach (var product in request.products)
     {
       var result = await _addOrderDetailService.AddOrderDetail(order, product.productUrl, product.productQuantity);
 
@@ -70,7 +73,13 @@ public class Create : EndpointBaseAsync
 
     order = await _createOrderService.SaveNewOrder(userId, order);
 
+    if (order == null)
+    {
+      return StatusCode(500, "Order is not created? please contact developer");
+    }
 
-    return Ok(order);
+    var response = new CreateOrderResponse(_mapper.Map<OrderRecord>(order));
+
+    return Ok(response);
   }
 }
