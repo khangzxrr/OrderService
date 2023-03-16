@@ -1,4 +1,5 @@
-﻿using OrderService.SharedKernel;
+﻿using OrderService.Core.OrderAggregate;
+using OrderService.SharedKernel;
 using OrderService.SharedKernel.Interfaces;
 
 namespace OrderService.Core.ProductAggregate;

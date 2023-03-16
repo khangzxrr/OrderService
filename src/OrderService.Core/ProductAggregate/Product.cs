@@ -13,10 +13,6 @@ public class Product: EntityBase, IAggregateRoot
 {
   public ProductCategory productCategory { get; private set; }
 
-
-  private List<ProductHistory> _productHistories = new List<ProductHistory>();
-  public IReadOnlyCollection<ProductHistory> ProductHistories => _productHistories.AsReadOnly();
-
   private List<ProductTax> _productTaxes = new List<ProductTax>();
   public IReadOnlyCollection<ProductTax> productTaxes => _productTaxes.AsReadOnly();
 
@@ -27,8 +23,6 @@ public class Product: EntityBase, IAggregateRoot
   public float productPrice { get; set; }
   public string productURL { get; set; }
   public float productWeight { get; set; }
-
-  
 
   public string productSellerAddress { get; set; }
   public string productSellerEmail { get; set; }
@@ -80,13 +74,6 @@ public class Product: EntityBase, IAggregateRoot
     this.productReturnDescription = Guard.Against.NullOrEmpty(productReturnDescription);
     this.productReturnDuration = Guard.Against.Negative(productReturnDuration);
     
-  }
-
-  public void addProductHistory(ProductHistory product)
-  {
-    Guard.Against.Null(product);
-
-    this._productHistories.Add(product);
   }
 
   public void setProductCategory(ProductCategory productCategory)
