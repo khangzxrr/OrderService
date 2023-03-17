@@ -12,8 +12,10 @@ public class OrderById : Specification<Order>, ISingleResultSpecification
   {
     Query
       .Where(o => o.Id == id)
-      .Include(o => o.chat)
       .Include(o => o.orderDetails)
-      .Include(o => o.orderPayments);
+      .Include(o => o.orderPayments)
+      .Include(o => o.chat)
+      .ThenInclude(c => c.chatMessages);
+      
   }
 }
