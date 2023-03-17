@@ -13,8 +13,8 @@ public class OrderDetail : EntityBase
   public float processCost { get; private set; }
   public int quantity { get; private set; }
 
-  private List<ProductReturn> _productReturns = new List<ProductReturn>();
-  public IReadOnlyCollection<ProductReturn> productReturns => _productReturns;
+  private readonly List<ProductReturn> _productReturns = new List<ProductReturn>();
+  public IEnumerable<ProductReturn> productReturns => _productReturns.AsReadOnly();
 
   public void setProduct(ProductHistory product)
   {

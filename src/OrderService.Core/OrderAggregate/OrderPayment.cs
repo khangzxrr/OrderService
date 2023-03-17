@@ -13,13 +13,20 @@ public class OrderPayment : EntityBase
   public float paymentCost { get; }
   public DateTime paymentDate { get; }
   public string paymentDescription { get; }
+  public string transactionalId { get; private set; }
 
-  public OrderPayment(PaymentStatus paymentStatus, float paymentCost, DateTime paymentDate)
+  public OrderPayment(PaymentStatus paymentStatus, float paymentCost, string transactionalId, string paymentDescription, DateTime paymentDate)
   {
     this.paymentStatus = Guard.Against.Null(paymentStatus, nameof(paymentStatus));
     this.paymentCost = Guard.Against.Negative(paymentCost, nameof(paymentCost));
     this.paymentDate = Guard.Against.Null(paymentDate, nameof(paymentDate));
+    this.transactionalId = Guard.Against.NullOrEmpty(transactionalId);
     this.paymentDescription = Guard.Against.NullOrEmpty(paymentDescription, nameof(paymentDescription));
+  }
+
+  public void SetTransactionalId(string transactionalId)
+  {
+    transactionalId = Guard.Against.NullOrEmpty(transactionalId);
   }
 
  

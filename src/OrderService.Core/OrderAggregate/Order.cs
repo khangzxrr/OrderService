@@ -1,6 +1,4 @@
-﻿
-using Ardalis.GuardClauses;
-using OrderService.Core.ChatAggregate;
+﻿using Ardalis.GuardClauses;
 using OrderService.SharedKernel;
 using OrderService.SharedKernel.Interfaces;
 
@@ -9,7 +7,7 @@ public class Order : EntityBase, IAggregateRoot
 {
   public Chat chat { get; private set; }
   public DateTime orderDate { get; }
-  public OrderStatus status { get; }
+  public OrderStatus status { get; private set; }
   public string orderDescription { get; }
   public string customerDescription { get; }
   public string deliveryAddress { get; }
@@ -50,6 +48,11 @@ public class Order : EntityBase, IAggregateRoot
   public void SetChat(Chat chat)
   {
     this.chat = Guard.Against.Null(chat);
+  }
+
+  public void SetStatus(OrderStatus status)
+  {
+    this.status = Guard.Against.Null(status);
   }
 
   public float GetFirstPaymentAmount()
