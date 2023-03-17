@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using OrderService.Core.ChatAggregate;
+using OrderService.Core.OrderAggregate;
 
 namespace OrderService.Infrastructure.Data.Config;
 public class ChatConfiguration : IEntityTypeConfiguration<Chat>

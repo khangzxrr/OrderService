@@ -23,7 +23,5 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
     builder.Property(o => o.deliveryAddress).IsRequired();
     builder.Property(o => o.orderDate).IsRequired();
     builder.Property(o => o.orderDescription).HasMaxLength(300).IsRequired();
-
-    builder.HasMany(o => o.orderPayments).WithOne();
   }
 }
