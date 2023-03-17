@@ -12,11 +12,9 @@ public class Pay : EndpointBaseAsync
   .WithActionResult<PayResponse>
 {
 
-  private readonly IRepository<Order> _orderRepository;
   private readonly IPaymentService _paymentService;
-  public Pay(IPaymentService paymentService, IRepository<Order> orderRepository) { 
+  public Pay(IPaymentService paymentService) { 
     _paymentService = paymentService;
-    _orderRepository = orderRepository;
   }
 
   [HttpGet(PayRequest.Route)]
@@ -28,15 +26,14 @@ public class Pay : EndpointBaseAsync
   ]
   public override async Task<ActionResult<PayResponse>> HandleAsync([FromRoute] PayRequest request, CancellationToken cancellationToken = default)
   {
-    var order = await _orderRepository.GetByIdAsync(request.OrderId);
-    if (order == null)
+    var result = await _paymentService.GeneratePaymentUrl(request.OrderId);
+
+    if (result.Errors.Any())
     {
-      return NotFound("Order is not found");
+      return BadRequest(result.Errors);
     }
 
-    string url = _paymentService.GeneratePaymentUrl(order);
-
-    var response = new PayResponse(url);
+    var response = new PayResponse(result.Value);
 
     return Ok(response);
   }
