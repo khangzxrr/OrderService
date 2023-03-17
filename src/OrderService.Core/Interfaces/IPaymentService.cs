@@ -4,5 +4,5 @@ using OrderService.Core.OrderAggregate;
 namespace OrderService.Core.Interfaces;
 public interface IPaymentService
 {
-  public Result<string> GeneratePaymentUrl(Order order);
+  public Task<Result<string>> GeneratePaymentUrl(int orderId);
 }
