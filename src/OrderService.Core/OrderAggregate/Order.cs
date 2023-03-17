@@ -17,11 +17,11 @@ public class Order : EntityBase, IAggregateRoot
   public int shippingEstimatedDays { get; }
   public float price;
 
-  private readonly List<OrderPayment> _orderPayment = new List<OrderPayment>();
-  public IReadOnlyCollection<OrderPayment> orderPayments => _orderPayment.AsReadOnly();
+  private readonly List<OrderPayment> _orderPayments = new();
+  public IEnumerable<OrderPayment> orderPayments => _orderPayments.AsReadOnly();
 
-  private readonly List<OrderDetail> _orderDetails = new List<OrderDetail>();
-  public IReadOnlyCollection<OrderDetail> orderDetails => _orderDetails.AsReadOnly();
+  private readonly List<OrderDetail> _orderDetails = new();
+  public IEnumerable<OrderDetail> orderDetails => _orderDetails.AsReadOnly();
 
   public void addOrderDetail(OrderDetail orderDetail)
   {
@@ -52,4 +52,20 @@ public class Order : EntityBase, IAggregateRoot
     this.chat = Guard.Against.Null(chat);
   }
 
+  public float GetFirstPaymentAmount()
+  {
+    return 80.0f * this.price / 100.0f;
+  }
+
+  public float GetSecondPaymentAmount()
+  {
+    return 20.0f * this.price / 100.0f;
+  }
+
+  public void AddPayment(OrderPayment payment)
+  {
+    Guard.Against.Null(payment);
+
+    _orderPayments.Add(payment);
+  }
 }
