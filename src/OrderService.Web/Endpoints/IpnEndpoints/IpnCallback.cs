@@ -1,5 +1,6 @@
 ﻿using Ardalis.ApiEndpoints;
 using Microsoft.AspNetCore.Mvc;
+using OrderService.Core.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace OrderService.Web.Endpoints.IpnEndpoints;
@@ -9,6 +10,13 @@ public class IpnCallback : EndpointBaseAsync
   .WithActionResult
 {
 
+  private readonly IOrderPaymentService _orderPaymentService;
+
+  public IpnCallback(IOrderPaymentService orderPaymentService)
+  {
+    _orderPaymentService = orderPaymentService;
+  }
+
   [HttpGet(IpnCallbackRequest.Route)]
   [SwaggerOperation(
     Summary = "Ipn callback Endpoint",
@@ -16,10 +24,30 @@ public class IpnCallback : EndpointBaseAsync
     OperationId = "Ipn.Callback",
     Tags = new[] { "IpnEndpoints" })
   ]
-#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
   public override async Task<ActionResult> HandleAsync([FromQuery] IpnCallbackRequest request, CancellationToken cancellationToken = default)
-#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
   {
+
+    if (request.vnp_ResponseCode != "00") {
+      return Ok(); //Dont process if response code is not successfully
+    }
+
+
+    string[] splitedOrderInfo = request.vnp_OrderInfo.Split("_");
+
+    string paymentTurn = splitedOrderInfo[0];
+    int orderId = int.Parse(splitedOrderInfo[1]);
+
+    var payment = await _orderPaymentService.AddNewPayment(orderId, paymentTurn, request.vnp_Amount, request.vnp_TxnRef, request.vnp_PayDate);
+
+    if (payment.Errors.Any())
+    {
+      return BadRequest(payment.Errors);
+    }
+    if (payment == null)
+    {
+      return StatusCode(500, "Cannot add new payment, please contact developer");
+    }
+
     return Ok();
   }
 }

@@ -16,9 +16,6 @@ public class IpnCallbackRequest
   [Required]
   public string vnp_BankCode { get; set; }
 
-  [Required]
-  public string vnp_BankTranNo { get; set; }
-
   public string? vnp_CardType { get; set; }
   [Required]
   public string vnp_PayDate { get; set; }
