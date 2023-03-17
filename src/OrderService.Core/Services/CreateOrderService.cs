@@ -1,7 +1,6 @@
 ﻿using Ardalis.GuardClauses;
 using Ardalis.Result;
 using MediatR;
-using OrderService.Core.ChatAggregate;
 using OrderService.Core.Interfaces;
 using OrderService.Core.OrderAggregate;
 using OrderService.Core.OrderAggregate.Events;
@@ -36,7 +35,7 @@ public class CreateOrderService : ICreateOrderService
     customer.addOrder(order);
     await _userRepository.SaveChangesAsync();
 
-    var domainEvent = new OrderCreatedEvent(order.Id);
+    var domainEvent = new OrderDetailCreatedEvent(order.Id);
     await _mediator.Publish(domainEvent);
 
     return new Result<Order>(order);
