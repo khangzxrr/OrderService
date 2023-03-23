@@ -38,7 +38,8 @@ public class OderDetailCreatedHandler : INotificationHandler<OrderDetailCreatedE
       totalCost += orderDetail.processCost;
     }
 
-    order.price = totalCost * currency!.rate;
+    order.SetPrice(totalCost * currency!.rate);
+
     await _repository.SaveChangesAsync();
   }
 }

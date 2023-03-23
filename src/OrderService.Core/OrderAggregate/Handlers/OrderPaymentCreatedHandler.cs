@@ -30,6 +30,8 @@ public class OrderPaymentCreatedHandler : INotificationHandler<OrderPaymentCreat
       order.SetStatus(OrderStatus.waitingToOrderFromSeller);
     }
 
+    order.SetRemainCost(order.remainCost - orderPayment.paymentCost);
+
     await _repository.SaveChangesAsync();
   }
 }
