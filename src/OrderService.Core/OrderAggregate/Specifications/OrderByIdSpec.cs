@@ -8,8 +8,6 @@ public class OrderByIdSpec : Specification<Order>, ISingleResultSpecification
     Query
       .Where(o => o.Id == id)
       .Include(o => o.orderPayments)
-      .Include(o => o.chat)
-        .ThenInclude(c => c.chatMessages)
       .Include(o => o.orderDetails)
         .ThenInclude(od => od.productHistory)
         .ThenInclude(ph => ph.productCategory)
