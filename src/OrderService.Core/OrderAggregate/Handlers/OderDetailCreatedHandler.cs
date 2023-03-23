@@ -18,7 +18,7 @@ public class OderDetailCreatedHandler : INotificationHandler<OrderDetailCreatedE
 
   public async Task Handle(OrderDetailCreatedEvent notification, CancellationToken cancellationToken)
   {
-    var spec = new OrderById(notification.OrderId);
+    var spec = new OrderByIdSpec(notification.OrderId);
     var order = await _repository.FirstOrDefaultAsync(spec);
 
     var totalCost = 0.0f;

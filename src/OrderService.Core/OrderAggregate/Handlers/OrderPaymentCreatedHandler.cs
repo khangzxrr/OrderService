@@ -17,7 +17,7 @@ public class OrderPaymentCreatedHandler : INotificationHandler<OrderPaymentCreat
 
   public async Task Handle(OrderPaymentCreatedEvent notification, CancellationToken cancellationToken)
   {
-    var orderSpec = new OrderById(notification.OrderId);
+    var orderSpec = new OrderByIdSpec(notification.OrderId);
     var order = await _repository.FirstOrDefaultAsync(orderSpec);
 
     var orderPayment = order!.orderPayments.Where(op => op.Id == notification.PaymentId).FirstOrDefault();
