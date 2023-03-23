@@ -48,6 +48,13 @@ public class OrderPaymentService : IOrderPaymentService
       return Result.Error("order is null");
     }
 
+    var existTransactionalWithId = order.orderPayments.Where(p => p.transactionalId == transactionId).FirstOrDefault();
+
+    //handle case IPN callback multiple time with the same transactional ID (1 transaction)
+    if (existTransactionalWithId != null) { 
+      return new Result<OrderPayment>(existTransactionalWithId);
+    }
+
     float dbAmount;
     long VNPAYmustPayAmount;
     PaymentStatus paymentStatus;
