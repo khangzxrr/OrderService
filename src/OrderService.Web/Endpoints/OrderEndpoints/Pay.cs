@@ -24,9 +24,9 @@ public class Pay : EndpointBaseAsync
     OperationId = "Order.Pay",
     Tags = new[] { "OrderEndpoints" })
   ]
-  public override async Task<ActionResult<PayResponse>> HandleAsync([FromRoute] PayRequest request, CancellationToken cancellationToken = default)
+  public override async Task<ActionResult<PayResponse>> HandleAsync([FromQuery] PayRequest request, CancellationToken cancellationToken = default)
   {
-    var result = await _paymentService.GeneratePaymentUrl(request.OrderId);
+    var result = await _paymentService.GeneratePaymentUrl(request.OrderId, request.Hostname);
 
     if (result.Errors.Any())
     {

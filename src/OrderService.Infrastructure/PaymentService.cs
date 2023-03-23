@@ -1,5 +1,7 @@
-﻿using System.Security.Cryptography;
+﻿using System.Net;
+using System.Security.Cryptography;
 using System.Text;
+using System.Web;
 using Ardalis.Result;
 using Microsoft.Extensions.Configuration;
 using OrderService.Core.Interfaces;
@@ -38,10 +40,10 @@ public class PaymentService : IPaymentService
     return hash.ToString();
   }
 
-  public async Task<Result<string>> GeneratePaymentUrl(int orderId)
+  public async Task<Result<string>> GeneratePaymentUrl(int orderId, string hostName)
   {
 
-    var orderSpec = new OrderById(orderId);
+    var orderSpec = new OrderByIdSpec(orderId);
     var order = await _orderRepository.FirstOrDefaultAsync(orderSpec);
     if (order == null)
     {
@@ -85,7 +87,10 @@ public class PaymentService : IPaymentService
 
     string paymentTurn = (isFirstPayment) ? PaymentStatus.firstPayment.Name : PaymentStatus.SecondPayment.Name; //determine if this is the first or the second payment
 
-    string query = $"vnp_Amount={roundAmount}&vnp_BankCode=VNBANK&vnp_Command=pay&vnp_CreateDate={DateTime.Now.ToString("yyyyMMddHHmmss")}&vnp_CurrCode=VND&vnp_IpAddr=127.0.0.1&vnp_Locale=vn&vnp_OrderInfo={paymentTurn}_{order.Id}&vnp_OrderType=other&vnp_ReturnUrl=http%3A%2F%2Flocalhost%3A3000%2Fcallback&vnp_TmnCode={TmnCode}&vnp_TxnRef={order.Id}{DateTime.Now.Ticks}&vnp_Version=2.1.0";
+    
+    string encodedCallback = WebUtility.UrlEncode(hostName);
+
+    string query = $"vnp_Amount={roundAmount}&vnp_BankCode=VNBANK&vnp_Command=pay&vnp_CreateDate={DateTime.Now.ToString("yyyyMMddHHmmss")}&vnp_CurrCode=VND&vnp_IpAddr=127.0.0.1&vnp_Locale=vn&vnp_OrderInfo={paymentTurn}_{order.Id}&vnp_OrderType=other&vnp_ReturnUrl={encodedCallback!}&vnp_TmnCode={TmnCode}&vnp_TxnRef={order.Id}{DateTime.Now.Ticks}&vnp_Version=2.1.0";
 
     string hashSecure = HmacSHA512(hashKey, query);
 
