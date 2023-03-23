@@ -1,4 +1,5 @@
 ﻿using OrderService.Core.OrderAggregate;
+using OrderService.Web.Endpoints.ProductEndpoints;
 
 namespace OrderService.Web.Endpoints.OrderEndpoints;
 
@@ -8,11 +9,12 @@ public record OrderDetailRecord(
   float shipCost,
   float productCost,
   float processCost,
-  int quantity
+  int quantity,
+  ProductRecord product
   )
 {
   public static OrderDetailRecord FromEntity(OrderDetail orderDetail)
   {
-    return new OrderDetailRecord(orderDetail.Id, orderDetail.additionalCost, orderDetail.shipCost, orderDetail.productCost, orderDetail.processCost, orderDetail.quantity);
+    return new OrderDetailRecord(orderDetail.Id, orderDetail.additionalCost, orderDetail.shipCost, orderDetail.productCost, orderDetail.processCost, orderDetail.quantity, ProductRecord.FromEntity(orderDetail.productHistory));
   }
 }
