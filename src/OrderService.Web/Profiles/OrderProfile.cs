@@ -9,6 +9,7 @@ public class OrderProfile : Profile
   public OrderProfile()
   {
     CreateMap<Order, OrderRecord>()
+      .ForCtorParam(nameof(OrderRecord.progressStatus), options => options.MapFrom(or => or.status.Value))
       .ForCtorParam(nameof(OrderRecord.status), options => options.MapFrom(or => or.status.Name))
       .ForCtorParam(nameof(OrderRecord.contactPhoneNumber), options => options.MapFrom(or => or.contactPhonenumber))
       .ForCtorParam(nameof(OrderRecord.price), options => options.MapFrom(or => or.price))
