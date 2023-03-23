@@ -7,7 +7,7 @@ namespace OrderService.Web.Endpoints.IpnEndpoints;
 
 public class IpnCallback : EndpointBaseAsync
   .WithRequest<IpnCallbackRequest>
-  .WithActionResult
+  .WithActionResult<IpnCallbackResponse>
 {
 
   private readonly IOrderPaymentService _orderPaymentService;
@@ -24,7 +24,7 @@ public class IpnCallback : EndpointBaseAsync
     OperationId = "Ipn.Callback",
     Tags = new[] { "IpnEndpoints" })
   ]
-  public override async Task<ActionResult> HandleAsync([FromQuery] IpnCallbackRequest request, CancellationToken cancellationToken = default)
+  public override async Task<ActionResult<IpnCallbackResponse>> HandleAsync([FromQuery] IpnCallbackRequest request, CancellationToken cancellationToken = default)
   {
 
     if (request.vnp_ResponseCode != "00") {
@@ -46,13 +46,13 @@ public class IpnCallback : EndpointBaseAsync
 
     if (payment.Errors.Any())
     {
-      return BadRequest(payment.Errors);
+      return Ok(new IpnCallbackResponse("00", "Order already confirmed"));
     }
     if (payment == null)
     {
-      return StatusCode(500, "Cannot add new payment, please contact developer");
+      return Ok(new IpnCallbackResponse("01", "Order not found"));
     }
 
-    return Ok();
+    return Ok(new IpnCallbackResponse("00", "Confirm success"));
   }
 }
