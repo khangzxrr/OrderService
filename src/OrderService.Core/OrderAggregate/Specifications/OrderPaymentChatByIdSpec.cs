@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Ardalis.Specification;
+﻿using Ardalis.Specification;
 
 namespace OrderService.Core.OrderAggregate.Specifications;
 public class OrderPaymentChatByIdSpec : Specification<Order>, ISingleResultSpecification
@@ -13,6 +8,7 @@ public class OrderPaymentChatByIdSpec : Specification<Order>, ISingleResultSpeci
     Query
       .Where(o => o.Id == orderId)
       .Include(o => o.orderPayments)
-      .Include(o => o.chat);
+      .Include(o => o.chat)
+        .ThenInclude(c => c.chatMessages);  
   }
 }
