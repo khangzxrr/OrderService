@@ -13,6 +13,7 @@ public class OrderProfile : Profile
       .ForCtorParam(nameof(OrderRecord.status), options => options.MapFrom(or => or.status.Name))
       .ForCtorParam(nameof(OrderRecord.contactPhoneNumber), options => options.MapFrom(or => or.contactPhonenumber))
       .ForCtorParam(nameof(OrderRecord.price), options => options.MapFrom(or => or.price))
+      .ForCtorParam(nameof(OrderRecord.remainCost), options => options.MapFrom(or => or.remainCost))
       .ForCtorParam(nameof(OrderRecord.customerDescription), options => options.MapFrom(or => or.customerDescription))
       .ForCtorParam(nameof(OrderRecord.deliveryAddress), options => options.MapFrom(or => or.deliveryAddress))
       .ForCtorParam(nameof(OrderRecord.orderDate), options => options.MapFrom(or => or.orderDate))

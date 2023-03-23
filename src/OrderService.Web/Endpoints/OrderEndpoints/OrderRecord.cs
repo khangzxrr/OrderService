@@ -10,6 +10,7 @@ public record OrderRecord(
   string contactPhoneNumber,
   int shipEstimatedDays,
   float price,
+  float remainCost,
   IEnumerable<OrderDetailRecord>? orderDetails
   )
 {
