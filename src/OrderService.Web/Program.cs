@@ -34,13 +34,15 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
 string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");  
 builder.Services.AddDbContext(connectionString!);
 
-var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
+const string CORS_POLICY = "CorsPolicy";
 builder.Services.AddCors(options =>
 {
-  options.AddPolicy(name: myAllowSpecificOrigins,
-                    policy =>
+  options.AddPolicy(name: CORS_POLICY,
+                    corsPolicyBuilder =>
                     {
-                      policy.WithOrigins("http://localhost:5173");
+                      corsPolicyBuilder.WithOrigins("http://localhost:5173")
+                      .AllowAnyMethod()
+                      .AllowAnyHeader();
                     });
 });
 
@@ -112,15 +114,24 @@ else
   app.UseExceptionHandler("/Home/Error");
   app.UseHsts();
 }
+
+
 app.UseRouting();
 app.MapControllers();
+
+
+  app.UseCors(CORS_POLICY);
+
 app.UseHttpsRedirection();
+
+
+
 app.UseCookiePolicy();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseCors(myAllowSpecificOrigins);
+
 
 // Enable middleware to serve generated Swagger as a JSON endpoint.
 app.UseSwagger();
