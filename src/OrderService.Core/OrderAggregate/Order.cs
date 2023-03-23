@@ -5,6 +5,8 @@ using OrderService.SharedKernel.Interfaces;
 namespace OrderService.Core.OrderAggregate;
 public class Order : EntityBase, IAggregateRoot
 {
+  public int userId { get; private set; }
+
   public Chat chat { get; private set; }
   public DateTime orderDate { get; }
   public OrderStatus status { get; private set; }
@@ -13,7 +15,9 @@ public class Order : EntityBase, IAggregateRoot
   public string deliveryAddress { get; }
   public string contactPhonenumber { get; }
   public int shippingEstimatedDays { get; }
-  public float price;
+
+  public float price { get; private set; }
+  public float remainCost { get; private set; }
 
   private readonly List<OrderPayment> _orderPayments = new();
   public IEnumerable<OrderPayment> orderPayments => _orderPayments.AsReadOnly();
@@ -43,11 +47,22 @@ public class Order : EntityBase, IAggregateRoot
 
     shippingEstimatedDays = 30;
     price = 0;
+    remainCost = price;
   }
 
   public void SetChat(Chat chat)
   {
     this.chat = Guard.Against.Null(chat);
+  }
+
+
+  public void SetPrice(float price) { 
+    this.price = Guard.Against.Negative(price);
+    this.remainCost = price;
+  }
+  public void SetRemainCost(float remainCost)
+  {
+    this.remainCost = Guard.Against.Negative(remainCost);
   }
 
   public void SetStatus(OrderStatus status)
