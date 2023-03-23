@@ -32,9 +32,14 @@ public class IpnCallback : EndpointBaseAsync
     }
 
 
-    string[] splitedOrderInfo = request.vnp_OrderInfo.Split("_");
+    string[] splitedOrderInfo = request.vnp_OrderInfo.Split("_"); 
+    if (splitedOrderInfo.Length < 2)
+    {
+      return BadRequest("Order info doesnt fit");
+    }
 
     string paymentTurn = splitedOrderInfo[0];
+
     int orderId = int.Parse(splitedOrderInfo[1]);
 
     var payment = await _orderPaymentService.AddNewPayment(orderId, paymentTurn, request.vnp_Amount, request.vnp_TxnRef, request.vnp_PayDate);
