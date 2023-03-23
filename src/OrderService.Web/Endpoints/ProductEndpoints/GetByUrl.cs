@@ -55,7 +55,7 @@ public class GetByUrl : EndpointBaseAsync
       return NotFound($"server is fetching product {products.Count}/{request.Urls.Length}");
     }
 
-    var productRecords = products.Select(p => _mapper.Map<ProductRecord>(p));
+    var productRecords = products.Select(ProductRecord.FromEntity);
     var response = new GetByUrlResponse(productRecords);
 
     return Ok(response);
