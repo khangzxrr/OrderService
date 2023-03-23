@@ -40,7 +40,7 @@ public class OrderPaymentService : IOrderPaymentService
     var createAtDateTime = DateTime.ParseExact(createdAt, "yyyyMMddHHmmss", CultureInfo.InvariantCulture);
 
 
-    var orderSpec = new OrderById(orderId);
+    var orderSpec = new OrderByIdSpec(orderId);
     var order = await _repository.FirstOrDefaultAsync(orderSpec);
 
     if (order == null)
