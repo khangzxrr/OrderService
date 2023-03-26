@@ -74,9 +74,6 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 
 
 builder.Services.AddHttpContextAccessor();
-//Use ApiEndPoint
-//builder.Services.AddFastEndpoints();
-//builder.Services.AddFastEndpointsApiExplorer();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
