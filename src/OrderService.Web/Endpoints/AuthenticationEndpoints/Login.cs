@@ -43,7 +43,7 @@ public class AuthenLogin : EndpointBaseAsync
 
     string token = _tokenService.GenerateToken(user);
 
-    var response = new AuthenResponse(token);
+    var response = new AuthenResponse(token, user.Value.email, user.Value.address, user.Value.phoneNumber);
 
     return Ok(response);
   }

@@ -16,6 +16,11 @@ public class RegisterRequest
   public string Email { get; set; }
 
   [Required]
+  [MaxLength(100)]
+  [MinLength(9)]
+  public string PhoneNumber { get; set; }
+
+  [Required]
   public DateTime DateOfBirth { get; set; }
   [Required]
   public string Address { get; set; }
@@ -24,7 +29,7 @@ public class RegisterRequest
   [Required]
   public string LastName { get; set; }
 
-  public RegisterRequest(string email,string password, DateTime dateOfBirth, string address, string firstName, string lastName)
+  public RegisterRequest(string email, string phoneNumber, string password, DateTime dateOfBirth, string address, string firstName, string lastName)
   {
     
     Password = password;
@@ -33,5 +38,6 @@ public class RegisterRequest
     Address = address;
     FirstName = firstName;
     LastName = lastName;
+    PhoneNumber = phoneNumber;
   }
 }

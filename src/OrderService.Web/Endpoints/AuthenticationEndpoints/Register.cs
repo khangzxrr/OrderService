@@ -33,7 +33,7 @@ public class AuthenRegister : EndpointBaseAsync
   public override async Task<ActionResult<RegisterResponse>> HandleAsync(
     RegisterRequest request, CancellationToken cancellationToken = default)
   {
-    var userResult = await _authenticationService.CreateNewUserAsync(request.Email, request.Password, request.FirstName, request.LastName, request.DateOfBirth, request.Address);
+    var userResult = await _authenticationService.CreateNewUserAsync(request.Email, request.PhoneNumber, request.Password, request.FirstName, request.LastName, request.DateOfBirth, request.Address);
 
     if (userResult == null)
     {

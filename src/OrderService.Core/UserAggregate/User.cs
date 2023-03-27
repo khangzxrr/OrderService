@@ -11,6 +11,7 @@ public class User: EntityBase, IAggregateRoot
 {
   public string guid { get; private set; }
   public string email { get; private set; }
+  public string phoneNumber { get; private set; }
   public string passwordHash { get; private set; }
   public string passwordSalt { get; private set; }
   public string firstname { get; private set; }
@@ -31,6 +32,7 @@ public class User: EntityBase, IAggregateRoot
   public User(
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     string email,
+    string phoneNumber,
     string passwordHash,
     string passwordSalt,
     string firstname,
@@ -40,6 +42,7 @@ public class User: EntityBase, IAggregateRoot
     )
   {
     this.email = Guard.Against.NullOrEmpty(email);
+    this.phoneNumber = Guard.Against.NullOrEmpty(phoneNumber);
     this.passwordHash = Guard.Against.NullOrEmpty(passwordHash, nameof(passwordHash));
     this.passwordSalt = Guard.Against.NullOrEmpty(passwordSalt, nameof(passwordSalt));
     this.firstname = Guard.Against.NullOrEmpty(firstname, nameof(firstname));

@@ -64,10 +64,11 @@ internal class AuthenticationService : IAuthenticationService
     return Result.Success(user);
   }
 
-  public async Task<Result<User>> CreateNewUserAsync(string email, string password, string firstName, string lastName, DateTime dateofbirth, string address)
+  public async Task<Result<User>> CreateNewUserAsync(string email, string phoneNumber, string password, string firstName, string lastName, DateTime dateofbirth, string address)
   {
-    Guard.Against.NullOrEmpty(email, nameof(email));
-    Guard.Against.NullOrEmpty(password, nameof(password));
+    Guard.Against.NullOrEmpty(email);
+    Guard.Against.NullOrEmpty(password);
+    Guard.Against.NullOrEmpty(phoneNumber);
 
 
     var userByEmailSpec = new UserByEmailSpec(email);
@@ -85,7 +86,7 @@ internal class AuthenticationService : IAuthenticationService
       return Result.Error("Role is not exist");
     }
 
-    user = new User(email, GenerateMD5(password), "salt", firstName, lastName, dateofbirth, address);
+    user = new User(email, phoneNumber, GenerateMD5(password), "salt", firstName, lastName, dateofbirth, address);
     user.setRole(role!);
 
     await _userRepository.AddAsync(user);
