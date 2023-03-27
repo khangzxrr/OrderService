@@ -33,10 +33,10 @@ public static class SeedData
 
   public static void PopulateEmployee(AppDbContext dbContext)
   {
-    var employee = new User("employee@fastship.com", "b45cffe084dd3d20d928bee85e7b0f21", "123123", "Khang", "Ngoc", DateTime.Now, "159 aaa bbb");
+    var employee = new User("employee@fastship.com", "091092211","b45cffe084dd3d20d928bee85e7b0f21", "123123", "Khang", "Ngoc", DateTime.Now, "159 aaa bbb");
     employee.setRole(dbContext.Roles.Where(r => r.roleName == RoleEnum.EMPLOYEE.ToString()).First());
 
-    var customer = new User("customer@gmail.com", "4297f44b13955235245b2497399d7a93", "123123", "Khang", "Ngoc", DateTime.Now, "159 aaa bbb");
+    var customer = new User("customer@gmail.com", "091092233", "4297f44b13955235245b2497399d7a93", "123123", "Khang", "Ngoc", DateTime.Now, "159 aaa bbb");
     customer.setRole(dbContext.Roles.Where(r => r.roleName == RoleEnum.CUSTOMER.ToString()).First());
 
     dbContext.Users.Add(employee);
