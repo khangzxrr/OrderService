@@ -1,21 +1,22 @@
 {
+  "profiles": {
+    "OrderService.Web": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "HOSTNAME": "host.docker.internal"
+      },
+      "applicationUrl": "http://localhost:57679"
+    }
+  },
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
       "applicationUrl": "http://localhost:57678/swagger/index.html",
       "sslPort": 0
-    }
-  },
-  "profiles": {
-    "OrderService.Web": {
-      "commandName": "Project",
-      "launchBrowser": true,
-      "applicationUrl": "http://localhost:57679",
-      "launchUrl": "swagger",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
     }
   }
 }

@@ -5,9 +5,9 @@ services:
     container_name: selenium-hub
     restart: always
     ports:
-      - "4442:4442"
-      - "4443:4443"
-      - "4444:4444"
+      - 4444:4444
+      - 4442:4442
+      - 4443:4443
     environment:
       - SE_NODE_SESSION_TIMEOUT=60
 
@@ -35,14 +35,13 @@ services:
       - SE_DRAIN_AFTER_SESSION_COUNT=5
       - SE_NODE_SESSION_TIMEOUT=60
 
-
   rabbitmq:
     image: rabbitmq:3.11.10-management-alpine
     container_name: 'rabbitmq'
     restart: always
     ports:
-        - 5672:5672
         - 15672:15672
+        - 5672:5672
     volumes:
         - rb_data:/var/lib/rabbitmq/
         - rb_data:/var/log/rabbitmq
@@ -55,6 +54,8 @@ services:
       - selenium-hub
       - chrome1
       - chrome2
+    environment:
+      - HOSTNAME=127.0.0.1
 
   order_service_web:
     image: khangzxrr/order_service_web:latest
@@ -66,6 +67,7 @@ services:
       - selenium-hub
       - orderservicebot
     environment:
+      - HOSTNAME=127.0.0.1
       - ASPNETCORE_ENVIRONMENT=Development
       - CONNECTION_STRING=Data Source=aspcore-staging.database.windows.net;Initial Catalog=order_service;Persist Security Info=True;User ID=aspnetapp-vnk;Password=@Khang2106@
 

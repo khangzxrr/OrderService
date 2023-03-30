@@ -24,13 +24,15 @@ public class ConsumeProductResultHostedService : BackgroundService, IConsumeProd
   private readonly IRepository<Product> _productRepository;
   private readonly IRepository<CurrencyExchange> _currencyExchange;
   private readonly INotificationHub _notificationHub;
+  private readonly IConfiguration _configuration;
 
-  public ConsumeProductResultHostedService(IRepository<ProductCategory> categoryRepository, IRepository<Product> productRepository, IRepository<CurrencyExchange> currencyExchange, INotificationHub notificationHub)
+  public ConsumeProductResultHostedService(IRepository<ProductCategory> categoryRepository, IRepository<Product> productRepository, IRepository<CurrencyExchange> currencyExchange, INotificationHub notificationHub, IConfiguration configuration)
   {
     _categoryRepository = categoryRepository;
     _productRepository = productRepository;
     _currencyExchange = currencyExchange;
     _notificationHub = notificationHub;
+    _configuration = configuration;
 
     Console.WriteLine("init rabbitmq");
     InitRabbitMQ();
@@ -107,7 +109,10 @@ public class ConsumeProductResultHostedService : BackgroundService, IConsumeProd
 
   public void InitRabbitMQ()
   {
-    var factory = new ConnectionFactory { HostName = "host.docker.internal" };
+    var factory = new ConnectionFactory { HostName = _configuration["HOSTNAME"], Port = 5672 };
+
+    Console.WriteLine(factory.HostName);
+
     connection = factory.CreateConnection();
     channel = connection.CreateModel();
 

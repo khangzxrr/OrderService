@@ -3,6 +3,7 @@ using System.Text;
 using OrderService.Core.Interfaces;
 using OrderService.Core.RabbitMqDto;
 using RabbitMQ.Client;
+using Microsoft.Extensions.Configuration;
 
 namespace OrderService.Infrastructure;
 public class ProduceProductRequestService : IProduceProductRequestService
@@ -11,9 +12,9 @@ public class ProduceProductRequestService : IProduceProductRequestService
   IModel channel;
 
 
-  public ProduceProductRequestService()
+  public ProduceProductRequestService(IConfiguration configuration)
   {
-    var factory = new ConnectionFactory { HostName = "host.docker.internal" };
+    var factory = new ConnectionFactory { HostName = configuration["HOSTNAME"] };
     connection = factory.CreateConnection();
     channel = connection.CreateModel();
 
