@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Hosting;
+using OrderService.Core.RabbitMqDto;
 
 namespace OrderService.Core.Interfaces;
 public interface IConsumeProductResultHostedService: IHostedService
@@ -7,5 +8,5 @@ public interface IConsumeProductResultHostedService: IHostedService
 
   public void ConsumeMessage(string message);
 
-  public void SendToQueue(string url);
+  public void SendToQueue(RabbitRequestProductData rabbitRequestProductData);
 }

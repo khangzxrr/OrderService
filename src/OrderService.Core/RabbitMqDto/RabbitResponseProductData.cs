@@ -1,6 +1,7 @@
-﻿namespace OrderService.Core.ProductAggregate;
-public class ProductResult
+﻿namespace OrderService.Core.RabbitMqDto;
+public class RabbitResponseProductData
 {
+  public int UserId { get; set; }
   public string Catalog { get; set; }
   public string Product { get; set; }
   public string Price { get; set; }
@@ -8,8 +9,9 @@ public class ProductResult
 
   public string Url { get; set; }
 
-  public ProductResult(string catalog, string product, string price, string ship, string url)
+  public RabbitResponseProductData(int userId, string catalog, string product, string price, string ship, string url)
   {
+    UserId = userId;
     Catalog = catalog;
     Product = product;
     Price = price;
