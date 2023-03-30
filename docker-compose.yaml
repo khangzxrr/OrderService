@@ -1,5 +1,41 @@
 version: '3.6'
 services:
+  selenium-hub:
+    image: selenium/hub:4.8.2-20230325
+    container_name: selenium-hub
+    restart: always
+    ports:
+      - "4442:4442"
+      - "4443:4443"
+      - "4444:4444"
+    environment:
+      - SE_NODE_SESSION_TIMEOUT=60
+
+  chrome1:
+    image: selenium/node-chrome
+    restart: always
+    depends_on:
+      - selenium-hub
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_DRAIN_AFTER_SESSION_COUNT=5
+      - SE_NODE_SESSION_TIMEOUT=60
+
+  chrome2:
+    image: selenium/node-chrome
+    restart: always
+    depends_on:
+      - selenium-hub
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_DRAIN_AFTER_SESSION_COUNT=5
+      - SE_NODE_SESSION_TIMEOUT=60
+
+
   rabbitmq:
     image: rabbitmq:3.11.10-management-alpine
     container_name: 'rabbitmq'
@@ -10,34 +46,28 @@ services:
     volumes:
         - rb_data:/var/lib/rabbitmq/
         - rb_data:/var/log/rabbitmq
-  postgres:
-    image: postgres:14
+
+  orderservicebot:
+    image: khangzxrr/order_service_bot:latest
     restart: always
-    volumes:
-      - pg_data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_PASSWORD: postgrespassword
-  graphql-engine:
-    image: hasura/graphql-engine
-    ports:
-      - '8080:8080'
     depends_on:
-      - 'postgres'
+      - rabbitmq
+      - selenium-hub
+      - chrome1
+      - chrome2
+
+  order_service_web:
+    image: khangzxrr/order_service_web:latest
     restart: always
+    ports:
+      - 5000:5000
+    depends_on:
+      - rabbitmq
+      - selenium-hub
+      - orderservicebot
     environment:
-      ## postgres database to store Hasura metadata
-      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
-      ## this env var can be used to add the above ms sql server database to Hasura as a data source. this can be removed/updated based on your needs
-      MSSQL_DATABASE_URL: Driver={ODBC Driver 18 for SQL Server};Server=host.docker.internal,1433;Database=OrderService;Uid=sa;Pwd=123123;Encrypt=optional
-      ## enable the console served by server
-      HASURA_GRAPHQL_ENABLE_CONSOLE: 'true' # set to "false" to disable console
-      ## enable debugging mode. It is recommended to disable this in production
-      HASURA_GRAPHQL_DEV_MODE: 'true'
-      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
-      ## uncomment next line to run console offline (i.e load console assets from server instead of CDN)
-      # HASURA_GRAPHQL_CONSOLE_ASSETS_DIR: /srv/console-assets
-      ## uncomment next line to set an admin secret
-      # HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
+      - ASPNETCORE_ENVIRONMENT=Development
+      - CONNECTION_STRING=Data Source=aspcore-staging.database.windows.net;Initial Catalog=order_service;Persist Security Info=True;User ID=aspnetapp-vnk;Password=@Khang2106@
+
 volumes:
-  pg_data:
   rb_data:
