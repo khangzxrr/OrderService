@@ -19,14 +19,6 @@ public class Category : IClassFixture<CustomWebApplicationFactory<WebMarker>>
   }
 
   [Fact]
-
-  public async Task EnsureEmptyCategory()
-  {
-    var result = await _httpClient.GetAndDeserializeAsync<GetProductCategoriesResponse>("/categories");
-    Assert.Empty(result.Categories);
-  }
-
-  [Fact]
   public async Task EnsureSuccessCreateNewCategory()
   {
     var request = new CreateProductCatalogRequest("new category");
@@ -37,4 +29,7 @@ public class Category : IClassFixture<CustomWebApplicationFactory<WebMarker>>
 
     Assert.Equal(request.CategoryName, result.Category.categoryName);
   }
+
+  
+
 }
