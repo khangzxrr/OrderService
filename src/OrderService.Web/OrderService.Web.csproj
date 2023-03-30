@@ -8,6 +8,7 @@
     <WebProjectMode>true</WebProjectMode>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>42afe492-3a04-4ff9-8355-f68ca89b9e40</UserSecretsId>
   </PropertyGroup>
   
   <ItemGroup>

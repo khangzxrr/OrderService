@@ -6,12 +6,13 @@ using OrderService.Infrastructure;
 using OrderService.Infrastructure.Data;
 using OrderService.Web;
 using Microsoft.OpenApi.Models;
-using Serilog;
+//using Serilog;
 using OrderService.Web.Interfaces;
 using OrderService.Web.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using OrderService.Web.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,11 +20,10 @@ builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
   .ConfigureServices((hostContext, services) =>
   {
     StartupSetup.AddConsumerProductResult(services);
+    SignalRStartup.AddSignal(services);
   });
 
-
-
-builder.Host.UseSerilog((_, config) => config.ReadFrom.Configuration(builder.Configuration));
+//builder.Host.UseSerilog((_, config) => config.ReadFrom.Configuration(builder.Configuration));
 
 builder.Services.Configure<CookiePolicyOptions>(options =>
 {
@@ -31,7 +31,16 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
   options.MinimumSameSitePolicy = SameSiteMode.None;
 });
 
-string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");  
+
+string? connectionString = builder.Configuration["CONNECTION_STRING"];
+
+if (connectionString == null)
+{
+  connectionString = builder.Configuration["databases:local"];
+}
+
+Console.WriteLine(connectionString);
+
 builder.Services.AddDbContext(connectionString!);
 
 const string CORS_POLICY = "CorsPolicy";
@@ -53,6 +62,30 @@ builder.Services.AddSwaggerGen(c =>
 {
   c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
   c.EnableAnnotations();
+  c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+  {
+    Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n 
+                      Enter 'Bearer' [space] and then your token in the text input below.
+                      \r\n\r\nExample: 'Bearer 12345abcdef'",
+    Name = "Authorization",
+    In = ParameterLocation.Header,
+    Type = SecuritySchemeType.ApiKey,
+    Scheme = "Bearer"
+  });
+  c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type=ReferenceType.SecurityScheme,
+                    Id="Bearer"
+                }
+            },
+            new string[]{}
+        }
+    });
   //c.OperationFilter<FastEndpointsOperationFilter>();
 });
 
@@ -67,10 +100,9 @@ builder.Services.Configure<ServiceConfig>(config =>
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-
-
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<INotificationHub, NotificationHub>();
 
 
 builder.Services.AddHttpContextAccessor();
@@ -117,10 +149,11 @@ app.UseRouting();
 app.MapControllers();
 
 
-  app.UseCors(CORS_POLICY);
+app.UseCors(CORS_POLICY);
 
 app.UseHttpsRedirection();
 
+SignalRStartup.MapSignalR(app);
 
 
 app.UseCookiePolicy();
