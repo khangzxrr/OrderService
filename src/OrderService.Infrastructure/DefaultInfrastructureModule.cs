@@ -54,14 +54,11 @@ public class DefaultInfrastructureModule : Module
 
   private void RegisterCommonDependencies(ContainerBuilder builder)
   {
+    builder.RegisterType<ProduceProductRequestService>().As<IProduceProductRequestService>()
+        .InstancePerLifetimeScope();
+
     builder.RegisterType<PaymentService>().As<IPaymentService>()
-      .InstancePerLifetimeScope();
-
-
-    builder.RegisterType<ConsumeProductResultHostedService>()
-        .As<IConsumeProductResultHostedService>()
-        .SingleInstance();
-    
+      .InstancePerLifetimeScope();    
 
     builder.RegisterGeneric(typeof(EfRepository<>))
       .As(typeof(IRepository<>))

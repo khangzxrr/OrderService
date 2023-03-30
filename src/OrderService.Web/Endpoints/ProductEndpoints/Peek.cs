@@ -13,12 +13,12 @@ public class Peek : EndpointBaseAsync
   .WithActionResult
 {
 
-  private readonly IConsumeProductResultHostedService _consumeProductResultHostedService;
+  private readonly IProduceProductRequestService _produceProductRequestService;
   private readonly ICurrentUserService _currentUserService;
-  public Peek(IConsumeProductResultHostedService consumeProductResultHostedService, ICurrentUserService currentUserService)
+  public Peek(IProduceProductRequestService produceProductRequestService, ICurrentUserService currentUserService)
   {
-    
-    _consumeProductResultHostedService = consumeProductResultHostedService;
+
+    _produceProductRequestService = produceProductRequestService;
     _currentUserService = currentUserService;
   }
 
@@ -39,7 +39,7 @@ public class Peek : EndpointBaseAsync
     }
 
     var rabbitProductRequest = new RabbitRequestProductData(_currentUserService.TryParseUserId(), request.ProductUrl);
-    _consumeProductResultHostedService.SendToQueue(rabbitProductRequest);
+    _produceProductRequestService.SendToQueue(rabbitProductRequest);
 
     return Ok("sent to queue, please keep track by connect to the notification hub [/hub]");
 

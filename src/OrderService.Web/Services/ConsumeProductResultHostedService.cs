@@ -7,6 +7,7 @@ using OrderService.Core.ProductAggregate;
 using OrderService.Core.ProductAggregate.Specifications;
 using OrderService.Core.RabbitMqDto;
 using OrderService.SharedKernel.Interfaces;
+using OrderService.Web.SignalR;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
@@ -22,12 +23,14 @@ public class ConsumeProductResultHostedService : BackgroundService, IConsumeProd
   private readonly IRepository<ProductCategory> _categoryRepository;
   private readonly IRepository<Product> _productRepository;
   private readonly IRepository<CurrencyExchange> _currencyExchange;
+  private readonly INotificationHub _notificationHub;
 
-  public ConsumeProductResultHostedService(IRepository<ProductCategory> categoryRepository, IRepository<Product> productRepository, IRepository<CurrencyExchange> currencyExchange)
+  public ConsumeProductResultHostedService(IRepository<ProductCategory> categoryRepository, IRepository<Product> productRepository, IRepository<CurrencyExchange> currencyExchange, INotificationHub notificationHub)
   {
     _categoryRepository = categoryRepository;
     _productRepository = productRepository;
     _currencyExchange = currencyExchange;
+    _notificationHub = notificationHub;
 
     Console.WriteLine("init rabbitmq");
     InitRabbitMQ();
@@ -41,6 +44,7 @@ public class ConsumeProductResultHostedService : BackgroundService, IConsumeProd
     if (message.Contains("message"))
     {
       Console.WriteLine(message);
+      //await _notificationHub.SendPrivateMessage(productResult.UserId, message);
       return;
     }
 
@@ -49,6 +53,7 @@ public class ConsumeProductResultHostedService : BackgroundService, IConsumeProd
     var catalogSpec = new ProductCatalogByNameSpec(productResult!.Catalog);
     ProductCategory? category = await _categoryRepository.FirstOrDefaultAsync(catalogSpec);
     ProductShipCost? productShipCost = (category != null) ? category.productShipCost : null;
+
     if (category == null)
     {
       Console.WriteLine("add new catalog");
@@ -95,8 +100,9 @@ public class ConsumeProductResultHostedService : BackgroundService, IConsumeProd
       await _productRepository.SaveChangesAsync();
     }
 
+    await _notificationHub.SendPrivateMessage(productResult.UserId, JsonConvert.SerializeObject(product));
 
-
+    Console.WriteLine("sent finish message");
   }
 
   public void InitRabbitMQ()
@@ -140,6 +146,7 @@ public class ConsumeProductResultHostedService : BackgroundService, IConsumeProd
       catch (Exception ex)
       {
         Console.WriteLine(ex);
+        channel.BasicNack(ea.DeliveryTag, false, true);
       }
     };
 

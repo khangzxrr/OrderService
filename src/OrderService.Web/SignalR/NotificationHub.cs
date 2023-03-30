@@ -19,6 +19,12 @@ public class NotificationHub : Hub, INotificationHub
 
   public async Task SendPrivateMessage(int userId,  string message)
   {
+    if (!connections.ContainsKey(userId))
+    {
+      Console.WriteLine("User doesn't exist in signalR connection");
+      return;
+    }
+
     await Clients.Client(connections[userId]).SendAsync("boardcast", message);
   }
 
