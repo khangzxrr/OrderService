@@ -13,13 +13,13 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using OrderService.Web.SignalR;
+using OrderService.Core.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
   .ConfigureServices((hostContext, services) =>
   {
-    StartupSetup.AddConsumerProductResult(services);
     SignalRStartup.AddSignal(services);
   });
 
@@ -86,7 +86,6 @@ builder.Services.AddSwaggerGen(c =>
             new string[]{}
         }
     });
-  //c.OperationFilter<FastEndpointsOperationFilter>();
 });
 
 // add list services for diagnostic purposes - see https://github.com/ardalis/AspNetCoreStartupServices
@@ -103,7 +102,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<INotificationHub, NotificationHub>();
-
+builder.Services.AddHostedService<ConsumeProductResultHostedService>();
 
 builder.Services.AddHttpContextAccessor();
 
