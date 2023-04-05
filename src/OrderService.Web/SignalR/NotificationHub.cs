@@ -1,23 +1,25 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using OrderService.Web.Interfaces;
 
 namespace OrderService.Web.SignalR;
 
-[Authorize]
-public class NotificationHub : Hub, INotificationHub
+
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+public class NotificationHub : Hub
 {
 
   private readonly ICurrentUserService _currentUserService;
 
-  private Dictionary<int, string> connections = new Dictionary<int, string>();
+  private static Dictionary<int, string> connections = new Dictionary<int, string>();
 
   public NotificationHub(ICurrentUserService currentUserService)
   {
     _currentUserService = currentUserService;
   }
 
-  public async Task SendPrivateMessage(int userId,  string message)
+  public static async Task SendPrivateMessage(IHubClients clients, int userId,  string message)
   {
     if (!connections.ContainsKey(userId))
     {
@@ -25,19 +27,21 @@ public class NotificationHub : Hub, INotificationHub
       return;
     }
 
-    await Clients.Client(connections[userId]).SendAsync("boardcast", message);
+    await clients.Client(connections[userId]).SendAsync("boardcast", message);
   }
 
 
+  [Authorize]
   public override async Task OnConnectedAsync()
   {
     await base.OnConnectedAsync();
 
-    int userId = _currentUserService.TryParseUserId();
+    //var userId = _currentUserService.TryParseUserId();
+    var userId = int.Parse(Context.User!.Claims.Where(c => c.Type == "userId").First().Value);
 
-    connections.Remove(userId);
-    connections.Add(userId, Context.ConnectionId);
+    connections[userId] = Context.ConnectionId;
 
-    Console.WriteLine("connected to signalR: " + _currentUserService.UserId);
+    Console.WriteLine("connected to signalR: " + userId);
+
   }
 }

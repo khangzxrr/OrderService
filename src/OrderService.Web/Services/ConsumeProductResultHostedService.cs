@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using OrderService.Core.CurrencyAggregate;
 using OrderService.Core.CurrencyAggregate.Specifications;
@@ -23,10 +24,10 @@ public class ConsumeProductResultHostedService : BackgroundService, IConsumeProd
   private readonly IRepository<ProductCategory> _categoryRepository;
   private readonly IRepository<Product> _productRepository;
   private readonly IRepository<CurrencyExchange> _currencyExchange;
-  private readonly INotificationHub _notificationHub;
+  private readonly IHubContext<NotificationHub>  _notificationHub;
   private readonly IConfiguration _configuration;
 
-  public ConsumeProductResultHostedService(IRepository<ProductCategory> categoryRepository, IRepository<Product> productRepository, IRepository<CurrencyExchange> currencyExchange, INotificationHub notificationHub, IConfiguration configuration)
+  public ConsumeProductResultHostedService(IRepository<ProductCategory> categoryRepository, IRepository<Product> productRepository, IRepository<CurrencyExchange> currencyExchange, IHubContext<NotificationHub> notificationHub, IConfiguration configuration)
   {
     _categoryRepository = categoryRepository;
     _productRepository = productRepository;
@@ -45,8 +46,9 @@ public class ConsumeProductResultHostedService : BackgroundService, IConsumeProd
   {
     if (message.Contains("message"))
     {
-      Console.WriteLine(message);
-      //await _notificationHub.SendPrivateMessage(productResult.UserId, message);
+      var messageObject = JsonConvert.DeserializeObject<MessageData>(message);
+      await NotificationHub.SendPrivateMessage(_notificationHub.Clients, messageObject!.userId, message);
+
       return;
     }
 
@@ -102,7 +104,8 @@ public class ConsumeProductResultHostedService : BackgroundService, IConsumeProd
       await _productRepository.SaveChangesAsync();
     }
 
-    await _notificationHub.SendPrivateMessage(productResult.UserId, JsonConvert.SerializeObject(product));
+    await NotificationHub.SendPrivateMessage(_notificationHub.Clients, productResult.UserId, JsonConvert.SerializeObject(product));
+    
 
     Console.WriteLine("sent finish message");
   }
