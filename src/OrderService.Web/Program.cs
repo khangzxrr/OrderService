@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using OrderService.Web.SignalR;
-using OrderService.Core.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,9 +48,10 @@ builder.Services.AddCors(options =>
   options.AddPolicy(name: CORS_POLICY,
                     corsPolicyBuilder =>
                     {
-                      corsPolicyBuilder.WithOrigins("http://localhost:5173")
+                      corsPolicyBuilder.WithOrigins("http://localhost:3000", "https://fastship-staging.sontran.us")
                       .AllowAnyMethod()
-                      .AllowAnyHeader();
+                      .AllowAnyHeader()
+                      .AllowCredentials();
                     });
 });
 
@@ -101,7 +101,6 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<INotificationHub, NotificationHub>();
 builder.Services.AddHostedService<ConsumeProductResultHostedService>();
 
 builder.Services.AddHttpContextAccessor();
