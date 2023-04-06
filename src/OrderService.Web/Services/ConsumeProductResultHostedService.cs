@@ -64,7 +64,7 @@ public class ConsumeProductResultHostedService : BackgroundService, IConsumeProd
 
       category = new ProductCategory(productResult!.Catalog);
 
-      productShipCost = new ProductShipCost(10.0f, 12.0f, "[  {    \"WorkflowName\": \"AdditionalCost\",    \"Rules\": [      {        \"RuleName\": \"Price_over\",        \"Enabled\": true,        \"Expression\": \"orderDetail.productCost> 200\",        \"Actions\": {\t    \"OnSuccess\": {\"Name\": \"OutputAdditionalCost\",\"Content\": {   \"Expression\": \"orderDetail.productCost * 0.05\"\t    },\t    \"OnFailure\": {\"Name\": \"OutputAdditionalCost\",\"Content\": {   \"Expression\": \"0\"                }\t    }        }      }    ]  }]");
+      productShipCost = new ProductShipCost(10.0f, 12.0f, "[  {    \"WorkflowName\": \"AdditionalCost\",    \"Rules\": [      {        \"RuleName\": \"Price_over\",        \"Enabled\": true,        \"Expression\": \"orderDetail.productCost > 200\",        \"Actions\": {          \"OnSuccess\": {            \"Name\": \"OutputExpression\",            \"Context\": {              \"Expression\": \"orderDetail.productCost * 0.05\"            }          },          \"OnFailure\": {            \"Name\": \"OutputExpression\",            \"Context\": {              \"Expression\": \"0\"            }          }        }      }    ]  }]");
       category.SetProductShipCost(productShipCost);
 
       category = await _categoryRepository.AddAsync(category);
