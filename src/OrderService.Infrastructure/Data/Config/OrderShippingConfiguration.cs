@@ -13,5 +13,8 @@ public class OrderShippingConfiguration : IEntityTypeConfiguration<OrderShipping
       s => OrderShippingStatus.FromValue(s)
       )
       .IsRequired();
+
+    builder.HasOne(o => o.order).WithMany().HasForeignKey(o => o.orderId);
+
   }
 }

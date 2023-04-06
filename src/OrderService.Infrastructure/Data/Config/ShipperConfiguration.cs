@@ -15,5 +15,7 @@ public class ShipperConfiguration : IEntityTypeConfiguration<Shipper>
           s => s.Value,
           s => ShippingStatus.FromValue(s)
        ).IsRequired();
+
+    builder.HasMany(s => s.OrderShippings);
   }
 }

@@ -6,6 +6,7 @@ using OrderService.SharedKernel.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using OrderService.Core.UserAggregate;
 using OrderService.Core.CurrencyAggregate;
+using OrderService.Core.ShipperAggregate;
 
 namespace OrderService.Infrastructure.Data;
 
@@ -25,6 +26,7 @@ public class AppDbContext : DbContext
   public DbSet<Contributor> Contributors => Set<Contributor>(); 
 
   public DbSet<User> Users => Set<User>();
+  public DbSet<Shipper> Shippers => Set<Shipper>();
   public DbSet<Role> Roles => Set<Role>();
 
   public DbSet<CurrencyExchange> CurrencyExchanges => Set<CurrencyExchange>();
