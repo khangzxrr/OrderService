@@ -12,8 +12,8 @@ using OrderService.Infrastructure.Data;
 namespace OrderService.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230317090536_IreadonlycollectionToIEumberable")]
-    partial class IreadonlycollectionToIEumberable
+    [Migration("20230405080740_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,49 +24,6 @@ namespace OrderService.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("OrderService.Core.ChatAggregate.Chat", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("employeeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("employeeId");
-
-                    b.ToTable("Chat");
-                });
-
-            modelBuilder.Entity("OrderService.Core.ChatAggregate.ChatMessage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("ChatId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("isFromEmployee")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("message")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ChatId");
-
-                    b.ToTable("ChatMessage");
-                });
 
             modelBuilder.Entity("OrderService.Core.ContributorAggregate.Contributor", b =>
                 {
@@ -106,7 +63,7 @@ namespace OrderService.Infrastructure.Migrations
                     b.ToTable("CurrencyExchanges");
                 });
 
-            modelBuilder.Entity("OrderService.Core.OrderAggregate.Order", b =>
+            modelBuilder.Entity("OrderService.Core.OrderAggregate.Chat", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -114,8 +71,48 @@ namespace OrderService.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("employeeId")
                         .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("employeeId");
+
+                    b.ToTable("Chat");
+                });
+
+            modelBuilder.Entity("OrderService.Core.OrderAggregate.ChatMessage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ChatId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("isFromEmployee")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChatId");
+
+                    b.ToTable("ChatMessage");
+                });
+
+            modelBuilder.Entity("OrderService.Core.OrderAggregate.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("chatId")
                         .HasColumnType("int");
@@ -144,17 +141,23 @@ namespace OrderService.Infrastructure.Migrations
                     b.Property<float>("price")
                         .HasColumnType("real");
 
+                    b.Property<float>("remainCost")
+                        .HasColumnType("real");
+
                     b.Property<int>("shippingEstimatedDays")
                         .HasColumnType("int");
 
                     b.Property<int>("status")
                         .HasColumnType("int");
 
+                    b.Property<int>("userId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
                     b.HasIndex("chatId");
+
+                    b.HasIndex("userId");
 
                     b.ToTable("Order");
                 });
@@ -645,7 +648,7 @@ namespace OrderService.Infrastructure.Migrations
                     b.HasIndex("userId")
                         .IsUnique();
 
-                    b.ToTable("Shipper");
+                    b.ToTable("Shippers");
                 });
 
             modelBuilder.Entity("OrderService.Core.UserAggregate.Role", b =>
@@ -710,6 +713,11 @@ namespace OrderService.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("phoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<int>("roleId")
                         .HasColumnType("int");
 
@@ -753,7 +761,7 @@ namespace OrderService.Infrastructure.Migrations
                     b.ToTable("ProductProductTax");
                 });
 
-            modelBuilder.Entity("OrderService.Core.ChatAggregate.Chat", b =>
+            modelBuilder.Entity("OrderService.Core.OrderAggregate.Chat", b =>
                 {
                     b.HasOne("OrderService.Core.UserAggregate.User", "employee")
                         .WithMany()
@@ -764,22 +772,24 @@ namespace OrderService.Infrastructure.Migrations
                     b.Navigation("employee");
                 });
 
-            modelBuilder.Entity("OrderService.Core.ChatAggregate.ChatMessage", b =>
+            modelBuilder.Entity("OrderService.Core.OrderAggregate.ChatMessage", b =>
                 {
-                    b.HasOne("OrderService.Core.ChatAggregate.Chat", null)
+                    b.HasOne("OrderService.Core.OrderAggregate.Chat", null)
                         .WithMany("chatMessages")
                         .HasForeignKey("ChatId");
                 });
 
             modelBuilder.Entity("OrderService.Core.OrderAggregate.Order", b =>
                 {
-                    b.HasOne("OrderService.Core.UserAggregate.User", null)
-                        .WithMany("orders")
-                        .HasForeignKey("UserId");
-
-                    b.HasOne("OrderService.Core.ChatAggregate.Chat", "chat")
+                    b.HasOne("OrderService.Core.OrderAggregate.Chat", "chat")
                         .WithMany()
                         .HasForeignKey("chatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OrderService.Core.UserAggregate.User", null)
+                        .WithMany("orders")
+                        .HasForeignKey("userId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -947,7 +957,7 @@ namespace OrderService.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("OrderService.Core.ChatAggregate.Chat", b =>
+            modelBuilder.Entity("OrderService.Core.OrderAggregate.Chat", b =>
                 {
                     b.Navigation("chatMessages");
                 });

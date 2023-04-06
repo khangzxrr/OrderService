@@ -645,7 +645,7 @@ namespace OrderService.Infrastructure.Migrations
                     b.HasIndex("userId")
                         .IsUnique();
 
-                    b.ToTable("Shipper");
+                    b.ToTable("Shippers");
                 });
 
             modelBuilder.Entity("OrderService.Core.UserAggregate.Role", b =>
