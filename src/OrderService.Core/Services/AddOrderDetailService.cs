@@ -69,7 +69,7 @@ public class AddOrderDetailService : IAddOrderDetailService
 
     
 
-    var conditionString = productHistory.productCategory.productShipCost.additionalCostCondition;
+    var conditionString = productHistory.productCategory.productShipCost.additionalCostCondition.Replace('\t',' ');
     var workflow = JsonConvert.DeserializeObject<List<Workflow>>(conditionString);
 
     var re = new RulesEngine.RulesEngine(workflow!.ToArray(), null);
