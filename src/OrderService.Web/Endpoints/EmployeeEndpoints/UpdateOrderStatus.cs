@@ -1,7 +1,9 @@
 ﻿using Ardalis.ApiEndpoints;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OrderService.Core.OrderAggregate;
+using OrderService.Core.OrderAggregate.Events;
 using OrderService.Core.OrderAggregate.Specifications;
 using OrderService.SharedKernel.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
@@ -14,10 +16,12 @@ public class UpdateOrderStatus : EndpointBaseAsync
 {
 
   private readonly IRepository<Order> _orderRepository;
+  private readonly IMediator _mediator;
 
-  public UpdateOrderStatus(IRepository<Order> orderRepository)
+  public UpdateOrderStatus(IRepository<Order> orderRepository, IMediator mediator)
   {
     _orderRepository = orderRepository;
+    _mediator = mediator;
   }
 
   [HttpPost(UpdateOrderStatusRequest.Route)]
@@ -48,6 +52,11 @@ public class UpdateOrderStatus : EndpointBaseAsync
     }
 
     order.SetStatus(orderStatus);
+
+    await _orderRepository.SaveChangesAsync();
+
+    var orderStatusUpdateEvent = new OrderStatusUpdatedEvent(request.orderId, orderStatus);
+    await _mediator.Publish(orderStatusUpdateEvent);
 
     var response = new UpdateOrderStatusResponse("Update success");
     return Ok(response);
