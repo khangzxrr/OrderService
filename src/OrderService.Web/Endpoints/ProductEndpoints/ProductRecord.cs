@@ -50,26 +50,4 @@ public record ProductRecord(
       product.productReturnDuration);
   }
 
-  public static ProductRecord FromEntity(ProductHistory product)
-  {
-    return new ProductRecord(
-      product.Id,
-      product.productCategory.productCategoryName,
-      product.productName,
-      product.productImageUrl,
-      product.productDescription,
-      product.productPrice,
-      product.productCategory.productShipCost.shipCost,
-      product.productCategory.productShipCost.costPerWeight,
-      product.productURL,
-      product.productWeight,
-      product.productSellerAddress,
-      product.productSellerEmail,
-      product.productWarrantable,
-      product.productWarrantyDescription,
-      product.productWarrantyDuration,
-      product.productReturnable,
-      product.productReturnDescription,
-      product.productReturnDuration);
-  }
 }

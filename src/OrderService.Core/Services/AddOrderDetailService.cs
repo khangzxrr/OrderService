@@ -22,22 +22,18 @@ public class AddOrderDetailService : IAddOrderDetailService
     _productRepository = productRepository;
   }
 
-  public async Task<Result> AddOrderDetail(Order order, string productUrl, int quantity)
+  public async Task<Result> AddOrderDetail(Order order, int productId, int quantity)
   {
     if (order == null)
     {
       return Result.Error($"{nameof(order)} cannot be null.");
-    }
-    if (productUrl.IsNullOrEmpty())
-    {
-      return Result.Error($"{nameof(productUrl)} cannot be null or empty");
     }
     if (quantity < 1)
     {
       return Result.Error($"{nameof(quantity)} cannot be 0 or negative.");
     }
 
-    var productSpec = new ProductByUrlSpec(productUrl);
+    var productSpec = new ProductByIdSpec(productId);
     var product = await _productRepository.FirstOrDefaultAsync(productSpec);
 
     if (product == null)
@@ -45,31 +41,12 @@ public class AddOrderDetailService : IAddOrderDetailService
       return Result.Error($"{nameof(product)} is not found.");
     }
 
-    var productHistory = new ProductHistory(product.productName,
-        product.productImageUrl,
-        product.productDescription,
-        product.productPrice,
-        product.productURL,
-        product.productWeight,
-        product.productSellerAddress,
-        product.productSellerEmail,
-        product.productWarrantable,
-        product.productWarrantyDescription,
-        product.productWarrantyDuration,
-        product.productReturnable,
-        product.productReturnDescription,
-        product.productReturnDuration);
-
-    productHistory.SetCurrencyExchange(product.currencyExchange);
-    productHistory.SetProductCategory(product.productCategory);
-
     var orderDetail = new OrderDetail();
-    orderDetail.setProduct(productHistory);
+    orderDetail.setProduct(product);
     orderDetail.setQuantity(quantity);
 
-    
 
-    var conditionString = productHistory.productCategory.productShipCost.additionalCostCondition.Replace('\t',' ');
+    var conditionString = product.productCategory.productShipCost.additionalCostCondition.Replace('\t',' ');
     var workflow = JsonConvert.DeserializeObject<List<Workflow>>(conditionString);
 
     var re = new RulesEngine.RulesEngine(workflow!.ToArray(), null);
@@ -86,7 +63,6 @@ public class AddOrderDetailService : IAddOrderDetailService
 
     var result = await re.ExecuteActionWorkflowAsync("AdditionalCost", "Price_over", ruleParameters.ToArray());
 
-    Console.WriteLine(result.Output);
     float additionalCost = (float)(double)result.Output;
     orderDetail.setAdditionalCost(additionalCost);
 

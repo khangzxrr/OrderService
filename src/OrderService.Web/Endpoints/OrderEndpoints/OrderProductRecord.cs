@@ -1,5 +1,5 @@
 ﻿namespace OrderService.Web.Endpoints.OrderEndpoints;
 
-public record OrderProductRecord(string productUrl, int productQuantity)
+public record OrderProductRecord(int productId, int productQuantity)
 {
 }

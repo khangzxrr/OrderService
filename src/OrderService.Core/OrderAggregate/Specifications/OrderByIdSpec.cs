@@ -9,7 +9,7 @@ public class OrderByIdSpec : Specification<Order>, ISingleResultSpecification
       .Where(o => o.Id == id)
       .Include(o => o.orderPayments)
       .Include(o => o.orderDetails)
-        .ThenInclude(od => od.productHistory)
+        .ThenInclude(od => od.product)
         .ThenInclude(ph => ph.productCategory)
         .ThenInclude(pc => pc.productShipCost);
 

@@ -58,6 +58,9 @@ public class ConsumeProductResultHostedService : BackgroundService, IConsumeProd
     ProductCategory? category = await _categoryRepository.FirstOrDefaultAsync(catalogSpec);
     ProductShipCost? productShipCost = (category != null) ? category.productShipCost : null;
 
+    var currencySpec = new CurrencyExchangeByName("US");
+    var currency = await _currencyExchange.FirstOrDefaultAsync(currencySpec);
+
     if (category == null)
     {
       Console.WriteLine("add new catalog");
@@ -70,44 +73,32 @@ public class ConsumeProductResultHostedService : BackgroundService, IConsumeProd
       category = await _categoryRepository.AddAsync(category);
     }
 
-    var productSpec = new ProductByUrlSpec(productResult!.Url);
-    var product = await _productRepository.FirstOrDefaultAsync(productSpec);
+    Console.WriteLine("add new product");
 
-    if (product == null)
-    {
-      Console.WriteLine("add new product");
+    var product = new Product(
+      productResult!.Product,
+      "https://picsum.photos/200",
+      "yo this is description",
+      300,
+      productResult!.Url,
+      0,
+      "seller address",
+      "seller email",
+      false,
+      "warranty description",
+      0,
+      false,
+      "return description",
+      0);
 
-      product = new Product(
-        productResult!.Product,
-        "https://picsum.photos/200",
-        "yo this is description",
-        300,
-        productResult!.Url,
-        0,
-        "seller address",
-        "seller email",
-        false,
-        "warranty description",
-        0,
-        false,
-        "return description",
-        0);
+    product.setProductCategory(category);
+    product.setCurrencyExchange(currency!);
 
-      product.setProductCategory(category);
-
-      var currencySpec = new CurrencyExchangeByName("US");
-      var currency = await _currencyExchange.FirstOrDefaultAsync(currencySpec);
-
-      product.setCurrencyExchange(currency!);
-
-      await _productRepository.AddAsync(product);
-      await _productRepository.SaveChangesAsync();
-    }
+    await _productRepository.AddAsync(product);
+    await _productRepository.SaveChangesAsync();
 
     await NotificationHub.SendPrivateMessage(_notificationHub.Clients, productResult.UserId, JsonConvert.SerializeObject(product));
     
-
-    Console.WriteLine("sent finish message");
   }
 
   public void InitRabbitMQ()

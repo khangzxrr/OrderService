@@ -11,10 +11,6 @@ public class ProductTax : EntityBase, IAggregateRoot
   private List<Product> _products = new List<Product>();
   public IReadOnlyCollection<Product> products => _products.AsReadOnly();
 
-
-  private List<ProductHistory> _productHistories = new List<ProductHistory>();
-  public IReadOnlyCollection<ProductHistory> productHistories => _productHistories.AsReadOnly();
-
   public ProductTax(string taxName, float taxPrice)
   {
     this.taxName = taxName;

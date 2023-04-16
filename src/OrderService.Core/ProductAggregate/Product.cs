@@ -35,7 +35,7 @@ public class Product: EntityBase, IAggregateRoot
   public string productReturnDescription { get; set; }
   public int productReturnDuration { get; set; }
 
- 
+  public DateTime productCreateAt { get; set; }
 
   public CurrencyExchange currencyExchange { get; private set; }
 
@@ -74,6 +74,7 @@ public class Product: EntityBase, IAggregateRoot
     this.productReturnDescription = Guard.Against.NullOrEmpty(productReturnDescription);
     this.productReturnDuration = Guard.Against.Negative(productReturnDuration);
     
+    productCreateAt = DateTime.Now;
   }
 
   public void setProductCategory(ProductCategory productCategory)

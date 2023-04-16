@@ -16,7 +16,7 @@ public class OrderDetailProfile : Profile
       .ForCtorParam(nameof(OrderDetailRecord.additionalCost), options => options.MapFrom(od => od.additionalCost))
       .ForCtorParam(nameof(OrderDetailRecord.quantity), options => options.MapFrom(od => od.quantity))
       .ForCtorParam(nameof(OrderDetailRecord.shipCost), options => options.MapFrom(od => od.shipCost))
-      .ForCtorParam(nameof(OrderDetailRecord.product), options => options.MapFrom(od => ProductRecord.FromEntity(od.productHistory)) );
+      .ForCtorParam(nameof(OrderDetailRecord.product), options => options.MapFrom(od => ProductRecord.FromEntity(od.product)) );
 
 
   }
