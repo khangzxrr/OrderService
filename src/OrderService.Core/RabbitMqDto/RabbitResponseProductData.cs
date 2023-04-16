@@ -1,21 +1,27 @@
 ﻿namespace OrderService.Core.RabbitMqDto;
 public class RabbitResponseProductData
 {
-  public int UserId { get; set; }
-  public string Catalog { get; set; }
-  public string Product { get; set; }
-  public string Price { get; set; }
-  public string Ship { get; set; }
+  public int userId { get; set; }
+  public string imageUrl { get; set; }
+  public string catalog { get; set; }
+  public string product { get; set; }
+  public double price { get; set; }
+  public int shipDays { get; set; }
+  public double shipCost { get; set; }
+  public string url { get; set; }
+  public int returnDays { get; set; }
 
-  public string Url { get; set; }
 
-  public RabbitResponseProductData(int userId, string catalog, string product, string price, string ship, string url)
+  public RabbitResponseProductData(int userId, string imageUrl, string catalog, string product, double price, int shipDays, double shipCost, string url, int returnDays)
   {
-    UserId = userId;
-    Catalog = catalog;
-    Product = product;
-    Price = price;
-    Ship = ship;
-    Url = url;
+    this.userId = userId;
+    this.imageUrl = imageUrl;
+    this.catalog = catalog;
+    this.product = product;
+    this.price = price;
+    this.shipDays = shipDays;
+    this.url = url;
+    this.returnDays = returnDays;
+    this.shipCost = shipCost;
   }
 }
