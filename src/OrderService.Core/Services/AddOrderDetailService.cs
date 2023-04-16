@@ -63,7 +63,7 @@ public class AddOrderDetailService : IAddOrderDetailService
 
     var result = await re.ExecuteActionWorkflowAsync("AdditionalCost", "Price_over", ruleParameters.ToArray());
 
-    float additionalCost = (float)(double)result.Output;
+    float additionalCost = (float)Convert.ToDouble(result.Output);
     orderDetail.setAdditionalCost(additionalCost);
 
     order.addOrderDetail(orderDetail);

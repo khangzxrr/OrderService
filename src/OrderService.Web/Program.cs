@@ -35,7 +35,7 @@ string? connectionString = builder.Configuration["CONNECTION_STRING"];
 
 if (connectionString == null)
 {
-  connectionString = builder.Configuration["databases:local"];
+  connectionString = builder.Configuration["databases:azure"];
 }
 
 Console.WriteLine(connectionString);

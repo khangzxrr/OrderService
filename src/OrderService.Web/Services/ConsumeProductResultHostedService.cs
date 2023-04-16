@@ -54,7 +54,7 @@ public class ConsumeProductResultHostedService : BackgroundService, IConsumeProd
 
     var productResult = JsonConvert.DeserializeObject<RabbitResponseProductData>(message);
 
-    var catalogSpec = new ProductCatalogByNameSpec(productResult!.Catalog);
+    var catalogSpec = new ProductCatalogByNameSpec(productResult!.catalog);
     ProductCategory? category = await _categoryRepository.FirstOrDefaultAsync(catalogSpec);
     ProductShipCost? productShipCost = (category != null) ? category.productShipCost : null;
 
@@ -65,9 +65,9 @@ public class ConsumeProductResultHostedService : BackgroundService, IConsumeProd
     {
       Console.WriteLine("add new catalog");
 
-      category = new ProductCategory(productResult!.Catalog);
+      category = new ProductCategory(productResult!.catalog);
 
-      productShipCost = new ProductShipCost(10.0f, 12.0f, "[  {    \"WorkflowName\": \"AdditionalCost\",    \"Rules\": [      {        \"RuleName\": \"Price_over\",        \"Enabled\": true,        \"Expression\": \"orderDetail.productCost > 200\",        \"Actions\": {          \"OnSuccess\": {            \"Name\": \"OutputExpression\",            \"Context\": {              \"Expression\": \"orderDetail.productCost * 0.05\"            }          },          \"OnFailure\": {            \"Name\": \"OutputExpression\",            \"Context\": {              \"Expression\": \"0\"            }          }        }      }    ]  }]");
+      productShipCost = new ProductShipCost((float)productResult!.shipCost, 12.0f, "[  {    \"WorkflowName\": \"AdditionalCost\",    \"Rules\": [      {        \"RuleName\": \"Price_over\",        \"Enabled\": true,        \"Expression\": \"orderDetail.productCost > 200\",        \"Actions\": {          \"OnSuccess\": {            \"Name\": \"OutputExpression\",            \"Context\": {              \"Expression\": \"orderDetail.productCost * 0.05\"            }          },          \"OnFailure\": {            \"Name\": \"OutputExpression\",            \"Context\": {              \"Expression\": \"0\"            }          }        }      }    ]  }]");
       category.SetProductShipCost(productShipCost);
 
       category = await _categoryRepository.AddAsync(category);
@@ -75,21 +75,22 @@ public class ConsumeProductResultHostedService : BackgroundService, IConsumeProd
 
     Console.WriteLine("add new product");
 
+
     var product = new Product(
-      productResult!.Product,
-      "https://picsum.photos/200",
+      productResult!.product,
+      productResult!.imageUrl,
       "yo this is description",
-      300,
-      productResult!.Url,
+      (float)productResult!.price,
+      productResult!.url,
       0,
       "seller address",
       "seller email",
       false,
       "warranty description",
       0,
-      false,
-      "return description",
-      0);
+      (productResult!.returnDays > 0),
+      $"accept {productResult!.returnDays} return days",
+      productResult!.returnDays);
 
     product.setProductCategory(category);
     product.setCurrencyExchange(currency!);
@@ -97,7 +98,7 @@ public class ConsumeProductResultHostedService : BackgroundService, IConsumeProd
     await _productRepository.AddAsync(product);
     await _productRepository.SaveChangesAsync();
 
-    await NotificationHub.SendPrivateMessage(_notificationHub.Clients, productResult.UserId, JsonConvert.SerializeObject(product));
+    await NotificationHub.SendPrivateMessage(_notificationHub.Clients, productResult.userId, JsonConvert.SerializeObject(product));
     
   }
 
