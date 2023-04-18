@@ -24,6 +24,14 @@ public class Chat : EntityBase
     _chatMessages.Add(chatMessage);
   }
 
+  public void AddNewCustomerChatMessage(string message)
+  {
+    Guard.Against.NullOrEmpty(message);
+
+    ChatMessage chatMessage = new ChatMessage(false, message);
+    _chatMessages.Add(chatMessage);
+  }
+
 
 
 }
