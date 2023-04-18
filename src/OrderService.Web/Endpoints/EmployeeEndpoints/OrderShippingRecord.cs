@@ -1,5 +1,4 @@
 ﻿using OrderService.Core.OrderShippingAggregate;
-using OrderService.Core.ShipperAggregate;
 
 namespace OrderService.Web.Endpoints.EmployeeEndpoints;
 
