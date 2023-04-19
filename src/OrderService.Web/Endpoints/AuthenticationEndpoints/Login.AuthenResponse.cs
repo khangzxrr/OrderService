@@ -7,11 +7,13 @@ public class AuthenResponse
   public string address { get; set; }
   public string phoneNumber { get; set; }
 
-  public AuthenResponse(string token, string email, string address, string phoneNumber)
+  public string roleName { get; set; }
+  public AuthenResponse(string token, string email, string address, string phoneNumber, string roleName)
   {
     this.token = token;
     this.email = email;
     this.address = address;
     this.phoneNumber = phoneNumber;
+    this.roleName = roleName; 
   }
 }
