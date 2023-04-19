@@ -1,4 +1,5 @@
 ﻿using Ardalis.GuardClauses;
+using OrderService.Core.UserAggregate;
 using OrderService.SharedKernel;
 using OrderService.SharedKernel.Interfaces;
 
@@ -6,7 +7,7 @@ namespace OrderService.Core.OrderAggregate;
 public class Order : EntityBase, IAggregateRoot
 {
   public int userId { get; private set; }
-
+  public User user { get; private set; }
   public Chat chat { get; private set; }
   public DateTime orderDate { get; }
   public OrderStatus status { get; private set; }
@@ -50,6 +51,11 @@ public class Order : EntityBase, IAggregateRoot
     remainCost = price;
   }
 
+
+  public void SetUser(User user)
+  {
+    this.user = Guard.Against.Null(user);
+  }
   public void SetChat(Chat chat)
   {
     this.chat = Guard.Against.Null(chat);

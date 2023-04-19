@@ -7,6 +7,7 @@ public class OrderByIdSpec : Specification<Order>, ISingleResultSpecification
   {
     Query
       .Where(o => o.Id == id)
+      .Include(o => o.user)
       .Include(o => o.orderPayments)
       .Include(o => o.orderDetails)
         .ThenInclude(od => od.product)
