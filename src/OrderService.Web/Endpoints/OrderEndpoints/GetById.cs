@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using OrderService.Core.OrderAggregate;
 using OrderService.Core.OrderAggregate.Specifications;
 using OrderService.Core.UserAggregate;
-using OrderService.Core.UserAggregate.Specifications;
 using OrderService.SharedKernel.Interfaces;
 using OrderService.Web.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
@@ -18,18 +17,14 @@ public class GetById : EndpointBaseAsync
 {
 
   private readonly IRepository<Order> _orderRepository;
-  private readonly IRepository<User> _userRepository;
   private readonly ICurrentUserService _currentUserService;
 
   private readonly IMapper _mapper;
 
-
-
-  public GetById(IRepository<Order> orderRepository, ICurrentUserService currentUserService, IRepository<User> userRepository, IMapper mapper)
+  public GetById(IRepository<Order> orderRepository, ICurrentUserService currentUserService, IMapper mapper)
   {
     _orderRepository = orderRepository;
     _currentUserService = currentUserService;
-    _userRepository = userRepository;
     _mapper = mapper;
   }
 
@@ -46,26 +41,17 @@ public class GetById : EndpointBaseAsync
   {
     int userId = _currentUserService.TryParseUserId();
 
-    var userSpec = new UserByIdSpec(userId);
-    var user = await _userRepository.FirstOrDefaultAsync(userSpec);
-
-    if (user == null)
-    {
-      return BadRequest("User not found");
-    }
-
-    var order = user.orders.Where(o => o.Id == request.OrderId).FirstOrDefault();
-    if (order == null)
-    {
-      return BadRequest("This order is not yours");
-    }
-
     var orderSpec = new OrderByIdSpec(request.OrderId);
-    order = await _orderRepository.FirstOrDefaultAsync(orderSpec);
+    var order = await _orderRepository.FirstOrDefaultAsync(orderSpec);
 
     if (order == null)
     {
       return BadRequest("Order is not found");
+    }
+
+    if (order.userId != userId)
+    {
+      return BadRequest("Order is not yours");
     }
 
     var orderRecord = _mapper.Map<OrderRecord>(order);
