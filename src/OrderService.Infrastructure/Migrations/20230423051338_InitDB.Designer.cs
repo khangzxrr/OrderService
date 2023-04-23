@@ -12,8 +12,8 @@ using OrderService.Infrastructure.Data;
 namespace OrderService.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230416065200_RemoveProductHistory")]
-    partial class RemoveProductHistory
+    [Migration("20230423051338_InitDB")]
+    partial class InitDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -702,13 +702,15 @@ namespace OrderService.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("OrderService.Core.UserAggregate.User", null)
+                    b.HasOne("OrderService.Core.UserAggregate.User", "user")
                         .WithMany("orders")
                         .HasForeignKey("userId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("chat");
+
+                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("OrderService.Core.OrderAggregate.OrderDetail", b =>

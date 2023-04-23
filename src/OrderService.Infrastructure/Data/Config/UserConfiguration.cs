@@ -23,7 +23,5 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
       .IsRequired();
 
     builder.HasOne(u => u.role).WithMany().IsRequired();
-
-    builder.HasMany(u => u.orders).WithOne();
   }
 }

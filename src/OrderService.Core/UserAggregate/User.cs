@@ -1,5 +1,4 @@
-﻿
-using Ardalis.GuardClauses;
+﻿using Ardalis.GuardClauses;
 using OrderService.Core.OrderAggregate;
 using OrderService.Core.ShipperAggregate;
 using OrderService.SharedKernel;
@@ -27,10 +26,7 @@ public class User: EntityBase, IAggregateRoot
 
   public Shipper? shipper { get; private set; }
 
-
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
   public User(
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     string email,
     string phoneNumber,
     string passwordHash,

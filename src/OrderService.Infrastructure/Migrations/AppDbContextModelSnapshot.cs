@@ -699,13 +699,15 @@ namespace OrderService.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("OrderService.Core.UserAggregate.User", null)
+                    b.HasOne("OrderService.Core.UserAggregate.User", "user")
                         .WithMany("orders")
                         .HasForeignKey("userId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("chat");
+
+                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("OrderService.Core.OrderAggregate.OrderDetail", b =>

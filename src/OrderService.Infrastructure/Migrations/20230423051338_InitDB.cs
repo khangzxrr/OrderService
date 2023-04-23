@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace OrderService.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class InitDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -113,6 +113,7 @@ namespace OrderService.Infrastructure.Migrations
                     productReturnable = table.Column<bool>(type: "bit", nullable: false),
                     productReturnDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     productReturnDuration = table.Column<int>(type: "int", nullable: false),
+                    productCreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     currencyExchangeId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -126,46 +127,6 @@ namespace OrderService.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Product_ProductCategory_productCategoryId",
-                        column: x => x.productCategoryId,
-                        principalTable: "ProductCategory",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ProductHistory",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    productCategoryId = table.Column<int>(type: "int", nullable: false),
-                    productName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    productImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    productDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    productPrice = table.Column<float>(type: "real", nullable: false),
-                    productURL = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    productWeight = table.Column<float>(type: "real", nullable: false),
-                    productSellerAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    productSellerEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    productWarrantable = table.Column<bool>(type: "bit", nullable: false),
-                    productWarrantyDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    productWarrantyDuration = table.Column<int>(type: "int", nullable: false),
-                    productReturnable = table.Column<bool>(type: "bit", nullable: false),
-                    productReturnDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    productReturnDuration = table.Column<int>(type: "int", nullable: false),
-                    currencyExchangeId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductHistory", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ProductHistory_CurrencyExchanges_currencyExchangeId",
-                        column: x => x.currencyExchangeId,
-                        principalTable: "CurrencyExchanges",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProductHistory_ProductCategory_productCategoryId",
                         column: x => x.productCategoryId,
                         principalTable: "ProductCategory",
                         principalColumn: "Id",
@@ -265,30 +226,6 @@ namespace OrderService.Infrastructure.Migrations
                         name: "FK_ProductProductTax_Product_productsId",
                         column: x => x.productsId,
                         principalTable: "Product",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ProductHistoryProductTax",
-                columns: table => new
-                {
-                    productHistoriesId = table.Column<int>(type: "int", nullable: false),
-                    productTaxesId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductHistoryProductTax", x => new { x.productHistoriesId, x.productTaxesId });
-                    table.ForeignKey(
-                        name: "FK_ProductHistoryProductTax_ProductHistory_productHistoriesId",
-                        column: x => x.productHistoriesId,
-                        principalTable: "ProductHistory",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProductHistoryProductTax_ProductTax_productTaxesId",
-                        column: x => x.productTaxesId,
-                        principalTable: "ProductTax",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -396,7 +333,7 @@ namespace OrderService.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    productHistoryId = table.Column<int>(type: "int", nullable: false),
+                    productId = table.Column<int>(type: "int", nullable: false),
                     additionalCost = table.Column<float>(type: "real", nullable: false),
                     shipCost = table.Column<float>(type: "real", nullable: false),
                     productCost = table.Column<float>(type: "real", nullable: false),
@@ -413,9 +350,9 @@ namespace OrderService.Infrastructure.Migrations
                         principalTable: "Order",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_OrderDetail_ProductHistory_productHistoryId",
-                        column: x => x.productHistoryId,
-                        principalTable: "ProductHistory",
+                        name: "FK_OrderDetail_Product_productId",
+                        column: x => x.productId,
+                        principalTable: "Product",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -547,9 +484,9 @@ namespace OrderService.Infrastructure.Migrations
                 column: "OrderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderDetail_productHistoryId",
+                name: "IX_OrderDetail_productId",
                 table: "OrderDetail",
-                column: "productHistoryId");
+                column: "productId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderPayment_OrderId",
@@ -575,21 +512,6 @@ namespace OrderService.Infrastructure.Migrations
                 name: "IX_Product_productCategoryId",
                 table: "Product",
                 column: "productCategoryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductHistory_currencyExchangeId",
-                table: "ProductHistory",
-                column: "currencyExchangeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductHistory_productCategoryId",
-                table: "ProductHistory",
-                column: "productCategoryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductHistoryProductTax_productTaxesId",
-                table: "ProductHistoryProductTax",
-                column: "productTaxesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductProductTax_productsId",
@@ -645,9 +567,6 @@ namespace OrderService.Infrastructure.Migrations
                 name: "OrderShipping");
 
             migrationBuilder.DropTable(
-                name: "ProductHistoryProductTax");
-
-            migrationBuilder.DropTable(
                 name: "ProductProductTax");
 
             migrationBuilder.DropTable(
@@ -666,9 +585,6 @@ namespace OrderService.Infrastructure.Migrations
                 name: "ProductTax");
 
             migrationBuilder.DropTable(
-                name: "Product");
-
-            migrationBuilder.DropTable(
                 name: "ProductReturn");
 
             migrationBuilder.DropTable(
@@ -681,7 +597,7 @@ namespace OrderService.Infrastructure.Migrations
                 name: "Order");
 
             migrationBuilder.DropTable(
-                name: "ProductHistory");
+                name: "Product");
 
             migrationBuilder.DropTable(
                 name: "Chat");

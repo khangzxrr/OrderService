@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using OrderService.Core.OrderAggregate;
 
@@ -16,7 +13,7 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
       s => OrderStatus.FromValue(s)
       );
 
-    builder.HasOne(o => o.user).WithMany().HasForeignKey(o => o.userId);
+    builder.HasOne(o => o.user).WithMany(u => u.orders).HasForeignKey(o => o.userId);
 
     builder.Property(o => o.price).IsRequired();
     builder.Property(o => o.customerDescription).HasMaxLength(300).IsRequired();
