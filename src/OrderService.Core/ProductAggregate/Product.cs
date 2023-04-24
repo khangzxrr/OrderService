@@ -71,8 +71,17 @@ public class Product: EntityBase, IAggregateRoot
     this.productWarrantyDescription = Guard.Against.NullOrEmpty(productWarrantyDescription);
     this.productWarrantyDuration = Guard.Against.Negative(productWarrantyDuration);
     this.productReturnable = productReturnable;
-    this.productReturnDescription = Guard.Against.NullOrEmpty(productReturnDescription);
-    this.productReturnDuration = Guard.Against.Negative(productReturnDuration);
+
+    if (productReturnable)
+    {
+      this.productReturnDescription = Guard.Against.NullOrEmpty(productReturnDescription);
+      this.productReturnDuration = Guard.Against.Negative(productReturnDuration);
+    } else
+    {
+      this.productReturnDescription = "";
+      this.productReturnDuration = 0;
+    }
+    
     
     productCreateAt = DateTime.Now;
   }
