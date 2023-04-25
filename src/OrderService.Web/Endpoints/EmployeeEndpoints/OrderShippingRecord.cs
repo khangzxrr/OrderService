@@ -11,7 +11,7 @@ public record OrderShippingRecord(int id, bool shippingUsing3rd, string shipping
         orderShipping.orderShippingStatus.Name,
         orderShipping.shippingDescription,
         orderShipping.signatureImageUrl,
-        (orderShipping.shippingUsing3rd) ? "" : orderShipping.shipper.userId.ToString()
+        (orderShipping.shippingUsing3rd) ? "" : orderShipping.shipper!.userId.ToString()
       );
   }
 }

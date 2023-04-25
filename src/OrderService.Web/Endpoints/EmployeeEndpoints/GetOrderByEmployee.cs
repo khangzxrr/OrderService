@@ -2,7 +2,6 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata;
 using OrderService.Core.OrderAggregate;
 using OrderService.Core.OrderAggregate.Specifications;
 using OrderService.SharedKernel.Interfaces;
