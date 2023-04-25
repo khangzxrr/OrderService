@@ -2,11 +2,13 @@
 
 public class CreateOrderShippingResponse
 {
-  public OrderShippingRecord orderShippingRecord { get; set; }
+  public OrderShippingRecord? orderShippingRecord { get; set; }
+  public string message { get; set; }
 
-  public CreateOrderShippingResponse(OrderShippingRecord orderShippingRecord)
+  public CreateOrderShippingResponse(OrderShippingRecord? orderShippingRecord, string message = "")
   {
     this.orderShippingRecord = orderShippingRecord;
+    this.message = message; 
   }
 
 }

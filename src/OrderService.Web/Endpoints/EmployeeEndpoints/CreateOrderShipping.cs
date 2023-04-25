@@ -44,7 +44,7 @@ public class CreateOrderShipping : EndpointBaseAsync
 
     if (order == null)
     {
-      return BadRequest("Order not found");
+      return BadRequest("order not found");
     }
 
     if (order.status != OrderStatus.inVNwarehouse)
@@ -54,22 +54,34 @@ public class CreateOrderShipping : EndpointBaseAsync
 
     var shipper = await _getMostFreeEmployeeService.GetMostFreeShipper();
 
+    CreateOrderShippingResponse response;
+
     if (!request.isUsing3rd && shipper == null)
     {
-      return BadRequest("No shipper is free");
+
+      order.SetQueueInShipping(OrderLocalShippingStatus.inQueue);
+
+      await _orderRepository.SaveChangesAsync();
+
+      response = new CreateOrderShippingResponse(null, "PLACE_IN_QUEUE_WAITING_FOR_SHIPPER");
+
+      return Ok(response);
     }
 
     OrderShipping orderShipping = new OrderShipping(request.isUsing3rd, request.shippingDescription!);
+
+    orderShipping.setOrder(order.Id);
+
     if (!request.isUsing3rd)
     {
-      orderShipping.setOrder(order.Id);
+      
       orderShipping.setShipper(shipper!);
     }
 
     await _orderShippingRepository.AddAsync(orderShipping);
     await _orderShippingRepository.SaveChangesAsync();
 
-    var response = new CreateOrderShippingResponse(OrderShippingRecord.FromEntity(orderShipping));
+    response = new CreateOrderShippingResponse(OrderShippingRecord.FromEntity(orderShipping), "OK");
 
     return Ok(response);
   }
