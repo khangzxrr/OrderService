@@ -18,10 +18,10 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
     builder.Property(o => o.localShippingStatus)
         .HasConversion(
         s => s.Value,
-        s => OrderShippingStatus.FromValue(s)
+        s => OrderLocalShippingStatus.FromValue(s)
       )
         .IsRequired()
-        .HasDefaultValue(OrderShippingStatus.notInQueue);
+        .HasDefaultValue(OrderLocalShippingStatus.notInQueue);
 
     builder.Property(o => o.price).IsRequired();
     builder.Property(o => o.customerDescription).HasMaxLength(300).IsRequired();

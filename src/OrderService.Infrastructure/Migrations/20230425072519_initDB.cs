@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace OrderService.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitDB : Migration
+    public partial class initDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -308,7 +308,8 @@ namespace OrderService.Infrastructure.Migrations
                     contactPhonenumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     shippingEstimatedDays = table.Column<int>(type: "int", nullable: false),
                     price = table.Column<float>(type: "real", nullable: false),
-                    remainCost = table.Column<float>(type: "real", nullable: false)
+                    remainCost = table.Column<float>(type: "real", nullable: false),
+                    localShippingStatus = table.Column<int>(type: "int", nullable: false, defaultValue: 0)
                 },
                 constraints: table =>
                 {
@@ -387,7 +388,7 @@ namespace OrderService.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     orderId = table.Column<int>(type: "int", nullable: false),
-                    shipperId = table.Column<int>(type: "int", nullable: false),
+                    shipperId = table.Column<int>(type: "int", nullable: true),
                     shippingUsing3rd = table.Column<bool>(type: "bit", nullable: false),
                     orderShippingStatus = table.Column<int>(type: "int", nullable: false),
                     shippingDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -406,8 +407,7 @@ namespace OrderService.Infrastructure.Migrations
                         name: "FK_OrderShipping_Shippers_shipperId",
                         column: x => x.shipperId,
                         principalTable: "Shippers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(

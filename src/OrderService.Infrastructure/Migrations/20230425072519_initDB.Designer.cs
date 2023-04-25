@@ -12,8 +12,8 @@ using OrderService.Infrastructure.Data;
 namespace OrderService.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230425040938_shippingBoolNowContainStatus")]
-    partial class shippingBoolNowContainStatus
+    [Migration("20230425072519_initDB")]
+    partial class initDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -331,7 +331,7 @@ namespace OrderService.Infrastructure.Migrations
                     b.Property<int>("orderShippingStatus")
                         .HasColumnType("int");
 
-                    b.Property<int>("shipperId")
+                    b.Property<int?>("shipperId")
                         .HasColumnType("int");
 
                     b.Property<string>("shippingDescription")
@@ -764,9 +764,7 @@ namespace OrderService.Infrastructure.Migrations
 
                     b.HasOne("OrderService.Core.ShipperAggregate.Shipper", "shipper")
                         .WithMany("OrderShippings")
-                        .HasForeignKey("shipperId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("shipperId");
 
                     b.Navigation("order");
 

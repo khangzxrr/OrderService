@@ -328,7 +328,7 @@ namespace OrderService.Infrastructure.Migrations
                     b.Property<int>("orderShippingStatus")
                         .HasColumnType("int");
 
-                    b.Property<int>("shipperId")
+                    b.Property<int?>("shipperId")
                         .HasColumnType("int");
 
                     b.Property<string>("shippingDescription")
@@ -761,9 +761,7 @@ namespace OrderService.Infrastructure.Migrations
 
                     b.HasOne("OrderService.Core.ShipperAggregate.Shipper", "shipper")
                         .WithMany("OrderShippings")
-                        .HasForeignKey("shipperId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("shipperId");
 
                     b.Navigation("order");
 
