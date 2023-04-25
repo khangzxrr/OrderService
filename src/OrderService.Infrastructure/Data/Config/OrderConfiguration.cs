@@ -15,6 +15,14 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
 
     builder.HasOne(o => o.user).WithMany(u => u.orders).HasForeignKey(o => o.userId);
 
+    builder.Property(o => o.localShippingStatus)
+        .HasConversion(
+        s => s.Value,
+        s => OrderShippingStatus.FromValue(s)
+      )
+        .IsRequired()
+        .HasDefaultValue(OrderShippingStatus.notInQueue);
+
     builder.Property(o => o.price).IsRequired();
     builder.Property(o => o.customerDescription).HasMaxLength(300).IsRequired();
     builder.Property(o => o.shippingEstimatedDays).IsRequired();
