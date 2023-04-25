@@ -4,7 +4,7 @@ namespace OrderService.Web.Endpoints.EmployeeEndpoints;
 
 public class CreateOrderShippingRequest
 {
-  public const string Route = "/employee/ordershipping/create";
+  public const string Route = "/employee/orders/ordershipping/create";
 
   [Required]
   public int orderId { get; set; }
