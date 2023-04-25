@@ -20,7 +20,7 @@ public class Order : EntityBase, IAggregateRoot
   public float price { get; private set; }
   public float remainCost { get; private set; }
 
-  public OrderShippingStatus localShippingStatus { get; private set; }
+  public OrderLocalShippingStatus localShippingStatus { get; private set; }
 
   private readonly List<OrderPayment> _orderPayments = new();
   public IEnumerable<OrderPayment> orderPayments => _orderPayments.AsReadOnly();
@@ -52,10 +52,10 @@ public class Order : EntityBase, IAggregateRoot
     price = 0;
     remainCost = price;
 
-    localShippingStatus = OrderShippingStatus.notInQueue;
+    localShippingStatus = OrderLocalShippingStatus.notInQueue;
   }
 
-  public void SetQueueInShipping(OrderShippingStatus status) {
+  public void SetQueueInShipping(OrderLocalShippingStatus status) {
     localShippingStatus = Guard.Against.Null(status);
   }
 

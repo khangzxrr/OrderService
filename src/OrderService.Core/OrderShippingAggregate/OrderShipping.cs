@@ -11,9 +11,7 @@ public class OrderShipping : EntityBase, IAggregateRoot
   public int orderId { get; private set; }
   public Order order { get; private set; }
 
-  public int shipperId { get; private set; }
-  public Shipper shipper { get; private set; }
-
+  public Shipper? shipper { get; private set; }
 
   public bool shippingUsing3rd { get; private set; }
 
@@ -27,7 +25,7 @@ public class OrderShipping : EntityBase, IAggregateRoot
   {
     this.shippingUsing3rd = shippingUsing3rd;
     this.shippingDescription = shippingDescription;
-    this.signatureImageUrl = "";
+    signatureImageUrl = "";
     orderShippingStatus = OrderShippingStatus.inWarehouse;
   }
 
