@@ -52,6 +52,11 @@ public class CreateOrderShipping : EndpointBaseAsync
       return BadRequest("order is not in correct state to create order shipping");
     }
 
+    if (order.localShippingStatus != OrderLocalShippingStatus.notInQueue)
+    {
+      return BadRequest("order is already in shipping state");
+    }
+
     var shipper = await _getMostFreeEmployeeService.GetMostFreeShipper();
 
     CreateOrderShippingResponse response;
@@ -67,6 +72,8 @@ public class CreateOrderShipping : EndpointBaseAsync
 
       return Ok(response);
     }
+
+    order.SetQueueInShipping(OrderLocalShippingStatus.assignedShipper);
 
     OrderShipping orderShipping = new OrderShipping(request.isUsing3rd, request.shippingDescription!);
 
