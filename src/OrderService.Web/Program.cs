@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using OrderService.Web.SignalR;
+using StackExchange.Redis.Extensions.Newtonsoft;
+using StackExchange.Redis.Extensions.Core.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,6 +56,12 @@ builder.Services.AddCors(options =>
                       .AllowCredentials();
                     });
 });
+
+
+var redisConfiguration = builder.Configuration.GetSection("Redis").Get<RedisConfiguration>();
+
+builder.Services.AddStackExchangeRedisExtensions<NewtonsoftSerializer>(redisConfiguration!);
+
 
 builder.Services.AddControllers(); 
 
