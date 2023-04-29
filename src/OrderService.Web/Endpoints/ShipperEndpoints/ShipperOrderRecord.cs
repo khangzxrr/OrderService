@@ -3,11 +3,11 @@ using OrderService.Core.OrderShippingAggregate;
 
 namespace OrderService.Web.Endpoints.ShipperEndpoints;
 
-public record ShipperOrderRecord(int orderShippingId, string customerName, string customerAddress, string customerPhoneNumber)
+public record ShipperOrderRecord(int orderShippingId, string customerName, string customerAddress, string customerPhoneNumber, string orderShipingStatus, double remainCost)
 {
 
   public static ShipperOrderRecord FromEntity(OrderShipping orderShipping)
   {
-    return new ShipperOrderRecord(orderShipping.Id, orderShipping.order.user.firstname, orderShipping.order.user.address, orderShipping.order.user.phoneNumber);
+    return new ShipperOrderRecord(orderShipping.Id, orderShipping.order.user.firstname, orderShipping.order.user.address, orderShipping.order.user.phoneNumber, orderShipping.orderShippingStatus.Name, orderShipping.order.remainCost);
   }
 }
