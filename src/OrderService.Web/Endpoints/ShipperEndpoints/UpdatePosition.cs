@@ -1,6 +1,7 @@
 ﻿using Ardalis.ApiEndpoints;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OrderService.Core.ShipperAggregate.dtos;
 using OrderService.Web.Interfaces;
 using StackExchange.Redis.Extensions.Core.Abstractions;
 using Swashbuckle.AspNetCore.Annotations;
@@ -31,9 +32,15 @@ public class UpdatePosition : EndpointBaseAsync
   ]
   public override async Task<ActionResult<UpdatePositionResponse>> HandleAsync(UpdatePositionRequest request, CancellationToken cancellationToken = default)
   {
-    var isSuccess = await _redisClient.Db0.AddAsync("Test", "abc");
 
-    Console.WriteLine(isSuccess);
+    var shipperLocation = new ShipperLocation(_currentUserService.TryParseUserId(),request.latitule, request.longitude);
+
+
+
+    var isSuccess = await _redisClient.Db0.AddAsync(shipperLocation.shipperHash, shipperLocation);
+
+    await _redisClient.Db0.UpdateExpiryAsync(shipperLocation.shipperHash, DateTimeOffset.Now.AddMinutes(60));
+
 
     var response = new UpdatePositionResponse("Ok");
 
