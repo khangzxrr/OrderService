@@ -1,13 +1,13 @@
 ﻿using Ardalis.Specification;
 
 namespace OrderService.Core.ShipperAggregate.specifications;
-public class ShipperWithOrderByShipperIdSpec : Specification<Shipper>, ISingleResultSpecification
+public class ShipperWithOrderByUserIdSpec : Specification<Shipper>, ISingleResultSpecification
 {
 
-  public ShipperWithOrderByShipperIdSpec(int shipperId)
+  public ShipperWithOrderByUserIdSpec(int shipperId)
   {
     Query
-      .Where(s => s.Id == shipperId)
+      .Where(s => s.userId == shipperId)
       .Include(s => s.OrderShippings)
         .ThenInclude(os => os.order)
           .ThenInclude(o => o.user);
