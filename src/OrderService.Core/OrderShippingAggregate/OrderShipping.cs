@@ -40,5 +40,10 @@ public class OrderShipping : EntityBase, IAggregateRoot
     this.shipper = Guard.Against.Null(shipper);
   }
 
+  public void setOrderShippingStatus(OrderShippingStatus orderShippingStatus)
+  {
+    this.orderShippingStatus = Guard.Against.Null(orderShippingStatus);
+  }
+
 
 }
