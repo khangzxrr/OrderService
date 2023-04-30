@@ -12,8 +12,8 @@ public record GeneralOrderRecord(
   string deliveryAddress,
   string contactPhoneNumber,
   int shippingEstimatedDays,
-  float price, 
-  float remainCost
+  double price, 
+  double remainCost
   )
 {
   public static GeneralOrderRecord FromEntity(Order order)

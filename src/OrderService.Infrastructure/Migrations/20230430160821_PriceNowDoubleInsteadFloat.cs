@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace OrderService.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class initDB : Migration
+    public partial class PriceNowDoubleInsteadFloat : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -307,8 +307,8 @@ namespace OrderService.Infrastructure.Migrations
                     deliveryAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     contactPhonenumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     shippingEstimatedDays = table.Column<int>(type: "int", nullable: false),
-                    price = table.Column<float>(type: "real", nullable: false),
-                    remainCost = table.Column<float>(type: "real", nullable: false),
+                    price = table.Column<double>(type: "float", nullable: false),
+                    remainCost = table.Column<double>(type: "float", nullable: false),
                     localShippingStatus = table.Column<int>(type: "int", nullable: false, defaultValue: 0)
                 },
                 constraints: table =>
@@ -365,7 +365,7 @@ namespace OrderService.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     paymentStatus = table.Column<int>(type: "int", nullable: false),
-                    paymentCost = table.Column<float>(type: "real", nullable: false),
+                    paymentCost = table.Column<double>(type: "float", nullable: false),
                     paymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     paymentDescription = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
                     transactionalId = table.Column<string>(type: "nvarchar(max)", nullable: false),

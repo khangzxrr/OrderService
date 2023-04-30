@@ -12,8 +12,8 @@ using OrderService.Infrastructure.Data;
 namespace OrderService.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230425072519_initDB")]
-    partial class initDB
+    [Migration("20230430160821_PriceNowDoubleInsteadFloat")]
+    partial class PriceNowDoubleInsteadFloat
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -143,11 +143,11 @@ namespace OrderService.Infrastructure.Migrations
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
-                    b.Property<float>("price")
-                        .HasColumnType("real");
+                    b.Property<double>("price")
+                        .HasColumnType("float");
 
-                    b.Property<float>("remainCost")
-                        .HasColumnType("real");
+                    b.Property<double>("remainCost")
+                        .HasColumnType("float");
 
                     b.Property<int>("shippingEstimatedDays")
                         .HasColumnType("int");
@@ -216,8 +216,8 @@ namespace OrderService.Infrastructure.Migrations
                     b.Property<int?>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<float>("paymentCost")
-                        .HasColumnType("real");
+                    b.Property<double>("paymentCost")
+                        .HasColumnType("float");
 
                     b.Property<DateTime>("paymentDate")
                         .HasColumnType("datetime2");

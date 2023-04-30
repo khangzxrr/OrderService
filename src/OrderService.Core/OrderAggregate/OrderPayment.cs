@@ -9,13 +9,14 @@ using OrderService.SharedKernel;
 namespace OrderService.Core.OrderAggregate;
 public class OrderPayment : EntityBase
 {
+
   public PaymentStatus paymentStatus { get; }
-  public float paymentCost { get; }
+  public double paymentCost { get; }
   public DateTime paymentDate { get; }
   public string paymentDescription { get; }
   public string transactionalId { get; private set; }
 
-  public OrderPayment(PaymentStatus paymentStatus, float paymentCost, string transactionalId, string paymentDescription, DateTime paymentDate)
+  public OrderPayment(PaymentStatus paymentStatus, double paymentCost, string transactionalId, string paymentDescription, DateTime paymentDate)
   {
     this.paymentStatus = Guard.Against.Null(paymentStatus, nameof(paymentStatus));
     this.paymentCost = Guard.Against.Negative(paymentCost, nameof(paymentCost));
@@ -27,6 +28,11 @@ public class OrderPayment : EntityBase
   public void SetTransactionalId(string transactionalId)
   {
     transactionalId = Guard.Against.NullOrEmpty(transactionalId);
+  }
+
+  public static long ConvertDollarToVnPayVND(double cost)
+  {
+    return (long)(cost * 100000);
   }
 
  

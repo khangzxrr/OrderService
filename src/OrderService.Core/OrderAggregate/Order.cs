@@ -17,8 +17,8 @@ public class Order : EntityBase, IAggregateRoot
   public string contactPhonenumber { get; }
   public int shippingEstimatedDays { get; }
 
-  public float price { get; private set; }
-  public float remainCost { get; private set; }
+  public double price { get; private set; }
+  public double remainCost { get; private set; }
 
   public OrderLocalShippingStatus localShippingStatus { get; private set; }
 
@@ -64,11 +64,11 @@ public class Order : EntityBase, IAggregateRoot
     this.chat = Guard.Against.Null(chat);
   }
 
-  public void SetPrice(float price) { 
+  public void SetPrice(double price) { 
     this.price = Guard.Against.Negative(price);
     this.remainCost = price;
   }
-  public void SetRemainCost(float remainCost)
+  public void SetRemainCost(double remainCost)
   {
     this.remainCost = Guard.Against.Negative(remainCost);
   }
@@ -78,14 +78,24 @@ public class Order : EntityBase, IAggregateRoot
     this.status = Guard.Against.Null(status);
   }
 
-  public float GetFirstPaymentAmount()
+  public double GetFirstPaymentAmount()
   {
-    return 80.0f * this.price / 100.0f;
+    return Math.Ceiling(80.0f * this.price / 100.0f);
   }
 
-  public float GetSecondPaymentAmount()
+  public double GetSecondPaymentAmount()
   {
-    return 20.0f * this.price / 100.0f;
+    return Math.Ceiling(20.0f * this.price / 100.0f);
+  }
+
+  public bool IsPaidFirstMilestone()
+  {
+    return orderPayments.Where(op => op.paymentStatus == PaymentStatus.firstPayment).Any();
+  }
+
+  public bool IsPaidAllMilestone()
+  {
+    return orderPayments.Where(op => op.paymentStatus == PaymentStatus.firstPayment || op.paymentStatus == PaymentStatus.SecondPayment).Count() >= 2;
   }
 
   public void AddPayment(OrderPayment payment)

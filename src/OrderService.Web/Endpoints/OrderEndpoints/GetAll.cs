@@ -39,7 +39,7 @@ public class GetAll : EndpointBaseAsync
     var orderSpec = new GeneralOrderByUserIdSpec(userId);
     var orders = await _orderRepository.ListAsync(orderSpec);
 
-    IEnumerable<GeneralOrderRecord> orderRecords = orders.Select(o => GeneralOrderRecord.FromEntity(o));
+    IEnumerable<GeneralOrderRecord> orderRecords = orders.Select(GeneralOrderRecord.FromEntity);
 
     var response = new GetAllResponse(orderRecords);
 

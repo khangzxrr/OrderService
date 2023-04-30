@@ -107,7 +107,7 @@ public class ConsumeProductResultHostedService : BackgroundService, IConsumeProd
     var factory = new ConnectionFactory { HostName = _configuration["HOSTNAME"], Port = 5672 };
 
     Console.WriteLine(factory.HostName);
-
+    
     connection = factory.CreateConnection();
     channel = connection.CreateModel();
 

@@ -20,7 +20,7 @@ public class OrderPaymentService : IOrderPaymentService
     _mediator = mediator;
   }
 
-  public async Task<Result<OrderPayment>> AddNewPayment(int orderId, string paymentTurn, long amount, string transactionId, string createdAt)
+  public async Task<Result<OrderPayment>> AddNewPayment(int orderId, string paymentTurn, long amount, string transactionId)
   {
     if (paymentTurn != PaymentStatus.firstPayment.Name && paymentTurn != PaymentStatus.SecondPayment.Name)
     {
@@ -31,13 +31,6 @@ public class OrderPaymentService : IOrderPaymentService
     {
       return Result.Error("transactional Id cannot be null or empty");
     }
-
-    if (string.IsNullOrEmpty(createdAt))
-    {
-      return Result.Error("createAt cannot be null or empty");
-    }
-
-    var createAtDateTime = DateTime.ParseExact(createdAt, "yyyyMMddHHmmss", CultureInfo.InvariantCulture);
 
 
     var orderSpec = new OrderByIdSpec(orderId);
@@ -55,7 +48,7 @@ public class OrderPaymentService : IOrderPaymentService
       return new Result<OrderPayment>(existTransactionalWithId);
     }
 
-    float dbAmount;
+    double dbAmount;
     long VNPAYmustPayAmount;
     PaymentStatus paymentStatus;
 
@@ -70,7 +63,7 @@ public class OrderPaymentService : IOrderPaymentService
       paymentStatus = PaymentStatus.SecondPayment;
     }
 
-    VNPAYmustPayAmount = (long)((double)dbAmount * (double)100000); //convert to VNPAY amount
+    VNPAYmustPayAmount = OrderPayment.ConvertDollarToVnPayVND(dbAmount); //convert to VNPAY amount
 
 
     if (VNPAYmustPayAmount != amount)
@@ -84,7 +77,7 @@ public class OrderPaymentService : IOrderPaymentService
       , 
       transactionId, 
       $"order:{order.Id} left: {order.price - dbAmount}", 
-      createAtDateTime);
+      DateTime.Now);
 
     order.AddPayment(payment);
 
