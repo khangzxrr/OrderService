@@ -42,7 +42,7 @@ public class IpnCallback : EndpointBaseAsync
 
     int orderId = int.Parse(splitedOrderInfo[1]);
 
-    var payment = await _orderPaymentService.AddNewPayment(orderId, paymentTurn, request.vnp_Amount, request.vnp_TxnRef, request.vnp_PayDate);
+    var payment = await _orderPaymentService.AddNewPayment(orderId, paymentTurn, request.vnp_Amount, request.vnp_TxnRef);
 
     if (payment.Errors.Any())
     {
