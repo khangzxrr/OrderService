@@ -30,7 +30,7 @@ public class OrderPayment : EntityBase
     transactionalId = Guard.Against.NullOrEmpty(transactionalId);
   }
 
-  public static long ConvertDollarToVnPayVND(double cost)
+  public static long ConvertVNDToVNPayVND(double cost)
   {
     return (long)(cost * 100000);
   }
