@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using OrderService.Core.Interfaces;
 using OrderService.Core.OrderAggregate;
 using OrderService.Core.OrderAggregate.Specifications;
+using OrderService.Core.OrderShippingAggregate;
+using OrderService.Core.OrderShippingAggregate.specifications;
 using OrderService.Core.ShipperAggregate.enums;
 using OrderService.SharedKernel.Interfaces;
 using OrderService.Web.Interfaces;
@@ -17,12 +19,15 @@ public class PayRemainCost : EndpointBaseAsync
 {
 
   private readonly IRepository<Order> _orderRepository;
+  private readonly IRepository<OrderShipping> _orderShippingRepository;
   private readonly IOrderPaymentService _orderPaymentService;
+  
 
-  public PayRemainCost(IOrderPaymentService orderPaymentService, IRepository<Order> orderRepository)
+  public PayRemainCost(IOrderPaymentService orderPaymentService, IRepository<Order> orderRepository, IRepository<OrderShipping> orderShippingRepository)
   { 
     _orderPaymentService = orderPaymentService;
     _orderRepository = orderRepository;
+    _orderShippingRepository = orderShippingRepository;
   }
 
   [Authorize(Roles = "SHIPPER")]
@@ -45,12 +50,19 @@ public class PayRemainCost : EndpointBaseAsync
     }
 
     var orderSpec = new OrderPaymentByIdSpec(request.orderId);
-
     var order = await _orderRepository.FirstOrDefaultAsync(orderSpec);
+
+    var orderShippingSpec = new OrderShippingByOrderId(request.orderId);
+    var orderShipping = await _orderShippingRepository.FirstOrDefaultAsync(orderShippingSpec);
 
     if (order == null)
     {
-      return BadRequest("Order is not found");
+      return BadRequest("order is not found");
+    }
+
+    if (orderShipping == null)
+    {
+      return BadRequest("order shipping is not found");
     }
 
     if (!order.IsPaidFirstMilestone())
@@ -61,7 +73,7 @@ public class PayRemainCost : EndpointBaseAsync
     if (shipperPayingMethod == ShipperPayingMethod.byCash)
     {
       var transactionId = $"shipper_cash_{DateTime.UtcNow}";
-      var paymentCost = OrderPayment.ConvertDollarToVnPayVND(order.remainCost);
+      var paymentCost = OrderPayment.ConvertVNDToVNPayVND(order.remainCost);
 
       var addPaymentResults = await _orderPaymentService.AddNewPayment(request.orderId, PaymentStatus.SecondPayment.Name, paymentCost, transactionId);
 
@@ -83,6 +95,11 @@ public class PayRemainCost : EndpointBaseAsync
 
     order.SetQueueInShipping(OrderLocalShippingStatus.delivered);
     order.SetStatus(OrderStatus.finished);
+
+    orderShipping.setOrderShippingStatus(OrderShippingStatus.customerReceived);
+
+    await _orderRepository.SaveChangesAsync();
+    await _orderShippingRepository.SaveChangesAsync();
 
     //todo:
     //payment method is cash => update order payment table, process to finish
