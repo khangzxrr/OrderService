@@ -94,6 +94,9 @@ public class CreateOrderShipping : EndpointBaseAsync
     await _orderShippingRepository.AddAsync(orderShipping);
     await _orderShippingRepository.SaveChangesAsync();
 
+    var createOrderShippingEvent = new OrderShippingCreatedEvent(request.orderId, request.isUsing3rd);
+    await _mediator.Publish(createOrderShippingEvent);
+
     response = new CreateOrderShippingResponse(OrderShippingRecord.FromEntity(orderShipping), "OK");
 
     return Ok(response);
