@@ -85,7 +85,7 @@ public class Order : EntityBase, IAggregateRoot
 
   public double GetSecondPaymentAmount()
   {
-    return Math.Ceiling(20.0f * this.price / 100.0f);
+    return remainCost;
   }
 
   public bool IsPaidFirstMilestone()
