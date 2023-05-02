@@ -21,7 +21,7 @@ public class OderDetailCreatedHandler : INotificationHandler<OrderDetailCreatedE
     var spec = new OrderByIdSpec(notification.OrderId);
     var order = await _repository.FirstOrDefaultAsync(spec);
 
-    var totalCost = 0.0f;
+    double totalCost = 0.0f;
 
     var currencySpec = new CurrencyExchangeByName("US");
     var currency = await _currencyExchangeRepository.FirstOrDefaultAsync(currencySpec);
@@ -38,7 +38,9 @@ public class OderDetailCreatedHandler : INotificationHandler<OrderDetailCreatedE
       totalCost += orderDetail.processCost;
     }
 
-    order.SetPrice(totalCost * currency!.rate);
+    totalCost = Math.Ceiling(totalCost * currency!.rate);
+
+    order.SetPrice(totalCost);
 
     await _repository.SaveChangesAsync();
   }
