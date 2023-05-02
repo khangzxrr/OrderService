@@ -1,7 +1,9 @@
 ﻿using Ardalis.ApiEndpoints;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OrderService.Core.OrderShippingAggregate;
+using OrderService.Core.OrderShippingAggregate.Events;
 using OrderService.Core.ShipperAggregate;
 using OrderService.Core.ShipperAggregate.specifications;
 using OrderService.SharedKernel.Interfaces;
@@ -18,10 +20,13 @@ public class SetOrderShippingStatus : EndpointBaseAsync
   private readonly ICurrentUserService _currentUserService;
   private readonly IRepository<Shipper> _shipperRepository;
 
-  public SetOrderShippingStatus(ICurrentUserService currentUserService, IRepository<Shipper> shipperRepository)
+  private readonly IMediator _mediator;
+
+  public SetOrderShippingStatus(ICurrentUserService currentUserService, IRepository<Shipper> shipperRepository, IMediator mediator)
   {
     _currentUserService = currentUserService;
     _shipperRepository = shipperRepository;
+    _mediator = mediator;
   }
 
   [Authorize(Roles = "SHIPPER")]
@@ -60,6 +65,9 @@ public class SetOrderShippingStatus : EndpointBaseAsync
     orderShipping.setOrderShippingStatus(newOrderShippingStatus);
 
     await _shipperRepository.SaveChangesAsync();
+
+    var orderShippingUpdatedStatusEvent = new OrderShippingUpdateStatusEvent(orderShipping.orderId, orderShipping.orderShippingStatus);
+    await _mediator.Publish(orderShippingUpdatedStatusEvent);
 
     var orderShippingRecord = ShipperOrderRecord.FromEntity(orderShipping);
 
