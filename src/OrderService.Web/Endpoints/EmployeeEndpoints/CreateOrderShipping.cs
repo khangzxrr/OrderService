@@ -1,10 +1,12 @@
 ﻿using Ardalis.ApiEndpoints;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OrderService.Core.Interfaces;
 using OrderService.Core.OrderAggregate;
 using OrderService.Core.OrderAggregate.Specifications;
 using OrderService.Core.OrderShippingAggregate;
+using OrderService.Core.OrderShippingAggregate.Events;
 using OrderService.SharedKernel.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -20,12 +22,15 @@ public class CreateOrderShipping : EndpointBaseAsync
 
   private readonly IGetMostFreeEmployeeService _getMostFreeEmployeeService;
 
+  private readonly IMediator _mediator;
 
-  public CreateOrderShipping(IRepository<Order> orderRepository, IRepository<OrderShipping> orderShippingRepository, IGetMostFreeEmployeeService getMostFreeEmployeeService)
+
+  public CreateOrderShipping(IRepository<Order> orderRepository, IRepository<OrderShipping> orderShippingRepository, IGetMostFreeEmployeeService getMostFreeEmployeeService, IMediator mediator)
   {
     _orderRepository = orderRepository;
     _orderShippingRepository = orderShippingRepository;
     _getMostFreeEmployeeService = getMostFreeEmployeeService;
+    _mediator = mediator;
   }
   
 
@@ -85,7 +90,6 @@ public class CreateOrderShipping : EndpointBaseAsync
       order.SetQueueInShipping(OrderLocalShippingStatus.assignedTo3rdShipper);
     } else
     {
-      
       orderShipping.setShipper(shipper!);
     }
 
