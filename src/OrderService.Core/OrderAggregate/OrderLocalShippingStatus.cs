@@ -9,5 +9,7 @@ public class OrderLocalShippingStatus : SmartEnum<OrderLocalShippingStatus>
 
   public static readonly OrderLocalShippingStatus assignedShipper = new(nameof(assignedShipper), 2);
 
+  public static readonly OrderLocalShippingStatus delivered = new(nameof(delivered), 3);
+
   public OrderLocalShippingStatus(string name, int value) : base(name, value) { }
 }
