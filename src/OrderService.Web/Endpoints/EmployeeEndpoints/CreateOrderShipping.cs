@@ -79,11 +79,17 @@ public class CreateOrderShipping : EndpointBaseAsync
 
     orderShipping.setOrder(order.Id);
 
-    if (!request.isUsing3rd)
+
+    if (request.isUsing3rd)
+    {
+      order.SetQueueInShipping(OrderLocalShippingStatus.assignedTo3rdShipper);
+    } else
     {
       
       orderShipping.setShipper(shipper!);
     }
+
+    await _orderRepository.SaveChangesAsync();
 
     await _orderShippingRepository.AddAsync(orderShipping);
     await _orderShippingRepository.SaveChangesAsync();
