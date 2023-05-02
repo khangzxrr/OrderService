@@ -63,7 +63,7 @@ public class OrderPaymentService : IOrderPaymentService
       paymentStatus = PaymentStatus.SecondPayment;
     }
 
-    VNPAYmustPayAmount = OrderPayment.ConvertDollarToVnPayVND(dbAmount); //convert to VNPAY amount
+    VNPAYmustPayAmount = OrderPayment.ConvertVNDToVNPayVND(dbAmount); //convert to VNPAY amount
 
 
     if (VNPAYmustPayAmount != amount)
