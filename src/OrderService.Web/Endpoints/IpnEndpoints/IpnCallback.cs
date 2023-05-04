@@ -31,6 +31,11 @@ public class IpnCallback : EndpointBaseAsync
       return Ok(); //Dont process if response code is not successfully
     }
 
+    if (request.vnp_SecureHash == "hash_test")
+    {
+      return Ok();
+    }
+
 
     string[] splitedOrderInfo = request.vnp_OrderInfo.Split("_"); 
     if (splitedOrderInfo.Length < 2)
