@@ -67,7 +67,7 @@ public class PayRemainCost : EndpointBaseAsync
 
     if (order.IsPaidAllMilestone())
     {
-      return BadRequest("User is pay all milestone");
+      return BadRequest("User was paid all milestone");
     }
 
     if (!order.IsPaidFirstMilestone())
