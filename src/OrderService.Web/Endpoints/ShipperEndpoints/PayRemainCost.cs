@@ -65,10 +65,17 @@ public class PayRemainCost : EndpointBaseAsync
       return BadRequest("order shipping is not found");
     }
 
+    if (order.IsPaidAllMilestone())
+    {
+      return BadRequest("User is pay all milestone");
+    }
+
     if (!order.IsPaidFirstMilestone())
     {
-      return BadRequest("User is not pay first milestone yet!");
+      return BadRequest("User is not pay first milestone yet");
     }
+
+
 
     if (shipperPayingMethod == ShipperPayingMethod.byCash)
     {
