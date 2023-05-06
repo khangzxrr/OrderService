@@ -127,6 +127,28 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     ValidIssuer = builder.Configuration["Jwt:Issuer"],
     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
   };
+
+
+  //JWT authen for signalR hub
+  options.Events = new JwtBearerEvents
+  {
+    OnMessageReceived = context =>
+    {
+      var accessToken = context.Request.Query["access_token"];
+
+      var path = context.HttpContext.Request.Path;
+
+      if (!string.IsNullOrEmpty(accessToken) &&
+                  (path.StartsWithSegments("/hub")))
+      {
+        // Read the token out of the query string
+        context.Token = accessToken;
+      }
+
+      return Task.CompletedTask;
+    }
+};
+
 });
 
 builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
