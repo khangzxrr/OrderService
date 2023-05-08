@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using OrderService.Core.Interfaces;
 using OrderService.Core.OrderAggregate.Events;
 using OrderService.Core.OrderAggregate.Specifications;
 using OrderService.SharedKernel.Interfaces;
@@ -10,9 +11,13 @@ public class OrderPaymentCreatedHandler : INotificationHandler<OrderPaymentCreat
 
   private readonly IRepository<Order> _repository;
 
-  public OrderPaymentCreatedHandler(IRepository<Order> repository)
+  private readonly IEmailSender _emailSender;
+
+ 
+  public OrderPaymentCreatedHandler(IRepository<Order> repository, IEmailSender emailSender)
   {
     _repository = repository;
+    _emailSender = emailSender;
   }
 
   public async Task Handle(OrderPaymentCreatedEvent notification, CancellationToken cancellationToken)
@@ -22,8 +27,10 @@ public class OrderPaymentCreatedHandler : INotificationHandler<OrderPaymentCreat
 
     var orderPayment = order!.orderPayments.Where(op => op.Id == notification.PaymentId).FirstOrDefault();
 
-    order.chat.AddNewNotifiChatMessage(
-      $"Payment successfully, amount: {orderPayment!.paymentCost} at {orderPayment.paymentDate.ToString("HH:ss dd/MM/yyyy")}");
+    if (orderPayment == null)
+    {
+      throw new NullReferenceException("order payment is null");
+    }
 
     if (orderPayment.paymentStatus == PaymentStatus.firstPayment)
     {
@@ -31,6 +38,8 @@ public class OrderPaymentCreatedHandler : INotificationHandler<OrderPaymentCreat
     }
 
     order.SetRemainCost(order.remainCost - orderPayment.paymentCost);
+
+    await _emailSender.SendEmailAsync(order.user.email, "fastship@gmail.com", "[FastShip] Cập nhật trạng thái đơn hàng", $"<p>Xin chào bạn, đơn hàng #{notification.OrderId} đã được thanh toán thành công với số tiền: {orderPayment.paymentCost}! <a href='http://localhost:3000/detailod?orderId={notification.OrderId}'>Để xem chi tiết vui lòng nhấn vào đây</a></p>");
 
     await _repository.SaveChangesAsync();
   }
