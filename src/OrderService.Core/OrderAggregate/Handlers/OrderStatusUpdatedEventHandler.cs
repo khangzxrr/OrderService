@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using OrderService.Core.Interfaces;
 using OrderService.Core.OrderAggregate.Events;
 using OrderService.Core.OrderAggregate.Specifications;
 using OrderService.SharedKernel.Interfaces;
@@ -9,9 +10,12 @@ public class OrderStatusUpdatedEventHandler : INotificationHandler<OrderStatusUp
 
   private readonly IRepository<Order> _orderRepository;
 
-  public OrderStatusUpdatedEventHandler(IRepository<Order> orderRepository)
+  private readonly IEmailSender _emailSender;
+
+  public OrderStatusUpdatedEventHandler(IRepository<Order> orderRepository, IEmailSender emailSender)
   {
     _orderRepository = orderRepository;
+    _emailSender = emailSender;
   }
 
   public async Task Handle(OrderStatusUpdatedEvent notification, CancellationToken cancellationToken)
@@ -23,6 +27,9 @@ public class OrderStatusUpdatedEventHandler : INotificationHandler<OrderStatusUp
     {
       return;
     }
+
+
+    await _emailSender.SendEmailAsync(order.user.email, "fastship@gmail.com", "[FastShip] Cập nhật trạng thái đơn hàng", $"<p>Xin chào bạn, đơn hàng #{notification.OrderId} vừa được cập nhật trạng thái mới ({notification.orderStatus}) <a href='http://localhost:3000/detailod?orderId={notification.OrderId}'>Để xem chi tiết vui lòng nhấn vào đây</a></p>");
 
     order.chat.AddNewNotifiChatMessage($"Updated order status to {notification.orderStatus.Name} at {DateTime.Now.ToString("HH:ss dd/MM/yyyy")}");
 
