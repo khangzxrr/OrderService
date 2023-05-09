@@ -6,6 +6,6 @@ public class UserByEmailSpec: Specification<User>, ISingleResultSpecification
   public UserByEmailSpec(string email)
   {
     Query
-      .Where(u => u.firstname == email);
+      .Where(u => u.email == email);
   }
 }
