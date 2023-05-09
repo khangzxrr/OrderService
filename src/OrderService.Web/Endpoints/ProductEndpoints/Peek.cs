@@ -33,13 +33,13 @@ public class Peek : EndpointBaseAsync
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
   public override async Task<ActionResult> HandleAsync([FromQuery] PeekProductRequest request, CancellationToken cancellationToken = default)
   {
-    if (request.ProductUrl == null)
-    {
-      return BadRequest(request.ProductUrl);
-    }
+    //if (request.ProductUrl == null)
+    //{
+    //  return BadRequest(request.ProductUrl);
+    //}
 
-    var rabbitProductRequest = new RabbitRequestProductData(_currentUserService.TryParseUserId(), request.ProductUrl);
-    _produceProductRequestService.SendToQueue(rabbitProductRequest);
+    //var rabbitProductRequest = new RabbitRequestProductData(_currentUserService.TryParseUserId(), request.ProductUrl);
+    //_produceProductRequestService.SendToQueue(rabbitProductRequest);
 
     return Ok("sent to queue, please keep track by connect to the notification hub [/hub]");
 

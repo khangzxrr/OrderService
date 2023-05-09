@@ -1,12 +1,12 @@
 ﻿namespace OrderService.Core.RabbitMqDto;
 public class MessageData
 {
-  public int userId { get; set; }
+  public string connectionId { get; set; }
   public string message { get; set; }
 
-  public MessageData(int userId,  string message)
+  public MessageData(string connectionId,  string message)
   {
-    this.userId = userId;
+    this.connectionId = connectionId;
     this.message = message;
   }
 }

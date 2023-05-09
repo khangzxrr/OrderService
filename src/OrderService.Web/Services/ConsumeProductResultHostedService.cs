@@ -47,7 +47,7 @@ public class ConsumeProductResultHostedService : BackgroundService, IConsumeProd
     if (message.Contains("message"))
     {
       var messageObject = JsonConvert.DeserializeObject<MessageData>(message);
-      await NotificationHub.SendPrivateMessage(_notificationHub.Clients, messageObject!.userId, message);
+      await NotificationHub.SendPrivateMessage(_notificationHub.Clients, messageObject!.connectionId, message);
 
       return;
     }
@@ -98,7 +98,7 @@ public class ConsumeProductResultHostedService : BackgroundService, IConsumeProd
     await _productRepository.AddAsync(product);
     await _productRepository.SaveChangesAsync();
 
-    await NotificationHub.SendPrivateMessage(_notificationHub.Clients, productResult.userId, JsonConvert.SerializeObject(product));
+    await NotificationHub.SendPrivateMessage(_notificationHub.Clients, productResult.connectionId, JsonConvert.SerializeObject(product));
     
   }
 

@@ -1,47 +1,41 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using OrderService.Core.Interfaces;
+using OrderService.Core.RabbitMqDto;
 using OrderService.Web.Interfaces;
 
 namespace OrderService.Web.SignalR;
 
 
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class NotificationHub : Hub
 {
 
-  private readonly ICurrentUserService _currentUserService;
+  private readonly IProduceProductRequestService _produceProductRequestService;
 
-  private static Dictionary<int, string> connections = new Dictionary<int, string>();
-
-  public NotificationHub(ICurrentUserService currentUserService)
+  public NotificationHub(IProduceProductRequestService produceProductRequestService)
   {
-    _currentUserService = currentUserService;
+    _produceProductRequestService = produceProductRequestService;
   }
 
-  public static async Task SendPrivateMessage(IHubClients clients, int userId,  string message)
+  public static async Task SendPrivateMessage(IHubClients clients, string connectionId,  string message)
   {
-    if (!connections.ContainsKey(userId))
-    {
-      Console.WriteLine("User doesn't exist in signalR connection");
-      return;
-    }
+    await clients.Client(connectionId).SendAsync("fetched_new_product", message);
+  }
 
-    await clients.Client(connections[userId]).SendAsync("boardcast", message);
+  public void AddProductUrlToFetchData(RabbitRequestProductData rabbitRequestProductData)
+  {
+    rabbitRequestProductData.connectionId = Context.ConnectionId;
+
+    _produceProductRequestService.SendToQueue(rabbitRequestProductData);
   }
 
 
-  [Authorize]
   public override async Task OnConnectedAsync()
   {
     await base.OnConnectedAsync();
 
-    //var userId = _currentUserService.TryParseUserId();
-    var userId = int.Parse(Context.User!.Claims.Where(c => c.Type == "userId").First().Value);
-
-    connections[userId] = Context.ConnectionId;
-
-    Console.WriteLine("connected to signalR: " + userId);
+    Console.WriteLine("connected to signalR: " + Context.ConnectionId);
 
   }
 }
