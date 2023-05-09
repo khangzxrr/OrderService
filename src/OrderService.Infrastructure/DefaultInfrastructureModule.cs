@@ -40,14 +40,7 @@ public class DefaultInfrastructureModule : Module
 
   protected override void Load(ContainerBuilder builder)
   {
-    if (_isDevelopment)
-    {
-      RegisterDevelopmentOnlyDependencies(builder);
-    }
-    else
-    {
-      RegisterProductionOnlyDependencies(builder);
-    }
+    RegisterProductionOnlyDependencies(builder);
 
     RegisterCommonDependencies(builder);
   }
@@ -102,8 +95,8 @@ public class DefaultInfrastructureModule : Module
   private void RegisterDevelopmentOnlyDependencies(ContainerBuilder builder)
   {
     // NOTE: Add any development only services here
-    builder.RegisterType<FakeEmailSender>().As<IEmailSender>()
-      .InstancePerLifetimeScope();
+    //builder.RegisterType<FakeEmailSender>().As<IEmailSender>()
+    //  .InstancePerLifetimeScope();
   }
 
   private void RegisterProductionOnlyDependencies(ContainerBuilder builder)
