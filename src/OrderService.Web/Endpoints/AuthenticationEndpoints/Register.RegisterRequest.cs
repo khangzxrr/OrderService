@@ -12,7 +12,7 @@ public class RegisterRequest
   [MinLength(6)]
   public string Password { get; set; }
   [Required]
-  [DataType(DataType.EmailAddress)]
+  [EmailAddress]
   public string Email { get; set; }
 
   [Required]
@@ -21,7 +21,8 @@ public class RegisterRequest
   public string PhoneNumber { get; set; }
 
   [Required]
-  public DateTime DateOfBirth { get; set; }
+  [DataType(DataType.Date)]
+  public DateTime? DateOfBirth { get; set; }
   [Required]
   public string Address { get; set; }
   [Required]
@@ -29,7 +30,7 @@ public class RegisterRequest
   [Required]
   public string LastName { get; set; }
 
-  public RegisterRequest(string email, string phoneNumber, string password, DateTime dateOfBirth, string address, string firstName, string lastName)
+  public RegisterRequest(string email, string phoneNumber, string password, DateTime? dateOfBirth, string address, string firstName, string lastName)
   {
     
     Password = password;
