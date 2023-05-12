@@ -23,7 +23,9 @@ public record ProductRecord(
   int warrantyDuration,
   bool returnable,
   string returnDescription,
-  int returnDuration
+  int returnDuration,
+
+  ProductCurrencyExchangeRecord productCurrencyExchangeRecord
   )
 {
 
@@ -47,7 +49,9 @@ public record ProductRecord(
       product.productWarrantyDuration,
       product.productReturnable,
       product.productReturnDescription,
-      product.productReturnDuration);
+      product.productReturnDuration,
+      ProductCurrencyExchangeRecord.FromEntity(product.currencyExchange)
+      );
   }
 
 }
