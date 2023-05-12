@@ -54,7 +54,7 @@ public class AddOrderDetailService : IAddOrderDetailService
 
     var rule1 = new RuleParameter("orderDetail", new
     {
-      productCost = orderDetail.productCost
+      productCost = orderDetail.product.productPrice
     });
     List<RuleParameter> ruleParameters = new List<RuleParameter>
     {
