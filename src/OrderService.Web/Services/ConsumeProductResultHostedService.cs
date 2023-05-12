@@ -100,7 +100,14 @@ public class ConsumeProductResultHostedService : BackgroundService, IConsumeProd
       productResult!.returnDays);
 
     product.setProductCategory(category);
-    product.setCurrencyExchange(currency!);
+
+
+    var productCurrentExchange = new ProductCurrencyExchange(currency!.rate);
+
+    productCurrentExchange.setProduct(product);
+    productCurrentExchange.setCurrency(currency);
+
+    product.setCurrencyExchange(productCurrentExchange);
 
     await _productRepository.AddAsync(product);
     await _productRepository.SaveChangesAsync();
