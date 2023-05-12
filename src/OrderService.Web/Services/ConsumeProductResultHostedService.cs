@@ -11,6 +11,7 @@ using OrderService.SharedKernel.Interfaces;
 using OrderService.Web.SignalR;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using StackExchange.Redis.Extensions.Core.Abstractions;
 
 namespace OrderService.Web;
 public class ConsumeProductResultHostedService : BackgroundService, IConsumeProductResultHostedService
@@ -27,7 +28,9 @@ public class ConsumeProductResultHostedService : BackgroundService, IConsumeProd
   private readonly IHubContext<NotificationHub>  _notificationHub;
   private readonly IConfiguration _configuration;
 
-  public ConsumeProductResultHostedService(IRepository<ProductCategory> categoryRepository, IRepository<Product> productRepository, IRepository<CurrencyExchange> currencyExchange, IHubContext<NotificationHub> notificationHub, IConfiguration configuration)
+  private readonly IRedisClient _redisClient;
+
+  public ConsumeProductResultHostedService(IRepository<ProductCategory> categoryRepository, IRepository<Product> productRepository, IRepository<CurrencyExchange> currencyExchange, IHubContext<NotificationHub> notificationHub, IConfiguration configuration, IRedisClient redisClient)
   {
     _categoryRepository = categoryRepository;
     _productRepository = productRepository;
@@ -35,12 +38,15 @@ public class ConsumeProductResultHostedService : BackgroundService, IConsumeProd
     _notificationHub = notificationHub;
     _configuration = configuration;
 
+    _redisClient = redisClient;
+
     Console.WriteLine("init rabbitmq");
     InitRabbitMQ();
 
   }
 
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
 
   public async void ConsumeMessage(string message)
   {
@@ -75,6 +81,7 @@ public class ConsumeProductResultHostedService : BackgroundService, IConsumeProd
 
     Console.WriteLine("add new product");
 
+    
 
     var product = new Product(
       productResult!.product,
@@ -98,6 +105,18 @@ public class ConsumeProductResultHostedService : BackgroundService, IConsumeProd
     await _productRepository.AddAsync(product);
     await _productRepository.SaveChangesAsync();
 
+
+    //PUSH TO redis cache
+
+    string generatedProductRedisHashKey = product.generateRedisHashKey();
+
+    await _redisClient.Db0.AddAsync(generatedProductRedisHashKey, productResult);
+
+    await _redisClient.Db0.UpdateExpiryAsync(generatedProductRedisHashKey, DateTimeOffset.Now.AddMinutes(60));
+
+    //=====
+
+    //send data back to client
     await NotificationHub.SendPrivateMessage(_notificationHub.Clients, productResult.connectionId, JsonConvert.SerializeObject(product));
     
   }
