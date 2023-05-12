@@ -23,22 +23,21 @@ public class OrderDetailCreatedHandler : INotificationHandler<OrderDetailCreated
 
     double totalCost = 0.0f;
 
-    var currencySpec = new CurrencyExchangeByName("US");
-    var currency = await _currencyExchangeRepository.FirstOrDefaultAsync(currencySpec);
-    if (currency == null)
-    {
-      throw new NullReferenceException("currency is null");
-    }
+    float totalCostOfOrderDetail;
 
     foreach (var orderDetail in order!.orderDetails)
     {
-      totalCost += orderDetail.shipCost;
-      totalCost += orderDetail.productCost * orderDetail.quantity;
-      totalCost += orderDetail.additionalCost;
-      totalCost += orderDetail.processCost;
+      totalCostOfOrderDetail = orderDetail.shipCost;
+      totalCostOfOrderDetail += orderDetail.product.productPrice * orderDetail.quantity;
+      totalCostOfOrderDetail += orderDetail.additionalCost;
+      totalCostOfOrderDetail += orderDetail.processCost;
+
+      orderDetail.setTotalCost(totalCostOfOrderDetail);
+
+      totalCost += totalCostOfOrderDetail * orderDetail.product.currencyExchange.rate;
     }
 
-    totalCost = Math.Ceiling(totalCost * currency!.rate);
+    totalCost = Math.Ceiling(totalCost);
 
     order.SetPrice(totalCost);
 
