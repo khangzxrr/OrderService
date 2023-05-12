@@ -86,6 +86,12 @@ public class Product: EntityBase, IAggregateRoot
     productCreateAt = DateTime.Now;
   }
 
+
+  public string generateRedisHashKey()
+  {
+    return "product_" + productURL;
+  }
+
   public void setProductCategory(ProductCategory productCategory)
   {
     this.productCategory = Guard.Against.Null(productCategory);
