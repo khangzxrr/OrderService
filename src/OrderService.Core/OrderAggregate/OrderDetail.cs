@@ -10,8 +10,9 @@ public class OrderDetail : EntityBase
 
   public float additionalCost { get; private set; }
   public float shipCost { get; private set; }
-  public float productCost { get; private set; }
   public float processCost { get; private set; }
+
+  public float totalCost { get; private set; }
   public int quantity { get; private set; }
 
   private readonly List<ProductReturn> _productReturns = new List<ProductReturn>();
@@ -22,7 +23,6 @@ public class OrderDetail : EntityBase
     Guard.Against.Null(product.productCategory);
 
     this.product = Guard.Against.Null(product);
-    productCost = Guard.Against.Negative(product.productPrice);
     shipCost = Guard.Against.Negative(product.productCategory.productShipCost.shipCost);
 
   }
@@ -42,4 +42,8 @@ public class OrderDetail : EntityBase
     this.quantity = Guard.Against.NegativeOrZero(quantity);
   }
 
+  public void setTotalCost(float totalCost)
+  {
+    this.totalCost = Guard.Against.Negative(totalCost);
+  }
 }
