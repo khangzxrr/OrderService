@@ -12,7 +12,12 @@ public class OrderByIdSpec : Specification<Order>, ISingleResultSpecification
       .Include(o => o.orderDetails)
         .ThenInclude(od => od.product)
         .ThenInclude(ph => ph.productCategory)
-        .ThenInclude(pc => pc.productShipCost);
+        .ThenInclude(pc => pc.productShipCost)
+      .Include(o => o.orderDetails)
+        .ThenInclude(od => od.product)
+          .ThenInclude(p => p.currencyExchange)
+            .ThenInclude(ce => ce.currency);
+     
 
   }
 }
