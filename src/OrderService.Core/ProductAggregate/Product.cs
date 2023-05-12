@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Ardalis.GuardClauses;
+﻿using Ardalis.GuardClauses;
+using Newtonsoft.Json;
 using OrderService.Core.CurrencyAggregate;
 using OrderService.SharedKernel;
 using OrderService.SharedKernel.Interfaces;
@@ -15,7 +11,6 @@ public class Product: EntityBase, IAggregateRoot
 
   private List<ProductTax> _productTaxes = new List<ProductTax>();
   public IReadOnlyCollection<ProductTax> productTaxes => _productTaxes.AsReadOnly();
-
 
   public string productName { get; set; }
   public string productImageUrl { get; set; }
@@ -37,7 +32,8 @@ public class Product: EntityBase, IAggregateRoot
 
   public DateTime productCreateAt { get; set; }
 
-  public CurrencyExchange currencyExchange { get; private set; }
+  [JsonIgnore]
+  public ProductCurrencyExchange currencyExchange { get; private set; }
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
   public Product(
@@ -97,7 +93,7 @@ public class Product: EntityBase, IAggregateRoot
     this.productCategory = Guard.Against.Null(productCategory);
   }
 
-  public void setCurrencyExchange(CurrencyExchange currencyExchange)
+  public void setCurrencyExchange(ProductCurrencyExchange currencyExchange)
   {
     this.currencyExchange = Guard.Against.Null(currencyExchange);
   }
