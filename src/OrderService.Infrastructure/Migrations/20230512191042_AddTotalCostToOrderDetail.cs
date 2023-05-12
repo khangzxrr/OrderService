@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace OrderService.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class PriceNowDoubleInsteadFloat : Migration
+    public partial class AddTotalCostToOrderDetail : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -113,18 +113,11 @@ namespace OrderService.Infrastructure.Migrations
                     productReturnable = table.Column<bool>(type: "bit", nullable: false),
                     productReturnDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     productReturnDuration = table.Column<int>(type: "int", nullable: false),
-                    productCreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    currencyExchangeId = table.Column<int>(type: "int", nullable: false)
+                    productCreateAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Product", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Product_CurrencyExchanges_currencyExchangeId",
-                        column: x => x.currencyExchangeId,
-                        principalTable: "CurrencyExchanges",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Product_ProductCategory_productCategoryId",
                         column: x => x.productCategoryId,
@@ -202,6 +195,34 @@ namespace OrderService.Infrastructure.Migrations
                         name: "FK_Users_Roles_roleId",
                         column: x => x.roleId,
                         principalTable: "Roles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductCurrencyExchange",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    currencyId = table.Column<int>(type: "int", nullable: false),
+                    productId = table.Column<int>(type: "int", nullable: false),
+                    rate = table.Column<float>(type: "real", nullable: false),
+                    productCurrencyCreateAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductCurrencyExchange", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductCurrencyExchange_CurrencyExchanges_currencyId",
+                        column: x => x.currencyId,
+                        principalTable: "CurrencyExchanges",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProductCurrencyExchange_Product_productId",
+                        column: x => x.productId,
+                        principalTable: "Product",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -337,8 +358,8 @@ namespace OrderService.Infrastructure.Migrations
                     productId = table.Column<int>(type: "int", nullable: false),
                     additionalCost = table.Column<float>(type: "real", nullable: false),
                     shipCost = table.Column<float>(type: "real", nullable: false),
-                    productCost = table.Column<float>(type: "real", nullable: false),
                     processCost = table.Column<float>(type: "real", nullable: false),
+                    totalCost = table.Column<float>(type: "real", nullable: false),
                     quantity = table.Column<int>(type: "int", nullable: false),
                     OrderId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -504,14 +525,20 @@ namespace OrderService.Infrastructure.Migrations
                 column: "shipperId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Product_currencyExchangeId",
-                table: "Product",
-                column: "currencyExchangeId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Product_productCategoryId",
                 table: "Product",
                 column: "productCategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductCurrencyExchange_currencyId",
+                table: "ProductCurrencyExchange",
+                column: "currencyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductCurrencyExchange_productId",
+                table: "ProductCurrencyExchange",
+                column: "productId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductProductTax_productsId",
@@ -567,6 +594,9 @@ namespace OrderService.Infrastructure.Migrations
                 name: "OrderShipping");
 
             migrationBuilder.DropTable(
+                name: "ProductCurrencyExchange");
+
+            migrationBuilder.DropTable(
                 name: "ProductProductTax");
 
             migrationBuilder.DropTable(
@@ -580,6 +610,9 @@ namespace OrderService.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Shippers");
+
+            migrationBuilder.DropTable(
+                name: "CurrencyExchanges");
 
             migrationBuilder.DropTable(
                 name: "ProductTax");
@@ -601,9 +634,6 @@ namespace OrderService.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Chat");
-
-            migrationBuilder.DropTable(
-                name: "CurrencyExchanges");
 
             migrationBuilder.DropTable(
                 name: "ProductCategory");

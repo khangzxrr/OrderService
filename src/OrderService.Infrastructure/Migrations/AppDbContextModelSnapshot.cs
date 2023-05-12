@@ -60,6 +60,36 @@ namespace OrderService.Infrastructure.Migrations
                     b.ToTable("CurrencyExchanges");
                 });
 
+            modelBuilder.Entity("OrderService.Core.CurrencyAggregate.ProductCurrencyExchange", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("currencyId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("productCurrencyCreateAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("productId")
+                        .HasColumnType("int");
+
+                    b.Property<float>("rate")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("currencyId");
+
+                    b.HasIndex("productId")
+                        .IsUnique();
+
+                    b.ToTable("ProductCurrencyExchange");
+                });
+
             modelBuilder.Entity("OrderService.Core.OrderAggregate.Chat", b =>
                 {
                     b.Property<int>("Id")
@@ -181,9 +211,6 @@ namespace OrderService.Infrastructure.Migrations
                     b.Property<float>("processCost")
                         .HasColumnType("real");
 
-                    b.Property<float>("productCost")
-                        .HasColumnType("real");
-
                     b.Property<int>("productId")
                         .HasColumnType("int");
 
@@ -191,6 +218,9 @@ namespace OrderService.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<float>("shipCost")
+                        .HasColumnType("real");
+
+                    b.Property<float>("totalCost")
                         .HasColumnType("real");
 
                     b.HasKey("Id");
@@ -359,9 +389,6 @@ namespace OrderService.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("currencyExchangeId")
-                        .HasColumnType("int");
-
                     b.Property<int>("productCategoryId")
                         .HasColumnType("int");
 
@@ -422,8 +449,6 @@ namespace OrderService.Infrastructure.Migrations
                         .HasColumnType("real");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("currencyExchangeId");
 
                     b.HasIndex("productCategoryId");
 
@@ -678,6 +703,25 @@ namespace OrderService.Infrastructure.Migrations
                     b.ToTable("ProductProductTax");
                 });
 
+            modelBuilder.Entity("OrderService.Core.CurrencyAggregate.ProductCurrencyExchange", b =>
+                {
+                    b.HasOne("OrderService.Core.CurrencyAggregate.CurrencyExchange", "currency")
+                        .WithMany()
+                        .HasForeignKey("currencyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OrderService.Core.ProductAggregate.Product", "product")
+                        .WithOne("currencyExchange")
+                        .HasForeignKey("OrderService.Core.CurrencyAggregate.ProductCurrencyExchange", "productId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("currency");
+
+                    b.Navigation("product");
+                });
+
             modelBuilder.Entity("OrderService.Core.OrderAggregate.Chat", b =>
                 {
                     b.HasOne("OrderService.Core.UserAggregate.User", "employee")
@@ -770,19 +814,11 @@ namespace OrderService.Infrastructure.Migrations
 
             modelBuilder.Entity("OrderService.Core.ProductAggregate.Product", b =>
                 {
-                    b.HasOne("OrderService.Core.CurrencyAggregate.CurrencyExchange", "currencyExchange")
-                        .WithMany()
-                        .HasForeignKey("currencyExchangeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("OrderService.Core.ProductAggregate.ProductCategory", "productCategory")
                         .WithMany()
                         .HasForeignKey("productCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("currencyExchange");
 
                     b.Navigation("productCategory");
                 });
@@ -860,6 +896,12 @@ namespace OrderService.Infrastructure.Migrations
             modelBuilder.Entity("OrderService.Core.OrderAggregate.ProductReturn", b =>
                 {
                     b.Navigation("returnPayments");
+                });
+
+            modelBuilder.Entity("OrderService.Core.ProductAggregate.Product", b =>
+                {
+                    b.Navigation("currencyExchange")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("OrderService.Core.ProductAggregate.ProductCategory", b =>
