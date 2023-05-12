@@ -12,7 +12,7 @@ public class OrderDetailProfile : Profile
     CreateMap<OrderDetail, OrderDetailRecord>()
       .ForCtorParam(nameof(OrderDetailRecord.orderDetailId), options => options.MapFrom(od => od.Id))
       .ForCtorParam(nameof(OrderDetailRecord.processCost), options => options.MapFrom(od => od.processCost))
-      .ForCtorParam(nameof(OrderDetailRecord.productCost), options => options.MapFrom(od => od.productCost))
+      .ForCtorParam(nameof(OrderDetailRecord.productCost), options => options.MapFrom(od => od.product.productPrice))
       .ForCtorParam(nameof(OrderDetailRecord.additionalCost), options => options.MapFrom(od => od.additionalCost))
       .ForCtorParam(nameof(OrderDetailRecord.quantity), options => options.MapFrom(od => od.quantity))
       .ForCtorParam(nameof(OrderDetailRecord.shipCost), options => options.MapFrom(od => od.shipCost))
