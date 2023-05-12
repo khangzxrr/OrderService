@@ -1,9 +1,5 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using Ardalis.ApiEndpoints;
+﻿using Ardalis.ApiEndpoints;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using OrderService.Core.Interfaces;
 using OrderService.Web.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
