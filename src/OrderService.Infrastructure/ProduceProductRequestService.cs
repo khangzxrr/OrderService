@@ -33,6 +33,18 @@ public class ProduceProductRequestService : IProduceProductRequestService
     Console.WriteLine("init producer instance");
   }
 
+  public void SendToResultQueue(RabbitResponseProductData rabbitResponseProductData)
+  {
+    var json = JsonConvert.SerializeObject(rabbitResponseProductData);
+
+    var body = Encoding.UTF8.GetBytes(json);
+
+    channel.BasicPublish(exchange: string.Empty,
+    routingKey: "eshop_result",
+    basicProperties: null,
+    body: body);
+  }
+
   public void SendToQueue(RabbitRequestProductData rabbitProductRequest)
   {
     var json = JsonConvert.SerializeObject(rabbitProductRequest);
