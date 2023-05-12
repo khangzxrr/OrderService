@@ -4,4 +4,6 @@ namespace OrderService.Core.Interfaces;
 public interface IProduceProductRequestService
 {
   public void SendToQueue(RabbitRequestProductData rabbitRequestProductData);
+
+  public void SendToResultQueue(RabbitResponseProductData rabbitResponseProductData);
 }
