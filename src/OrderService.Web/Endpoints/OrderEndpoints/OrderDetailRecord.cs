@@ -9,12 +9,13 @@ public record OrderDetailRecord(
   float shipCost,
   float productCost,
   float processCost,
+  float totalCost,
   int quantity,
   ProductRecord product
   )
 {
   public static OrderDetailRecord FromEntity(OrderDetail orderDetail)
   {
-    return new OrderDetailRecord(orderDetail.Id, orderDetail.additionalCost, orderDetail.shipCost, orderDetail.productCost, orderDetail.processCost, orderDetail.quantity, ProductRecord.FromEntity(orderDetail.product));
+    return new OrderDetailRecord(orderDetail.Id, orderDetail.additionalCost, orderDetail.shipCost, orderDetail.product.productPrice, orderDetail.processCost, orderDetail.totalCost, orderDetail.quantity, ProductRecord.FromEntity(orderDetail.product));
   }
 }
