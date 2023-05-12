@@ -25,6 +25,11 @@ public class NotificationHub : Hub
 
   public static async Task SendPrivateMessage(IHubClients clients, string connectionId,  string message)
   {
+    if (connectionId == null)
+    {
+      return;
+    }
+
     await clients.Client(connectionId).SendAsync("fetched_new_product", message);
   }
 
