@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using OrderService.Core.OrderAggregate;
+using OrderService.Core.OrderPaymentAggregate;
 
 namespace OrderService.Infrastructure.Data.Config;
 public class OrderPaymentConfiguration : IEntityTypeConfiguration<OrderPayment>
