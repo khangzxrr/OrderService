@@ -59,6 +59,15 @@ builder.Services.AddCors(options =>
 
 
 var redisConfiguration = builder.Configuration.GetSection("Redis").Get<RedisConfiguration>();
+redisConfiguration!.Hosts = new List<RedisHost>() {
+  new RedisHost()
+  {
+    Host = builder.Configuration["HOSTNAME"]!,
+    Port = 6379
+  }
+}.ToArray();
+
+Console.WriteLine($"Using {redisConfiguration.Hosts[0].Host}:{redisConfiguration.Hosts[0].Port} for reddis host");
 
 builder.Services.AddStackExchangeRedisExtensions<NewtonsoftSerializer>(redisConfiguration!);
 
