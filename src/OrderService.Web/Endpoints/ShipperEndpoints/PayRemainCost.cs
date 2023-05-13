@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using OrderService.Core.Interfaces;
 using OrderService.Core.OrderAggregate;
 using OrderService.Core.OrderAggregate.Specifications;
+using OrderService.Core.OrderPaymentAggregate;
 using OrderService.Core.OrderShippingAggregate;
 using OrderService.Core.OrderShippingAggregate.specifications;
 using OrderService.Core.ShipperAggregate.enums;
