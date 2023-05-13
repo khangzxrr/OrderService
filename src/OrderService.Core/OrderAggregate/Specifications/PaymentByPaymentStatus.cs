@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Ardalis.Specification;
+﻿using Ardalis.Specification;
+using OrderService.Core.OrderPaymentAggregate;
 
 namespace OrderService.Core.OrderAggregate.Specifications;
 public class PaymentByPaymentStatus : Specification<OrderPayment>, ISingleResultSpecification
