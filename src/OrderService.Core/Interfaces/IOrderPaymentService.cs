@@ -1,5 +1,5 @@
 ﻿using Ardalis.Result;
-using OrderService.Core.OrderAggregate;
+using OrderService.Core.OrderPaymentAggregate;
 
 namespace OrderService.Core.Interfaces;
 public interface IOrderPaymentService
