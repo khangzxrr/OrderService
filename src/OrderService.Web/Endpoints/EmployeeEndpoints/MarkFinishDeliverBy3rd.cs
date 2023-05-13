@@ -6,6 +6,7 @@ using OrderService.Core.Interfaces;
 using OrderService.Core.OrderAggregate;
 using OrderService.Core.OrderAggregate.Events;
 using OrderService.Core.OrderAggregate.Specifications;
+using OrderService.Core.OrderPaymentAggregate;
 using OrderService.Core.OrderShippingAggregate;
 using OrderService.Core.OrderShippingAggregate.Events;
 using OrderService.Core.OrderShippingAggregate.specifications;
