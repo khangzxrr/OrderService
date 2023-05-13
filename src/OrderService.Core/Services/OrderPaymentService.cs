@@ -5,6 +5,7 @@ using OrderService.Core.Interfaces;
 using OrderService.Core.OrderAggregate;
 using OrderService.Core.OrderAggregate.Events;
 using OrderService.Core.OrderAggregate.Specifications;
+using OrderService.Core.OrderPaymentAggregate;
 using OrderService.SharedKernel.Interfaces;
 
 namespace OrderService.Core.Services;
