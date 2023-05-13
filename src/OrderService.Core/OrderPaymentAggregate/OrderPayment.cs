@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Ardalis.GuardClauses;
+﻿using Ardalis.GuardClauses;
+using OrderService.Core.OrderAggregate;
 using OrderService.SharedKernel;
+using OrderService.SharedKernel.Interfaces;
 
-namespace OrderService.Core.OrderAggregate;
-public class OrderPayment : EntityBase
+namespace OrderService.Core.OrderPaymentAggregate;
+public class OrderPayment : EntityBase, IAggregateRoot
 {
 
   public PaymentStatus paymentStatus { get; }
@@ -35,5 +32,5 @@ public class OrderPayment : EntityBase
     return (long)(cost * 100000);
   }
 
- 
+
 }

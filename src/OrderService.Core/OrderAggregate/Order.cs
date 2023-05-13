@@ -1,4 +1,5 @@
 ﻿using Ardalis.GuardClauses;
+using OrderService.Core.OrderPaymentAggregate;
 using OrderService.Core.UserAggregate;
 using OrderService.SharedKernel;
 using OrderService.SharedKernel.Interfaces;
