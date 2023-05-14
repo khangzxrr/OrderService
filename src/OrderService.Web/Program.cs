@@ -148,7 +148,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
       var path = context.HttpContext.Request.Path;
 
       if (!string.IsNullOrEmpty(accessToken) &&
-                  (path.StartsWithSegments("/hub")))
+                  (path.StartsWithSegments("/hub") || path.StartsWithSegments("/chat"))
+         )
       {
         // Read the token out of the query string
         context.Token = accessToken;
