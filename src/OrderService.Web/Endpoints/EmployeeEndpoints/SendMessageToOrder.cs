@@ -31,7 +31,7 @@ public class SendMessageToOrder : EndpointBaseAsync
     OperationId = "Order.SendMessage",
     Tags = new[] { "EmployeeEndpoints" })
   ]
-  [Authorize(Roles = "EMPLOYEE")]
+  [Authorize(Roles = "EMPLOYEE,MANAGER")]
   public override async Task<ActionResult<SendMessageToOrderResponse>> HandleAsync([FromBody] SendMessageToOrderRequest request, CancellationToken cancellationToken = default)
   {
 

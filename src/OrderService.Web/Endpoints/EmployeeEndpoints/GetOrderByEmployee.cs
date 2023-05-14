@@ -25,7 +25,7 @@ public class GetOrderByEmployee : EndpointBaseAsync
     _mapper = mapper;
   }
 
-  [Authorize(Roles = "EMPLOYEE")]
+  [Authorize(Roles = "EMPLOYEE,MANAGER")]
   [HttpGet(GetOrderByEmployeeRequest.Route)]
   [SwaggerOperation(
     Summary = "Get order by Employee Id",

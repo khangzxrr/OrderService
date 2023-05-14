@@ -35,7 +35,7 @@ public class CreateOrderShipping : EndpointBaseAsync
   
 
   [HttpPost(CreateOrderShippingRequest.Route)]
-  [Authorize(Roles = "EMPLOYEE")]
+  [Authorize(Roles = "EMPLOYEE,MANAGER")]
   [SwaggerOperation(
     Summary = "Create order shipping",
     Description = "Create order shipping",

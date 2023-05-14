@@ -35,7 +35,7 @@ public class GetOrdersByEmployeeId : EndpointBaseAsync
     OperationId = "Order.GetAllByEmployeeId",
     Tags = new[] { "EmployeeEndpoints" })
   ]
-  [Authorize(Roles = "EMPLOYEE")]
+  [Authorize(Roles = "EMPLOYEE,MANAGER")]
   public override async Task<ActionResult<GetOrdersByEmployeeIdResponse>> HandleAsync(CancellationToken cancellationToken = default)
   {
     var spec = new OrderByEmployeeIdSpec(_currentUserService.TryParseUserId());

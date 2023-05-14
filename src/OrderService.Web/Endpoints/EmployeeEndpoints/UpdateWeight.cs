@@ -20,7 +20,7 @@ public class UpdateWeight : EndpointBaseAsync
     _orderRepository = orderRepository;
   }
 
-  [Authorize(Roles = "EMPLOYEE")]
+  [Authorize(Roles = "EMPLOYEE,MANAGER")]
   [HttpPost(UpdateWeightRequest.Route)]
   [SwaggerOperation(
     Summary = "Update weight of an order",

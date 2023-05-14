@@ -27,7 +27,7 @@ public class GetChatByEmployee : EndpointBaseAsync
 
 
   [HttpGet(GetChatByEmployeeRequest.Route)]
-  [Authorize(Roles = "EMPLOYEE")]
+  [Authorize(Roles = "EMPLOYEE,MANAGER")]
   [SwaggerOperation(
     Summary = "Get order Chat",
     Description = "Get order Chat",

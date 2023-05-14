@@ -31,6 +31,7 @@ public class UpdateOrderStatus : EndpointBaseAsync
     OperationId = "Order.UpdateStatus",
     Tags = new[] { "EmployeeEndpoints" })
   ]
+  [Authorize(Roles = "EMPLOYEE,MANAGER")]
   public override async Task<ActionResult<UpdateOrderStatusResponse>> HandleAsync([FromBody] UpdateOrderStatusRequest request, CancellationToken cancellationToken = default)
   {
     OrderStatus orderStatus;

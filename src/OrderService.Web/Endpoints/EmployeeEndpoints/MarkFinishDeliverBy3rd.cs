@@ -36,7 +36,7 @@ public class MarkFinishDeliverBy3rd : EndpointBaseAsync
     _mediator = mediator;
   }
 
-  [Authorize(Roles = "EMPLOYEE")]
+  [Authorize(Roles = "EMPLOYEE,MANAGER")]
   [HttpPost(MarkFinishDeliverBy3rdRequest.Route)]
   [SwaggerOperation(
     Summary = "Mark finished deliver by using 3rd deliver",
