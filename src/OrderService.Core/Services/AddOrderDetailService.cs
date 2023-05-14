@@ -1,14 +1,11 @@
 ﻿
-using System.Dynamic;
 using Ardalis.Result;
-using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using OrderService.Core.Interfaces;
 using OrderService.Core.OrderAggregate;
 using OrderService.Core.ProductAggregate;
 using OrderService.Core.ProductAggregate.Specifications;
 using OrderService.SharedKernel.Interfaces;
-using RulesEngine.Extensions;
 using RulesEngine.Models;
 
 namespace OrderService.Core.Services;
@@ -65,7 +62,6 @@ public class AddOrderDetailService : IAddOrderDetailService
 
     float additionalCost = (float)Convert.ToDouble(result.Output);
     orderDetail.setAdditionalCost(additionalCost);
-
     order.addOrderDetail(orderDetail);
 
     return Result.Success();
