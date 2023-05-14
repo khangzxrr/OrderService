@@ -44,7 +44,7 @@ public class SendMessageToOrder : EndpointBaseAsync
       return BadRequest("Order is not found");
     }
 
-    order.chat.AddNewNotifiChatMessage($"{request.message} at {DateTime.Now.ToString("HH:ss dd/MM/yyyy")}");
+    order.chat.AddMessageFromEmployee(request.message);
 
     await _orderRepository.SaveChangesAsync();
 
