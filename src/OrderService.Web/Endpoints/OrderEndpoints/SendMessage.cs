@@ -43,7 +43,7 @@ public class SendMessage : EndpointBaseAsync
     }
 
     string date = DateTime.Now.ToString("HH:ss dd/MM/yyyy");
-    order.chat.AddNewCustomerChatMessage(request.message + $" at {date}");
+    order.chat.AddMessageFromCustomer(request.message);
 
     await _orderRepository.SaveChangesAsync();
 
