@@ -31,6 +31,6 @@ public class ItemCompletedEmailNotificationHandlerHandle
   {
     await _handler.Handle(new ToDoItemCompletedEvent(new ToDoItem()), CancellationToken.None);
 
-    _emailSenderMock.Verify(sender => sender.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+    _emailSenderMock.Verify(sender => sender.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
   }
 }

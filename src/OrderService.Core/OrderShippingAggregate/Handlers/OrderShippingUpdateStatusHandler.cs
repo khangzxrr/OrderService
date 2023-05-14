@@ -29,8 +29,6 @@ public class OrderShippingUpdateStatusHandler : INotificationHandler<OrderShippi
       throw new Exception("order is not found");
     }
 
-    order.chat.AddMessageFromEmployee($"Updated delivery status to  {notification.orderShippingStatus.Name} At {DateTime.Now:HH:ss dd/MM/yyyy}");
-
     await _emailSender.SendEmailAsync(order.user.email, "[FastShip] Cập nhật trạng thái giao hàng", $"<p> đã được giao cho shipper để đưa đến bạn được cập nhật trạng thái mới ({notification.orderShippingStatus.Name}) <a href='http://localhost:3000/detailod?orderId={notification.orderId}'>Để xem chi tiết vui lòng nhấn vào đây</a></p>");
 
     await _orderRepository.SaveChangesAsync();
