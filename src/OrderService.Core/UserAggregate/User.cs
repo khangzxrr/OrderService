@@ -51,6 +51,11 @@ public class User: EntityBase, IAggregateRoot
     this.verify = UserVerify.actived;
   }
 
+  public string getFullname()
+  {
+    return firstname + " " + lastname;
+  }
+
   public void setRole(Role role)
   {
     this.role = Guard.Against.Null(role);
