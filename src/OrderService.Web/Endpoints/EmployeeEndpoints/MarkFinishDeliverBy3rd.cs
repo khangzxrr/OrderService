@@ -50,7 +50,7 @@ public class MarkFinishDeliverBy3rd : EndpointBaseAsync
     var order = await _orderRepository.FirstOrDefaultAsync(orderSpec);
 
 
-    var orderShippingSpec = new OrderShippingByOrderId(request.orderId);
+    var orderShippingSpec = new OrderShippingByOrderIdSpec(request.orderId);
     var orderShipping = await _orderShippingRepository.FirstOrDefaultAsync(orderShippingSpec);
 
     if (order == null)
