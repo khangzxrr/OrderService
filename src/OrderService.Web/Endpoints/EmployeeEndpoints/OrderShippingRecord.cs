@@ -11,7 +11,7 @@ public record OrderShippingRecord(int id, bool shippingUsing3rd, string shipping
         orderShipping.orderShippingStatus.Name,
         orderShipping.shippingDescription,
         orderShipping.signatureImageUrl,
-        (orderShipping.shippingUsing3rd) ? "3rd" : orderShipping.shipper!.user.getFullname(),
+        (orderShipping.shipper != null) ? orderShipping.shipper.user.getFullname() : "",
         orderShipping.orderId
       );
   }
