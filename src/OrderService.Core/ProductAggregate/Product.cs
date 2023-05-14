@@ -1,4 +1,5 @@
 ﻿using Ardalis.GuardClauses;
+using Ardalis.SmartEnum.Exceptions;
 using Newtonsoft.Json;
 using OrderService.Core.CurrencyAggregate;
 using OrderService.SharedKernel;
@@ -17,7 +18,7 @@ public class Product: EntityBase, IAggregateRoot
   public string productDescription { get; set; }
   public float productPrice { get; set; }
   public string productURL { get; set; }
-  public float productWeight { get; set; }
+  public float productWeight { get; private set; }
 
   public string productSellerAddress { get; set; }
   public string productSellerEmail { get; set; }
@@ -93,6 +94,10 @@ public class Product: EntityBase, IAggregateRoot
     this.productCategory = Guard.Against.Null(productCategory);
   }
 
+  public void setProductWeight(float weight)
+  {
+    this.productWeight = Guard.Against.Negative(weight);
+  }
   public void setCurrencyExchange(ProductCurrencyExchange currencyExchange)
   {
     this.currencyExchange = Guard.Against.Null(currencyExchange);
