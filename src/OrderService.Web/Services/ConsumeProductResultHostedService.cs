@@ -25,12 +25,12 @@ public class ConsumeProductResultHostedService : BackgroundService, IConsumeProd
   private readonly IRepository<ProductCategory> _categoryRepository;
   private readonly IRepository<Product> _productRepository;
   private readonly IRepository<CurrencyExchange> _currencyExchange;
-  private readonly IHubContext<NotificationHub>  _notificationHub;
+  private readonly IHubContext<ProductFetchingHub>  _notificationHub;
   private readonly IConfiguration _configuration;
 
   private readonly IRedisClient _redisClient;
 
-  public ConsumeProductResultHostedService(IRepository<ProductCategory> categoryRepository, IRepository<Product> productRepository, IRepository<CurrencyExchange> currencyExchange, IHubContext<NotificationHub> notificationHub, IConfiguration configuration, IRedisClient redisClient)
+  public ConsumeProductResultHostedService(IRepository<ProductCategory> categoryRepository, IRepository<Product> productRepository, IRepository<CurrencyExchange> currencyExchange, IHubContext<ProductFetchingHub> notificationHub, IConfiguration configuration, IRedisClient redisClient)
   {
     _categoryRepository = categoryRepository;
     _productRepository = productRepository;
@@ -53,7 +53,7 @@ public class ConsumeProductResultHostedService : BackgroundService, IConsumeProd
     if (message.Contains("message"))
     {
       var messageObject = JsonConvert.DeserializeObject<MessageData>(message);
-      await NotificationHub.SendPrivateMessage(_notificationHub.Clients, messageObject!.connectionId, message);
+      await ProductFetchingHub.SendPrivateMessage(_notificationHub.Clients, messageObject!.connectionId, message);
 
       return;
     }
@@ -124,7 +124,7 @@ public class ConsumeProductResultHostedService : BackgroundService, IConsumeProd
     //=====
 
     //send data back to client
-    await NotificationHub.SendPrivateMessage(_notificationHub.Clients, productResult.connectionId, JsonConvert.SerializeObject(product));
+    await ProductFetchingHub.SendPrivateMessage(_notificationHub.Clients, productResult.connectionId, JsonConvert.SerializeObject(product));
     
   }
 

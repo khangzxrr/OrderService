@@ -10,14 +10,14 @@ using StackExchange.Redis.Extensions.Core.Abstractions;
 namespace OrderService.Web.SignalR;
 
 
-public class NotificationHub : Hub
+public class ProductFetchingHub : Hub
 {
 
   private readonly IProduceProductRequestService _produceProductRequestService;
 
   private readonly IRedisClient _redisClient;
 
-  public NotificationHub(IProduceProductRequestService produceProductRequestService, IRedisClient redisClient)
+  public ProductFetchingHub(IProduceProductRequestService produceProductRequestService, IRedisClient redisClient)
   {
     _produceProductRequestService = produceProductRequestService;
     _redisClient = redisClient;
