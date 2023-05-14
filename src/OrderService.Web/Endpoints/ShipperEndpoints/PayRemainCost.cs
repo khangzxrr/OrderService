@@ -80,7 +80,7 @@ public class PayRemainCost : EndpointBaseAsync
 
     if (shipperPayingMethod == ShipperPayingMethod.byCash)
     {
-      var transactionId = $"shipper_cash_{DateTime.UtcNow}";
+      var transactionId = $"shipper_cash";
       var paymentCost = OrderPayment.ConvertVNDToVNPayVND(order.remainCost);
 
       var addPaymentResults = await _orderPaymentService.AddNewPayment(request.orderId, PaymentStatus.SecondPayment.Name, paymentCost, transactionId);
