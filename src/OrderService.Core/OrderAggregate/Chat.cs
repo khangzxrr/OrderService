@@ -16,7 +16,7 @@ public class Chat : EntityBase
     this.employee = Guard.Against.Null(employee);
   }
 
-  public void AddNewNotifiChatMessage(string message)
+  public void AddMessageFromEmployee(string message)
   {
     Guard.Against.NullOrEmpty(message);
 
@@ -24,7 +24,7 @@ public class Chat : EntityBase
     _chatMessages.Add(chatMessage);
   }
 
-  public void AddNewCustomerChatMessage(string message)
+  public void AddMessageFromCustomer(string message)
   {
     Guard.Against.NullOrEmpty(message);
 
