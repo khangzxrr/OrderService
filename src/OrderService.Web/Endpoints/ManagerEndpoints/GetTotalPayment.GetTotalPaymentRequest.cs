@@ -9,6 +9,6 @@ public class GetTotalPaymentRequest
   [DataType(DataType.DateTime)]
   public DateTime? startDate { get; init; }
   [DataType(DataType.DateTime)]
-  public DateTime? endDate { get; init;  }
+  public DateTime? endDate { get; init; }
 
 }
