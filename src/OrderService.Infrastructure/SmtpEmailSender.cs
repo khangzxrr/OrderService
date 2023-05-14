@@ -14,7 +14,7 @@ public class SmtpEmailSender : IEmailSender
     _logger = logger;
   }
 
-  public async Task SendEmailAsync(string to, string from, string subject, string body)
+  public async Task SendEmailAsync(string to, string subject, string body)
   {
     var emailClient = new SmtpClient("smtp.gmail.com", 587)
     {
@@ -24,7 +24,7 @@ public class SmtpEmailSender : IEmailSender
 
     var message = new MailMessage
     {
-      From = new MailAddress(from),
+      From = new MailAddress("datnqse62453@fpt.edu.vn"),
       Subject = subject,
       Body = body,
       IsBodyHtml = true
@@ -33,6 +33,6 @@ public class SmtpEmailSender : IEmailSender
     message.To.Add(new MailAddress(to));
     await emailClient.SendMailAsync(message);
 
-    _logger.LogWarning("Sending email to {to} from {from} with subject {subject}.", to, from, subject);
+    _logger.LogWarning($"Sending email to {to} with subject {subject}.");
   }
 }
