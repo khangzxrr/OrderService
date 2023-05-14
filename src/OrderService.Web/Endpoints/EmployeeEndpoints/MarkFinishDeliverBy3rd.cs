@@ -71,6 +71,7 @@ public class MarkFinishDeliverBy3rd : EndpointBaseAsync
 
     order.SetQueueInShipping(OrderLocalShippingStatus.delivered);
     order.SetStatus(OrderStatus.finished);
+
     orderShipping.setOrderShippingStatus(OrderShippingStatus.customerReceived);
 
 
@@ -78,7 +79,7 @@ public class MarkFinishDeliverBy3rd : EndpointBaseAsync
       request.orderId,
       PaymentStatus.SecondPayment.Name,
       OrderPayment.ConvertVNDToVNPayVND(order.remainCost),
-      $"shipper_3rd_{DateTime.UtcNow}");
+      $"shipper_3rd");
 
     if (paymentResult.Errors.Any())
     {
