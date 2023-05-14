@@ -2,7 +2,7 @@
 
 namespace OrderService.Web.Endpoints.EmployeeEndpoints;
 
-public record OrderShippingRecord(int id, bool shippingUsing3rd, string shippingStatus, string shippingDescription, string signatureImageUrl, string shipperName)
+public record OrderShippingRecord(int id, bool shippingUsing3rd, string shippingStatus, string shippingDescription, string signatureImageUrl, string shipperName, int orderId)
 {
   public static OrderShippingRecord FromEntity(OrderShipping orderShipping)
   {
@@ -11,7 +11,8 @@ public record OrderShippingRecord(int id, bool shippingUsing3rd, string shipping
         orderShipping.orderShippingStatus.Name,
         orderShipping.shippingDescription,
         orderShipping.signatureImageUrl,
-        (orderShipping.shippingUsing3rd) ? "" : orderShipping.shipper!.userId.ToString()
+        (orderShipping.shippingUsing3rd) ? "3rd" : orderShipping.shipper!.user.getFullname(),
+        orderShipping.orderId
       );
   }
 }
