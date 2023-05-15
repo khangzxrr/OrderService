@@ -81,8 +81,6 @@ public class SpecificOrderChatHub: Hub
   {
     var groupName = $"order_{connectToChatRoomRequest.orderId}";
 
-    _userInGroup.Remove(Context.ConnectionId);
-
     await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
 
     _userInGroup.Add(Context.ConnectionId, groupName);
