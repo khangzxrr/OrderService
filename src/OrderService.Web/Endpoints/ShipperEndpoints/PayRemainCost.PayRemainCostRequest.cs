@@ -9,11 +9,14 @@ public class PayRemainCostRequest
   [Required]
   public int orderId { get; set; }
   [Required]
+  public int orderShippingId { get; set; }
+  [Required]
   public string payMethod { get; set; }
 
-  public PayRemainCostRequest(int orderId, string payMethod)
+  public PayRemainCostRequest(int orderId, int orderShippingId, string payMethod)
   {
     this.orderId = orderId;
+    this.orderShippingId = orderShippingId;
     this.payMethod = payMethod;
   }
 }
