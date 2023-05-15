@@ -67,6 +67,7 @@ public class Order : EntityBase, IAggregateRoot
 
   public void SetPrice(double price) { 
     this.price = Guard.Against.Negative(price);
+
     this.remainCost = price;
   }
   public void SetRemainCost(double remainCost)
