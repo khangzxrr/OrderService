@@ -8,9 +8,10 @@ public class UpdateWeightRequest
   public const string Route = "/employee/orders/weight/update";
 
   [Required]
-  [NotZero]
-  public double weight { get; set; }
+  public float weight { get; set; }
 
+  [Required]
+  public int productId { get; set; }
   [Required]
   public int orderId { get; set; }
 }
