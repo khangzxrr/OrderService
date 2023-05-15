@@ -1,4 +1,5 @@
 ﻿using Ardalis.GuardClauses;
+using Ardalis.SmartEnum.Exceptions;
 using OrderService.Core.ProductAggregate;
 using OrderService.SharedKernel;
 
@@ -10,6 +11,7 @@ public class OrderDetail : EntityBase
 
   public float additionalCost { get; private set; }
   public float shipCost { get; private set; }
+  public float costPerWeight { get; private set; }
   public float processCost { get; private set; }
 
   public float totalCost { get; private set; }
@@ -24,7 +26,7 @@ public class OrderDetail : EntityBase
 
     this.product = Guard.Against.Null(product);
     shipCost = Guard.Against.Negative(product.productCategory.productShipCost.shipCost);
-
+    costPerWeight = Guard.Against.Negative(product.productCategory.productShipCost.costPerWeight);
   }
 
   public void setAdditionalCost(float additionalCost)
