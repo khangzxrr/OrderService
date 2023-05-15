@@ -6,6 +6,6 @@ public class NotZeroAttribute : ValidationAttribute
 {
   public override bool IsValid(object? value)
   {
-    return (double)value! <= 0;
+    return (float)value! <= 0;
   }
 }
