@@ -1,6 +1,4 @@
 ﻿using MediatR;
-using OrderService.Core.CurrencyAggregate;
-using OrderService.Core.CurrencyAggregate.Specifications;
 using OrderService.Core.OrderAggregate.Events;
 using OrderService.Core.OrderAggregate.Specifications;
 using OrderService.SharedKernel.Interfaces;
@@ -9,11 +7,9 @@ namespace OrderService.Core.OrderAggregate.Handlers;
 public class OrderDetailCreatedHandler : INotificationHandler<OrderDetailCreatedEvent>
 {
   private readonly IRepository<Order> _repository;
-  private readonly IRepository<CurrencyExchange> _currencyExchangeRepository;
-  public OrderDetailCreatedHandler(IRepository<Order> repository, IRepository<CurrencyExchange> currencyExchangeRepository)
+  public OrderDetailCreatedHandler(IRepository<Order> repository)
   {
     _repository = repository;
-    _currencyExchangeRepository = currencyExchangeRepository;
   }
 
   public async Task Handle(OrderDetailCreatedEvent notification, CancellationToken cancellationToken)
