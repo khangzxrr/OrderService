@@ -6,6 +6,7 @@ public class FreeShipperSpec : Specification<Shipper>, ISingleResultSpecificatio
   public FreeShipperSpec()
   {
     Query
+      .Include(s => s.user)
       .Where(s => s.shippingStatus == ShippingStatus.online);
   }
 }
