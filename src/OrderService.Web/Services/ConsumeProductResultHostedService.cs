@@ -154,7 +154,7 @@ public class ConsumeProductResultHostedService : BackgroundService, IConsumeProd
 
   protected override Task ExecuteAsync(CancellationToken stoppingToken)
   {
-    stoppingToken.ThrowIfCancellationRequested();
+
 
     Console.WriteLine("activate consumer rabbitmq");
 
