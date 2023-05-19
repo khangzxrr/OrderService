@@ -1,10 +1,11 @@
 ﻿using OrderService.Core.OrderAggregate;
 using OrderService.Core.ProductAggregate;
+using OrderService.Web.Endpoints.ProductEndpoints;
 
-namespace OrderService.Web.Endpoints.ProductEndpoints;
+namespace OrderService.Web.Endpoints.Records;
 
 public record ProductRecord(
-  int id, 
+  int id,
   string category,
   string name,
   string imageUrl,

@@ -1,5 +1,5 @@
 ﻿using OrderService.Core.OrderAggregate;
-using OrderService.Web.Endpoints.ProductEndpoints;
+using OrderService.Web.Endpoints.Records;
 
 namespace OrderService.Web.Endpoints.OrderEndpoints;
 

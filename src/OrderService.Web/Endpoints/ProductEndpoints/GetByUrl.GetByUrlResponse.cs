@@ -1,4 +1,6 @@
-﻿namespace OrderService.Web.Endpoints.ProductEndpoints;
+﻿using OrderService.Web.Endpoints.Records;
+
+namespace OrderService.Web.Endpoints.ProductEndpoints;
 
 public class GetByUrlResponse
 {

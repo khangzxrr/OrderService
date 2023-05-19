@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using OrderService.Core.ProductAggregate;
 using OrderService.Core.ProductAggregate.Specifications;
 using OrderService.SharedKernel.Interfaces;
+using OrderService.Web.Endpoints.Records;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace OrderService.Web.Endpoints.ProductEndpoints;
