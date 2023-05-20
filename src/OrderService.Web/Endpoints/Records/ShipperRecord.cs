@@ -6,6 +6,6 @@ public record ShipperRecord(int id, string name, string shippingAddress, string 
 {
   public static ShipperRecord FromEntity(Shipper shipper)
   {
-    return new ShipperRecord(shipper.Id, shipper.user.getFullname(), shipper.shippingDistrict, shipper.shippingStatus.Name);
+    return new ShipperRecord(shipper.Id, shipper.user.fullname, shipper.shippingDistrict, shipper.shippingStatus.Name);
   }
 }
