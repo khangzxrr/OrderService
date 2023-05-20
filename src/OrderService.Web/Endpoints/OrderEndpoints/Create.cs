@@ -3,6 +3,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OrderService.Core.Interfaces;
+using OrderService.Web.Endpoints.Records;
 using OrderService.Web.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 

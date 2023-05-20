@@ -1,4 +1,6 @@
-﻿namespace OrderService.Web.Endpoints.OrderEndpoints;
+﻿using OrderService.Web.Endpoints.Records;
+
+namespace OrderService.Web.Endpoints.OrderEndpoints;
 
 public class GetAllResponse
 {

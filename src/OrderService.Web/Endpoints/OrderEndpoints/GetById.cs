@@ -6,6 +6,7 @@ using OrderService.Core.OrderAggregate;
 using OrderService.Core.OrderAggregate.Specifications;
 using OrderService.Core.UserAggregate;
 using OrderService.SharedKernel.Interfaces;
+using OrderService.Web.Endpoints.Records;
 using OrderService.Web.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 
