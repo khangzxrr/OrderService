@@ -16,11 +16,10 @@ public class GetByUrl : EndpointBaseAsync
 {
 
   private readonly IRepository<Product> _productRepository;
-  private readonly IMapper _mapper;
-  public GetByUrl(IRepository<Product> productRepository, IMapper mapper)
+  
+  public GetByUrl(IRepository<Product> productRepository)
   {
     _productRepository = productRepository;
-    _mapper = mapper;
   }
 
 
