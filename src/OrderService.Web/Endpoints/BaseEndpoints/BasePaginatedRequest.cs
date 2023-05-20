@@ -11,6 +11,7 @@ public abstract class BasePaginatedRequest
 
   public int skip => pageIndex * pageSize;
   public int take => (pageSize == 0) ? int.MaxValue : pageSize;
-
+  public int totalSkip => 0;
+  public int totalTake => int.MaxValue;
 
 }
