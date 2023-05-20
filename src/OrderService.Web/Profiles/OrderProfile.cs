@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using OrderService.Core.OrderAggregate;
 using OrderService.Web.Endpoints.OrderEndpoints;
+using OrderService.Web.Endpoints.Records;
 
 namespace OrderService.Web.Profiles;
 
