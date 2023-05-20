@@ -42,12 +42,14 @@ public class Order : EntityBase, IAggregateRoot
     string deliveryAddress,
     string contactPhonenumber)
   {
-    orderDate = DateTime.Now;
-    status = OrderStatus.noPayYet;
+    
     this.orderDescription = Guard.Against.NullOrEmpty(orderDescription, nameof(orderDescription));
     this.customerDescription = Guard.Against.NullOrEmpty(customerDescription, nameof(customerDescription));
     this.deliveryAddress = Guard.Against.NullOrEmpty(deliveryAddress, nameof(deliveryAddress));
     this.contactPhonenumber = Guard.Against.NullOrEmpty(contactPhonenumber, nameof(contactPhonenumber));
+
+    orderDate = DateTime.Now;
+    status = OrderStatus.noPriceQuotation;
 
     shippingEstimatedDays = 30;
     price = 0;
