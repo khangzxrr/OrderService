@@ -35,8 +35,10 @@ public class CreateOrderService : ICreateOrderService
     customer.addOrder(order);
     await _userRepository.SaveChangesAsync();
 
-    var domainEvent = new OrderDetailCreatedEvent(order.Id);
-    await _mediator.Publish(domainEvent);
+
+    //DONT PUT PRICE ON FIRST INIT ORDER
+    //var domainEvent = new OrderDetailCreatedEvent(order.Id);
+    //await _mediator.Publish(domainEvent);
 
     return new Result<Order>(order);
   }
@@ -103,7 +105,6 @@ public class CreateOrderService : ICreateOrderService
 
     var chat = new Chat();
     chat.SetEmployee(employee.Value);
-
     order.SetChat(chat);
 
     return new Result<Order>(order);
