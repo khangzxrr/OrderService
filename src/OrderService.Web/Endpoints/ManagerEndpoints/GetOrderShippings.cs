@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using OrderService.Core.OrderShippingAggregate;
 using OrderService.Core.OrderShippingAggregate.Specifications;
 using OrderService.SharedKernel.Interfaces;
-using OrderService.Web.Endpoints.EmployeeEndpoints;
+using OrderService.Web.Endpoints.Records;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace OrderService.Web.Endpoints.ManagerEndpoints;
