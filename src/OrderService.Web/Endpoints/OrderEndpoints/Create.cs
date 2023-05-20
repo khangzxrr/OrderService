@@ -64,6 +64,7 @@ public class Create : EndpointBaseAsync
 
     foreach (var product in request.products)
     {
+      
       var result = await _addOrderDetailService.AddOrderDetail(order, product.productId, product.productQuantity);
 
       if (result.Errors.Any())
