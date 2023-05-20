@@ -1,4 +1,6 @@
-﻿namespace OrderService.Web.Endpoints.EmployeeEndpoints;
+﻿using OrderService.Web.Endpoints.Records;
+
+namespace OrderService.Web.Endpoints.EmployeeEndpoints;
 
 public class CreateOrderShippingResponse
 {

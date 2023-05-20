@@ -8,6 +8,7 @@ using OrderService.Core.OrderAggregate.Specifications;
 using OrderService.Core.OrderShippingAggregate;
 using OrderService.Core.OrderShippingAggregate.Events;
 using OrderService.SharedKernel.Interfaces;
+using OrderService.Web.Endpoints.Records;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace OrderService.Web.Endpoints.EmployeeEndpoints;
