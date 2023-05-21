@@ -1,6 +1,4 @@
 ﻿using System.Reflection;
-using OrderService.Core.ContributorAggregate;
-using OrderService.Core.ProjectAggregate;
 using OrderService.SharedKernel;
 using OrderService.SharedKernel.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -21,9 +19,6 @@ public class AppDbContext : DbContext
     _dispatcher = dispatcher;
   }
 
-  public DbSet<ToDoItem> ToDoItems => Set<ToDoItem>();
-  public DbSet<Project> Projects => Set<Project>();
-  public DbSet<Contributor> Contributors => Set<Contributor>(); 
 
   public DbSet<User> Users => Set<User>();
   public DbSet<Shipper> Shippers => Set<Shipper>();

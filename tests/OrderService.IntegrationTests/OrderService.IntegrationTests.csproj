@@ -24,7 +24,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\OrderService.Infrastructure\OrderService.Infrastructure.csproj" />
-    <ProjectReference Include="..\OrderService.UnitTests\OrderService.UnitTests.csproj" />
   </ItemGroup>
 
   <ItemGroup>

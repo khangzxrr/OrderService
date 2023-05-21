@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using Autofac;
 using OrderService.Core.Interfaces;
-using OrderService.Core.ProjectAggregate;
+using OrderService.Core.OrderAggregate;
 using OrderService.Infrastructure.Data;
 using OrderService.SharedKernel;
 using OrderService.SharedKernel.Interfaces;
@@ -20,7 +20,7 @@ public class DefaultInfrastructureModule : Module
   {
     _isDevelopment = isDevelopment;
     var coreAssembly =
-      Assembly.GetAssembly(typeof(Project)); // TODO: Replace "Project" with any type from your Core project
+      Assembly.GetAssembly(typeof(Order)); // TODO: Replace "Project" with any type from your Core project
     var infrastructureAssembly = Assembly.GetAssembly(typeof(StartupSetup));
     if (coreAssembly != null)
     {

@@ -15,6 +15,7 @@ public record OrderRecord(
   float price,
   float remainCost,
   string localOrderShippingStatus,
+  string employeeName,
   IEnumerable<OrderDetailRecord>? orderDetails
   )
 {

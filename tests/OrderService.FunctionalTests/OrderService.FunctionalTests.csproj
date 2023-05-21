@@ -26,7 +26,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\OrderService.Web\OrderService.Web.csproj" />
-    <ProjectReference Include="..\OrderService.UnitTests\OrderService.UnitTests.csproj" />
   </ItemGroup>
 
 </Project>

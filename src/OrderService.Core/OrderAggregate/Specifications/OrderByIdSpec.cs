@@ -16,7 +16,9 @@ public class OrderByIdSpec : Specification<Order>, ISingleResultSpecification
       .Include(o => o.orderDetails)
         .ThenInclude(od => od.product)
           .ThenInclude(p => p.currencyExchange)
-            .ThenInclude(ce => ce.currency);
+            .ThenInclude(ce => ce.currency)
+      .Include(o => o.chat)
+        .ThenInclude(o => o.employee);
      
 
   }

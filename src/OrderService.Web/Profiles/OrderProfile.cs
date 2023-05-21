@@ -21,6 +21,7 @@ public class OrderProfile : Profile
       .ForCtorParam(nameof(OrderRecord.orderDate), options => options.MapFrom(or => or.orderDate))
       .ForCtorParam(nameof(OrderRecord.orderId), options => options.MapFrom(or => or.Id))
       .ForCtorParam(nameof(OrderRecord.shipEstimatedDays), options => options.MapFrom(or => or.shippingEstimatedDays))
+      .ForCtorParam(nameof(OrderRecord.employeeName), options => options.MapFrom(or => or.chat.employee.fullname))
       .ForCtorParam(nameof(OrderRecord.orderDetails), options => options.MapFrom(or => (or.orderDetails == null) ? null : or.orderDetails.Select(od => OrderDetailRecord.FromEntity(od))))
       .ForCtorParam(nameof(OrderRecord.localOrderShippingStatus), options => options.MapFrom(or => or.localShippingStatus.Name));
       
