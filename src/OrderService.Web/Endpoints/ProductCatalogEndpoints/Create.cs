@@ -1,6 +1,5 @@
 ﻿using Ardalis.ApiEndpoints;
 using AutoMapper;
-using Humanizer;
 using Microsoft.AspNetCore.Mvc;
 using OrderService.Core.ProductAggregate;
 using OrderService.SharedKernel.Interfaces;
