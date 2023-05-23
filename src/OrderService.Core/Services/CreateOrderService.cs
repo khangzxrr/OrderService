@@ -45,30 +45,11 @@ public class CreateOrderService : ICreateOrderService
 
   public async Task<Result<Order>> CreateNewOrder(string orderDescription, string customerDescription, string deliveryAddress, string contactPhoneNumber)
   {
-    Guard.Against.NullOrEmpty(orderDescription);
-    Guard.Against.NullOrEmpty(customerDescription);
     Guard.Against.NullOrEmpty(deliveryAddress);
     Guard.Against.NullOrEmpty(contactPhoneNumber);
 
     var errors = new List<ValidationError>();
 
-    if (string.IsNullOrEmpty(orderDescription))
-    {
-      errors.Add(new ValidationError
-      {
-        Identifier = nameof(orderDescription),
-        ErrorMessage = $"{nameof(orderDescription)} is required."
-      });
-    }
-
-    if (string.IsNullOrEmpty(customerDescription))
-    {
-      errors.Add(new ValidationError
-      {
-        Identifier = nameof(customerDescription),
-        ErrorMessage = $"{nameof(customerDescription)} is required."
-      });
-    }
 
     if (string.IsNullOrEmpty(deliveryAddress))
     {

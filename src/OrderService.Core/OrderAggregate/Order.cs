@@ -43,8 +43,8 @@ public class Order : EntityBase, IAggregateRoot
     string contactPhonenumber)
   {
     
-    this.orderDescription = Guard.Against.NullOrEmpty(orderDescription, nameof(orderDescription));
-    this.customerDescription = Guard.Against.NullOrEmpty(customerDescription, nameof(customerDescription));
+    this.orderDescription = "";
+    this.customerDescription = Guard.Against.Null(customerDescription);
     this.deliveryAddress = Guard.Against.NullOrEmpty(deliveryAddress, nameof(deliveryAddress));
     this.contactPhonenumber = Guard.Against.NullOrEmpty(contactPhonenumber, nameof(contactPhonenumber));
 
