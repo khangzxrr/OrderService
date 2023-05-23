@@ -43,7 +43,7 @@ public class Create : EndpointBaseAsync
     }
 
     var userId = int.Parse(_currentUserService.UserId!);
-    var orderResult = await _createOrderService.CreateNewOrder("description", "customer description", "delivery address", "0919092211");
+    var orderResult = await _createOrderService.CreateNewOrder("", request.customerDescription, request.address, request.phoneNumber);
 
     if (orderResult.ValidationErrors.Any())
     {
