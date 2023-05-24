@@ -36,13 +36,13 @@ public class GetShipperOrders : EndpointBaseAsync
     var spec = new OrderShippingPaginatedByShipperIdSpec(request.shipperId, request.skip, request.take);
 
     var totalCountSpec = new OrderShippingPaginatedByShipperIdSpec(request.shipperId, request.totalSkip, request.totalTake);
-
     var totalCount = await _orderShippingRepository.CountAsync(totalCountSpec);
+
     var orderShippings = await _orderShippingRepository.ListAsync(spec);
+    
+    var generalOrderRecords = orderShippings.Select(os => GeneralOrderRecord.FromEntity(os.order));
 
-    var orderShippingRecords = orderShippings.Select(OrderShippingRecord.FromEntity);
-
-    var response = new GetShipperOrdersResponse(totalCount, request.pageSize, orderShippingRecords);
+    var response = new GetShipperOrdersResponse(totalCount, request.pageSize, generalOrderRecords, 0);
 
     return Ok(response);
   }
