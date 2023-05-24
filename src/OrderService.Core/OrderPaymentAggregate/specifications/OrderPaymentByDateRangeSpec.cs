@@ -1,6 +1,4 @@
-﻿
-
-using Ardalis.Specification;
+﻿using Ardalis.Specification;
 
 namespace OrderService.Core.OrderPaymentAggregate.specifications;
 public class OrderPaymentByDateRangeSpec: Specification<OrderPayment>
