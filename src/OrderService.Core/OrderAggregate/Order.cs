@@ -102,6 +102,11 @@ public class Order : EntityBase, IAggregateRoot
     return orderPayments.Where(op => op.paymentStatus == PaymentStatus.firstPayment || op.paymentStatus == PaymentStatus.SecondPayment).Count() >= 2;
   }
 
+  public double GetTotalPaymentsAmount()
+  {
+    return orderPayments.Sum(op => op.paymentCost);
+  }
+
   public void AddPayment(OrderPayment payment)
   {
     Guard.Against.Null(payment);
