@@ -1,6 +1,8 @@
 ﻿using Ardalis.ApiEndpoints;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OrderService.Core.OrderAggregate;
+using OrderService.Core.OrderAggregate.Specifications;
 using OrderService.Core.UserAggregate;
 using OrderService.Core.UserAggregate.Specifications;
 using OrderService.SharedKernel.Interfaces;
@@ -14,11 +16,13 @@ public class GetCustomers : EndpointBaseAsync
   .WithActionResult<GetCustomersResponse>
 {
 
+  private readonly IRepository<Order> _orderRepository;
   private readonly IRepository<User> _userRepository; 
 
-  public GetCustomers(IRepository<User> userRepository)
+  public GetCustomers(IRepository<User> userRepository, IRepository<Order> orderRepository)
   {
     _userRepository = userRepository;
+    _orderRepository = orderRepository;
   }
 
   [HttpGet(GetCustomersRequest.Route)]
@@ -37,7 +41,23 @@ public class GetCustomers : EndpointBaseAsync
     var totalCount = await _userRepository.CountAsync(totalSpec);
     var users = await _userRepository.ListAsync(spec);
 
-    var customerRecords = users.Select(CustomerRecord.FromEntity);
+    var customerRecords =  users.Select(async user =>
+    {
+
+      //===== count orders  and calculate total payments
+      var orderWithPaymentsSpec = new OrderWithPaymentsByUserIdSpec(user.Id);
+      var orders = await _orderRepository.ListAsync(orderWithPaymentsSpec);
+
+      var totalPaymentAmount = orders.Sum(o => o.GetTotalPaymentsAmount());
+      var totalOrders = orders.Count;
+      //================
+
+      var customerRecord = CustomerRecord.FromEntity(user, totalOrders, totalPaymentAmount);
+
+      return customerRecord;
+    })
+    .Select(task => task.Result);
+
 
     var response = new GetCustomersResponse(totalCount, request.pageSize, customerRecords);
 
