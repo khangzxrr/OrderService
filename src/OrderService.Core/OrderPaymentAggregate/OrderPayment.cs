@@ -22,10 +22,6 @@ public class OrderPayment : EntityBase, IAggregateRoot
     this.paymentDescription = Guard.Against.NullOrEmpty(paymentDescription, nameof(paymentDescription));
   }
 
-  public void SetTransactionalId(string transactionalId)
-  {
-    transactionalId = Guard.Against.NullOrEmpty(transactionalId);
-  }
 
   public static long ConvertVNDToVNPayVND(double cost)
   {
