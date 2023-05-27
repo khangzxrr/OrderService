@@ -12,8 +12,6 @@ public record ProductRecord(
   string description,
 
   float price,
-  float shipCost,
-  float costPerWeight,
 
   string url,
   float weight,
@@ -39,8 +37,6 @@ public record ProductRecord(
       product.productImageUrl,
       product.productDescription,
       product.productPrice,
-      product.productCategory.productShipCost.shipCost,
-      product.productCategory.productShipCost.costPerWeight,
       product.productURL,
       product.productWeight,
       product.productSellerAddress,
