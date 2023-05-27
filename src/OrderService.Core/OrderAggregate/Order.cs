@@ -13,7 +13,7 @@ public class Order : EntityBase, IAggregateRoot
   public DateTime orderDate { get; }
   public OrderStatus status { get; private set; }
   public string orderDescription { get; }
-  public string customerDescription { get; }
+  public string customerDescription { get; private set; }
   public string deliveryAddress { get; }
   public string contactPhonenumber { get; }
   public int shippingEstimatedDays { get; }
@@ -58,8 +58,14 @@ public class Order : EntityBase, IAggregateRoot
     localShippingStatus = OrderLocalShippingStatus.notInQueue;
   }
 
+   
   public void SetQueueInShipping(OrderLocalShippingStatus status) {
     localShippingStatus = Guard.Against.Null(status);
+  }
+
+  public void SetCustomerDescription(string customerDescription)
+  {
+    this.customerDescription = Guard.Against.NullOrEmpty(customerDescription);
   }
 
   public void SetChat(Chat chat)
