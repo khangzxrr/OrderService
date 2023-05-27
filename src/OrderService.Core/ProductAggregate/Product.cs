@@ -102,4 +102,33 @@ public class Product: EntityBase, IAggregateRoot
   {
     this.currencyExchange = Guard.Against.Null(currencyExchange);
   }
+
+  public void setPrice(float price)
+  {
+    productPrice = Guard.Against.Negative(price);
+  }
+
+  public void setProductDescription(string description) {
+    productDescription = Guard.Against.NullOrEmpty(description);
+  }
+
+  public void setProductWarrantable(bool warrantable)
+  {
+    productWarrantable = Guard.Against.Null(warrantable);
+  }
+
+  public void setProductWarrantyDescription(string warrantyDescription)
+  {
+    productWarrantyDescription = Guard.Against.NullOrEmpty(warrantyDescription);
+  }
+
+  public void setProductReturnable(bool returnable)
+  {
+    productReturnable = Guard.Against.Null(returnable);  
+  }
+
+  public void setProductReturnDescription(string returnDescription)
+  {
+    productReturnDescription = Guard.Against.NullOrEmpty(returnDescription);
+  }
 }
