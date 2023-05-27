@@ -2,6 +2,7 @@
 using OrderService.Core.Interfaces;
 using Microsoft.Extensions.Logging;
 using System.Net;
+using Hangfire;
 
 namespace OrderService.Infrastructure;
 
@@ -14,7 +15,7 @@ public class SmtpEmailSender : IEmailSender
     _logger = logger;
   }
 
-  public async Task SendEmailAsync(string to, string subject, string body)
+  public async Task HangFireSendEmail(string to, string subject, string body)
   {
     var emailClient = new SmtpClient("smtp.gmail.com", 587)
     {
@@ -31,8 +32,14 @@ public class SmtpEmailSender : IEmailSender
     };
 
     message.To.Add(new MailAddress(to));
+
     await emailClient.SendMailAsync(message);
 
     _logger.LogWarning($"Sending email to {to} with subject {subject}.");
+  }
+
+  public void SendEmail(string to, string subject, string body)
+  {
+    BackgroundJob.Enqueue(() => HangFireSendEmail(to,subject,body));
   }
 }
