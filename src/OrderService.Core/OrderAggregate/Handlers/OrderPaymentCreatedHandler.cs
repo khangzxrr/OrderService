@@ -39,7 +39,7 @@ public class OrderPaymentCreatedHandler : INotificationHandler<OrderPaymentCreat
 
     order.SetRemainCost(order.remainCost - orderPayment.paymentCost);
 
-    await _emailSender.SendEmailAsync(order.user.email, "[FastShip] Cập nhật trạng thái đơn hàng", $"<p>Xin chào bạn, đơn hàng #{notification.OrderId} đã được thanh toán thành công với số tiền: {orderPayment.paymentCost}! <a href='http://localhost:3000/detailod?orderId={notification.OrderId}'>Để xem chi tiết vui lòng nhấn vào đây</a></p>");
+    _emailSender.SendEmail(order.user.email, "[FastShip] Cập nhật trạng thái đơn hàng", $"<p>Xin chào bạn, đơn hàng #{notification.OrderId} đã được thanh toán thành công với số tiền: {orderPayment.paymentCost}! <a href='http://localhost:3000/detailod?orderId={notification.OrderId}'>Để xem chi tiết vui lòng nhấn vào đây</a></p>");
 
     await _repository.SaveChangesAsync();
   }

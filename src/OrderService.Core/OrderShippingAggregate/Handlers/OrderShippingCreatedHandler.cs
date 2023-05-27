@@ -32,7 +32,7 @@ public class OrderShippingCreatedHandler : INotificationHandler<OrderShippingCre
       throw new Exception("Order is not found");
     }
 
-    await _emailSender.SendEmailAsync(order.user.email, "[FastShip] Hàng đang đến bạn", $"<p>Xin chào bạn, đơn hàng #{notification.OrderId} đã được giao cho shipper để đưa đến bạn <a href='http://localhost:3000/detailod?orderId={notification.OrderId}'>Để xem chi tiết vui lòng nhấn vào đây</a></p>");
+    _emailSender.SendEmail(order.user.email, "[FastShip] Hàng đang đến bạn", $"<p>Xin chào bạn, đơn hàng #{notification.OrderId} đã được giao cho shipper để đưa đến bạn <a href='http://localhost:3000/detailod?orderId={notification.OrderId}'>Để xem chi tiết vui lòng nhấn vào đây</a></p>");
 
 
     await _orderRepository.SaveChangesAsync();
