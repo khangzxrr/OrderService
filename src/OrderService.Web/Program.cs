@@ -15,6 +15,7 @@ using System.Text;
 using OrderService.Web.SignalR;
 using StackExchange.Redis.Extensions.Newtonsoft;
 using StackExchange.Redis.Extensions.Core.Configuration;
+using Hangfire;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -71,6 +72,10 @@ Console.WriteLine($"Using {redisConfiguration.Hosts[0].Host}:{redisConfiguration
 
 builder.Services.AddStackExchangeRedisExtensions<NewtonsoftSerializer>(redisConfiguration!);
 
+builder.Services.AddHangfire(configuration => 
+  configuration.UseSqlServerStorage(connectionString));
+
+builder.Services.AddHangfireServer();
 
 builder.Services.AddControllers(); 
 
@@ -198,6 +203,9 @@ app.UseCookiePolicy();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseHangfireDashboard();
+
 
 
 
