@@ -7,6 +7,7 @@ public class ShipperPaginatedSpec : Specification<Shipper>
   {
     Query
       .Include(s => s.user)
+      .Include(s => s.OrderShippings)
       .Skip(skip)
       .Take(take);
   }
