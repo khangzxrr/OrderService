@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Collections.Concurrent;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using OrderService.Core.OrderAggregate;
 using OrderService.Core.OrderAggregate.Specifications;
@@ -11,7 +12,7 @@ namespace OrderService.Web.SignalR;
 public class SpecificOrderChatHub: Hub
 {
 
-  private static Dictionary<string, string> _userInGroup = new Dictionary<string, string>();
+  private static ConcurrentDictionary<string, string> _userInGroup = new ConcurrentDictionary<string, string>();
 
   private readonly IRepository<Order> _orderRepository;
 
@@ -83,7 +84,8 @@ public class SpecificOrderChatHub: Hub
 
     await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
 
-    _userInGroup.Add(Context.ConnectionId, groupName);
+
+    _userInGroup.TryAdd(Context.ConnectionId, groupName);
 
     Console.WriteLine($"{Context.ConnectionId}  {groupName}");
   }
@@ -96,7 +98,7 @@ public class SpecificOrderChatHub: Hub
 
   public override Task OnDisconnectedAsync(Exception? exception)
   {
-    _userInGroup.Remove(Context.ConnectionId);
+    _userInGroup.Remove(Context.ConnectionId, out _);
 
     return base.OnDisconnectedAsync(exception);
   }
