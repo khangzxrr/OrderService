@@ -59,6 +59,7 @@ public class UpdateOrderStatus : EndpointBaseAsync
     var orderStatusUpdateEvent = new OrderStatusUpdatedEvent(request.orderId, orderStatus);
     await _mediator.Publish(orderStatusUpdateEvent);
 
+
     var response = new UpdateOrderStatusResponse("Update success");
     return Ok(response);
   }
