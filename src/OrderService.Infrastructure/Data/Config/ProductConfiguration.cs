@@ -26,5 +26,13 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
     builder.Property(p => p.productReturnable).IsRequired();
     builder.Property(p => p.productReturnDescription).IsRequired();
     builder.Property(p => p.productReturnDuration).IsRequired();
+
+    builder.Property(p => p.productResellStatus)
+        .HasConversion(
+        s => s.Value,
+        s => ProductResellStatus.FromValue(s)
+      )
+        .IsRequired()
+        .HasDefaultValue(ProductResellStatus.notForSale);
   }
 }
