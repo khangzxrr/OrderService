@@ -1,8 +1,6 @@
-﻿using Hangfire;
-using MediatR;
+﻿using MediatR;
 using OrderService.Core.Interfaces;
 using OrderService.Core.OrderAggregate.Events;
-using OrderService.Core.OrderAggregate.Specifications;
 using OrderService.SharedKernel.Interfaces;
 
 namespace OrderService.Core.OrderAggregate.Handlers;
