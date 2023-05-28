@@ -51,7 +51,7 @@ builder.Services.AddCors(options =>
   options.AddPolicy(name: CORS_POLICY,
                     corsPolicyBuilder =>
                     {
-                      corsPolicyBuilder.WithOrigins("http://localhost:3000", "https://fastship-staging.sontran.us")
+                      corsPolicyBuilder.WithOrigins("http://localhost:3000", "http://localhost:5001", "https://fastship-staging.sontran.us")
                       .AllowAnyMethod()
                       .AllowAnyHeader()
                       .AllowCredentials();
