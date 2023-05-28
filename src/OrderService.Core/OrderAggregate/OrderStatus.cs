@@ -13,6 +13,8 @@ public class OrderStatus : SmartEnum<OrderStatus>
   public static readonly OrderStatus deliverToCustomer = new(nameof(deliverToCustomer), 6);
   public static readonly OrderStatus finished = new(nameof(finished), 7);
 
+  public static readonly OrderStatus reselling = new(nameof(reselling), 8);
+
   public OrderStatus(string name, int value): base(name, value) { }
 }
 
