@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Ardalis.SmartEnum;
+﻿using Ardalis.SmartEnum;
 
 namespace OrderService.Core.OrderAggregate;
 public class PaymentStatus : SmartEnum<PaymentStatus>

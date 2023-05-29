@@ -1,16 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using OrderService.Core.OrderAggregate;
+using OrderService.Core.ProductReturnAggregate;
 
 namespace OrderService.Infrastructure.Data.Config;
 public class ProductReturnConfiguration : IEntityTypeConfiguration<ProductReturn>
 {
   public void Configure(EntityTypeBuilder<ProductReturn> builder)
   {
-    builder.Property(p => p.shippingStatus)
+    builder.Property(p => p.status)
       .HasConversion(
         p => p.Value,
-        p => ShippingStatus.FromValue(p)
+        p => ProductReturnStatus.FromValue(p)
       ).IsRequired();
+
   }
 }

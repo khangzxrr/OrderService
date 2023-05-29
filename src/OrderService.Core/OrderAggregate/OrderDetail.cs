@@ -1,6 +1,7 @@
 ﻿using Ardalis.GuardClauses;
 
 using OrderService.Core.ProductAggregate;
+using OrderService.Core.ProductReturnAggregate;
 using OrderService.SharedKernel;
 
 namespace OrderService.Core.OrderAggregate;
@@ -17,8 +18,7 @@ public class OrderDetail : EntityBase
   public float totalCost { get; private set; }
   public int quantity { get; private set; }
 
-  private readonly List<ProductReturn> _productReturns = new List<ProductReturn>();
-  public IEnumerable<ProductReturn> productReturns => _productReturns.AsReadOnly();
+  public virtual ProductReturn productReturn { get; private set; }
 
   public void setProduct(Product product)
   {
