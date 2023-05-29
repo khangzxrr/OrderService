@@ -4,7 +4,7 @@ using Ardalis.Specification;
 namespace OrderService.Core.UserAggregate.Specifications;
 public class UserPaginatedSpec : Specification<User>
 {
-  public UserPaginatedSpec(int skip, int take, string? roleName)
+  public UserPaginatedSpec(int skip, int take, string? roleName = null)
   {
     Query
       .Include(u => u.role)
