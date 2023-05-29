@@ -1,4 +1,5 @@
 ﻿using Ardalis.ApiEndpoints;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OrderService.Core.UserAggregate;
 using OrderService.Core.UserAggregate.Specifications;
@@ -21,7 +22,7 @@ public class GetUsers : EndpointBaseAsync
   }
 
   [HttpGet(GetUsersRequest.Route)]
-  //[Authorize(Roles = "ADMIN")]
+  [Authorize(Roles = "ADMIN")]
   [SwaggerOperation(
     Summary = "Get users",
     Description = "Get users",
