@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OrderService.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using OrderService.Infrastructure.Data;
 namespace OrderService.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230529123923_ReConfigProductReturn")]
+    partial class ReConfigProductReturn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -448,10 +451,7 @@ namespace OrderService.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("isFinished")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("orderDetailId")
+                    b.Property<int?>("OrderDetailId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("returnDate")
@@ -466,8 +466,7 @@ namespace OrderService.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("orderDetailId")
-                        .IsUnique();
+                    b.HasIndex("OrderDetailId");
 
                     b.ToTable("ProductReturn");
                 });
@@ -508,18 +507,12 @@ namespace OrderService.Infrastructure.Migrations
                     b.Property<float>("cost")
                         .HasColumnType("real");
 
-                    b.Property<bool>("isPaid")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime>("paymentDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("paymentDescription")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("paymentStatus")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -795,10 +788,8 @@ namespace OrderService.Infrastructure.Migrations
             modelBuilder.Entity("OrderService.Core.ProductReturnAggregate.ProductReturn", b =>
                 {
                     b.HasOne("OrderService.Core.OrderAggregate.OrderDetail", null)
-                        .WithOne("productReturn")
-                        .HasForeignKey("OrderService.Core.ProductReturnAggregate.ProductReturn", "orderDetailId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("productReturns")
+                        .HasForeignKey("OrderDetailId");
                 });
 
             modelBuilder.Entity("OrderService.Core.ProductReturnAggregate.ReturnMedia", b =>
@@ -873,8 +864,7 @@ namespace OrderService.Infrastructure.Migrations
 
             modelBuilder.Entity("OrderService.Core.OrderAggregate.OrderDetail", b =>
                 {
-                    b.Navigation("productReturn")
-                        .IsRequired();
+                    b.Navigation("productReturns");
                 });
 
             modelBuilder.Entity("OrderService.Core.ProductAggregate.Product", b =>
