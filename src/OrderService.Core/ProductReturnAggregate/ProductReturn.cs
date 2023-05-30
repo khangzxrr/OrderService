@@ -20,6 +20,7 @@ public class ProductReturn : EntityBase, IAggregateRoot
   private List<ReturnMedia> _returnMedias = new List<ReturnMedia>();
   public IReadOnlyCollection<ReturnMedia> ReturnMedias => _returnMedias.AsReadOnly();
 
+
   private List<ReturnPayment> _returnPayments = new List<ReturnPayment>();
   public IReadOnlyCollection<ReturnPayment> returnPayments => _returnPayments.AsReadOnly();
 
@@ -42,7 +43,7 @@ public class ProductReturn : EntityBase, IAggregateRoot
 
     isFinished = false;
 
-    status = ProductReturnStatus.verifying;
+    status = ProductReturnStatus.requestReturn;
   }
 
   public void SetStatus(ProductReturnStatus status)
