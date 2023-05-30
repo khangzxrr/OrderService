@@ -10,9 +10,6 @@ public class Product: EntityBase, IAggregateRoot
 {
   public ProductCategory productCategory { get; private set; }
 
-  private List<ProductTax> _productTaxes = new List<ProductTax>();
-  public IReadOnlyCollection<ProductTax> productTaxes => _productTaxes.AsReadOnly();
-
   public string productName { get; set; }
   public string productImageUrl { get; set; }
   public string productDescription { get; set; }
