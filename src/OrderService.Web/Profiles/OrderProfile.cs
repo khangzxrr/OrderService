@@ -23,7 +23,8 @@ public class OrderProfile : Profile
       .ForCtorParam(nameof(OrderRecord.shipEstimatedDays), options => options.MapFrom(or => or.shippingEstimatedDays))
       .ForCtorParam(nameof(OrderRecord.employeeName), options => options.MapFrom(or => or.chat.employee.fullname))
       .ForCtorParam(nameof(OrderRecord.orderDetails), options => options.MapFrom(or => (or.orderDetails == null) ? null : or.orderDetails.Select(od => OrderDetailRecord.FromEntity(od))))
-      .ForCtorParam(nameof(OrderRecord.localOrderShippingStatus), options => options.MapFrom(or => or.localShippingStatus.Name));
+      .ForCtorParam(nameof(OrderRecord.localOrderShippingStatus), options => options.MapFrom(or => or.localShippingStatus.Name))
+      .ForCtorParam(nameof(OrderRecord.firstPaymentAmount), options => options.MapFrom(or => or.GetFirstPaymentAmount())); ;
       
 
 

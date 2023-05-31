@@ -14,6 +14,7 @@ public record OrderRecord(
   int shipEstimatedDays,
   float price,
   float remainCost,
+  float firstPaymentAmount,
   string localOrderShippingStatus,
   string employeeName,
   IEnumerable<OrderDetailRecord>? orderDetails
