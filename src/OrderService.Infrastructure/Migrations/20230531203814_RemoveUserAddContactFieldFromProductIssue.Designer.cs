@@ -12,8 +12,8 @@ using OrderService.Infrastructure.Data;
 namespace OrderService.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230529191959_OrderDetailOnlyHasOneProductReturn")]
-    partial class OrderDetailOnlyHasOneProductReturn
+    [Migration("20230531203814_RemoveUserAddContactFieldFromProductIssue")]
+    partial class RemoveUserAddContactFieldFromProductIssue
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -205,9 +205,6 @@ namespace OrderService.Infrastructure.Migrations
                     b.Property<int>("productId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("productReturnId")
-                        .HasColumnType("int");
-
                     b.Property<int>("quantity")
                         .HasColumnType("int");
 
@@ -222,8 +219,6 @@ namespace OrderService.Infrastructure.Migrations
                     b.HasIndex("OrderId");
 
                     b.HasIndex("productId");
-
-                    b.HasIndex("productReturnId");
 
                     b.ToTable("OrderDetail");
                 });
@@ -427,7 +422,7 @@ namespace OrderService.Infrastructure.Migrations
                     b.ToTable("ProductShipCost");
                 });
 
-            modelBuilder.Entity("OrderService.Core.ProductAggregate.ProductTax", b =>
+            modelBuilder.Entity("OrderService.Core.ProductReturnAggregate.IssueMedia", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -435,51 +430,7 @@ namespace OrderService.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("taxName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<float>("taxPrice")
-                        .HasColumnType("real");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ProductTax");
-                });
-
-            modelBuilder.Entity("OrderService.Core.ProductReturnAggregate.ProductReturn", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("returnDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("returnReason")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("status")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ProductReturn");
-                });
-
-            modelBuilder.Entity("OrderService.Core.ProductReturnAggregate.ReturnMedia", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("ProductReturnId")
+                    b.Property<int?>("ProductIssueId")
                         .HasColumnType("int");
 
                     b.Property<string>("mediaUrl")
@@ -488,12 +439,12 @@ namespace OrderService.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductReturnId");
+                    b.HasIndex("ProductIssueId");
 
-                    b.ToTable("ReturnMedia");
+                    b.ToTable("IssueMedia");
                 });
 
-            modelBuilder.Entity("OrderService.Core.ProductReturnAggregate.ReturnPayment", b =>
+            modelBuilder.Entity("OrderService.Core.ProductReturnAggregate.IssuePayment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -501,7 +452,7 @@ namespace OrderService.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ProductReturnId")
+                    b.Property<int?>("ProductIssueId")
                         .HasColumnType("int");
 
                     b.Property<float>("cost")
@@ -522,12 +473,12 @@ namespace OrderService.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductReturnId");
+                    b.HasIndex("ProductIssueId");
 
-                    b.ToTable("ReturnPayment");
+                    b.ToTable("IssuePayment");
                 });
 
-            modelBuilder.Entity("OrderService.Core.ProductReturnAggregate.ReturnSpecificSeriNumber", b =>
+            modelBuilder.Entity("OrderService.Core.ProductReturnAggregate.ProductIssue", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -535,18 +486,55 @@ namespace OrderService.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ProductReturnId")
+                    b.Property<int>("assignedEmployeeId")
                         .HasColumnType("int");
 
-                    b.Property<string>("seriNumber")
+                    b.Property<string>("customerEmail")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("customerFullname")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("customerPhonenumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("finishStatus")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<bool>("isWarranty")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("productId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("returnDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("returnReason")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("series")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductReturnId");
+                    b.HasIndex("assignedEmployeeId");
 
-                    b.ToTable("ReturnSpecificSeriNumber");
+                    b.HasIndex("productId");
+
+                    b.ToTable("ProductIssue");
                 });
 
             modelBuilder.Entity("OrderService.Core.ShipperAggregate.Shipper", b =>
@@ -661,21 +649,6 @@ namespace OrderService.Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ProductProductTax", b =>
-                {
-                    b.Property<int>("productTaxesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("productsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("productTaxesId", "productsId");
-
-                    b.HasIndex("productsId");
-
-                    b.ToTable("ProductProductTax");
-                });
-
             modelBuilder.Entity("OrderService.Core.CurrencyAggregate.ProductCurrencyExchange", b =>
                 {
                     b.HasOne("OrderService.Core.CurrencyAggregate.CurrencyExchange", "currency")
@@ -744,13 +717,7 @@ namespace OrderService.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("OrderService.Core.ProductReturnAggregate.ProductReturn", "productReturn")
-                        .WithMany()
-                        .HasForeignKey("productReturnId");
-
                     b.Navigation("product");
-
-                    b.Navigation("productReturn");
                 });
 
             modelBuilder.Entity("OrderService.Core.OrderPaymentAggregate.OrderPayment", b =>
@@ -797,25 +764,37 @@ namespace OrderService.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("OrderService.Core.ProductReturnAggregate.ReturnMedia", b =>
+            modelBuilder.Entity("OrderService.Core.ProductReturnAggregate.IssueMedia", b =>
                 {
-                    b.HasOne("OrderService.Core.ProductReturnAggregate.ProductReturn", null)
-                        .WithMany("ReturnMedias")
-                        .HasForeignKey("ProductReturnId");
+                    b.HasOne("OrderService.Core.ProductReturnAggregate.ProductIssue", null)
+                        .WithMany("issueMedias")
+                        .HasForeignKey("ProductIssueId");
                 });
 
-            modelBuilder.Entity("OrderService.Core.ProductReturnAggregate.ReturnPayment", b =>
+            modelBuilder.Entity("OrderService.Core.ProductReturnAggregate.IssuePayment", b =>
                 {
-                    b.HasOne("OrderService.Core.ProductReturnAggregate.ProductReturn", null)
-                        .WithMany("returnPayments")
-                        .HasForeignKey("ProductReturnId");
+                    b.HasOne("OrderService.Core.ProductReturnAggregate.ProductIssue", null)
+                        .WithMany("issuePayments")
+                        .HasForeignKey("ProductIssueId");
                 });
 
-            modelBuilder.Entity("OrderService.Core.ProductReturnAggregate.ReturnSpecificSeriNumber", b =>
+            modelBuilder.Entity("OrderService.Core.ProductReturnAggregate.ProductIssue", b =>
                 {
-                    b.HasOne("OrderService.Core.ProductReturnAggregate.ProductReturn", null)
-                        .WithMany("returnSpecificSeriNumbers")
-                        .HasForeignKey("ProductReturnId");
+                    b.HasOne("OrderService.Core.UserAggregate.User", "assignedEmployee")
+                        .WithMany()
+                        .HasForeignKey("assignedEmployeeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("OrderService.Core.ProductAggregate.Product", "product")
+                        .WithMany()
+                        .HasForeignKey("productId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("assignedEmployee");
+
+                    b.Navigation("product");
                 });
 
             modelBuilder.Entity("OrderService.Core.ShipperAggregate.Shipper", b =>
@@ -838,21 +817,6 @@ namespace OrderService.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("role");
-                });
-
-            modelBuilder.Entity("ProductProductTax", b =>
-                {
-                    b.HasOne("OrderService.Core.ProductAggregate.ProductTax", null)
-                        .WithMany()
-                        .HasForeignKey("productTaxesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("OrderService.Core.ProductAggregate.Product", null)
-                        .WithMany()
-                        .HasForeignKey("productsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("OrderService.Core.OrderAggregate.Chat", b =>
@@ -879,13 +843,11 @@ namespace OrderService.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("OrderService.Core.ProductReturnAggregate.ProductReturn", b =>
+            modelBuilder.Entity("OrderService.Core.ProductReturnAggregate.ProductIssue", b =>
                 {
-                    b.Navigation("ReturnMedias");
+                    b.Navigation("issueMedias");
 
-                    b.Navigation("returnPayments");
-
-                    b.Navigation("returnSpecificSeriNumbers");
+                    b.Navigation("issuePayments");
                 });
 
             modelBuilder.Entity("OrderService.Core.ShipperAggregate.Shipper", b =>

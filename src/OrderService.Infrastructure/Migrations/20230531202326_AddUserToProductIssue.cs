@@ -6,24 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace OrderService.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddTotalCostToOrderDetail : Migration
+    public partial class AddUserToProductIssue : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Contributors",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Contributors", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "CurrencyExchanges",
                 columns: table => new
@@ -49,34 +36,6 @@ namespace OrderService.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProductCategory", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ProductTax",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    taxName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    taxPrice = table.Column<float>(type: "real", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductTax", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Projects",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Priority = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Projects", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -113,7 +72,8 @@ namespace OrderService.Infrastructure.Migrations
                     productReturnable = table.Column<bool>(type: "bit", nullable: false),
                     productReturnDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     productReturnDuration = table.Column<int>(type: "int", nullable: false),
-                    productCreateAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    productCreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    productResellStatus = table.Column<int>(type: "int", nullable: false, defaultValue: 0)
                 },
                 constraints: table =>
                 {
@@ -146,28 +106,6 @@ namespace OrderService.Infrastructure.Migrations
                         principalTable: "ProductCategory",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ToDoItems",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ContributorId = table.Column<int>(type: "int", nullable: true),
-                    IsDone = table.Column<bool>(type: "bit", nullable: false),
-                    ProjectId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ToDoItems", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ToDoItems_Projects_ProjectId",
-                        column: x => x.ProjectId,
-                        principalTable: "Projects",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -228,30 +166,6 @@ namespace OrderService.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductProductTax",
-                columns: table => new
-                {
-                    productTaxesId = table.Column<int>(type: "int", nullable: false),
-                    productsId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductProductTax", x => new { x.productTaxesId, x.productsId });
-                    table.ForeignKey(
-                        name: "FK_ProductProductTax_ProductTax_productTaxesId",
-                        column: x => x.productTaxesId,
-                        principalTable: "ProductTax",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProductProductTax_Product_productsId",
-                        column: x => x.productsId,
-                        principalTable: "Product",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Chat",
                 columns: table => new
                 {
@@ -265,6 +179,45 @@ namespace OrderService.Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_Chat_Users_employeeId",
                         column: x => x.employeeId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductIssue",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    productId = table.Column<int>(type: "int", nullable: false),
+                    assignedEmployeeId = table.Column<int>(type: "int", nullable: false),
+                    customerId = table.Column<int>(type: "int", nullable: false),
+                    returnReason = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    returnDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    isWarranty = table.Column<bool>(type: "bit", nullable: false),
+                    status = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+                    finishStatus = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+                    series = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductIssue", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductIssue_Product_productId",
+                        column: x => x.productId,
+                        principalTable: "Product",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProductIssue_Users_assignedEmployeeId",
+                        column: x => x.assignedEmployeeId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ProductIssue_Users_customerId",
+                        column: x => x.customerId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -301,6 +254,7 @@ namespace OrderService.Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     isFromEmployee = table.Column<bool>(type: "bit", nullable: false),
                     message = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    dateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ChatId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -350,6 +304,48 @@ namespace OrderService.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "IssueMedia",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    mediaUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProductIssueId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IssueMedia", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_IssueMedia_ProductIssue_ProductIssueId",
+                        column: x => x.ProductIssueId,
+                        principalTable: "ProductIssue",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "IssuePayment",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    cost = table.Column<float>(type: "real", nullable: false),
+                    paymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    paymentDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    paymentStatus = table.Column<int>(type: "int", nullable: false),
+                    isPaid = table.Column<bool>(type: "bit", nullable: false),
+                    ProductIssueId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IssuePayment", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_IssuePayment_ProductIssue_ProductIssueId",
+                        column: x => x.ProductIssueId,
+                        principalTable: "ProductIssue",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "OrderDetail",
                 columns: table => new
                 {
@@ -358,6 +354,7 @@ namespace OrderService.Infrastructure.Migrations
                     productId = table.Column<int>(type: "int", nullable: false),
                     additionalCost = table.Column<float>(type: "real", nullable: false),
                     shipCost = table.Column<float>(type: "real", nullable: false),
+                    costPerWeight = table.Column<float>(type: "real", nullable: false),
                     processCost = table.Column<float>(type: "real", nullable: false),
                     totalCost = table.Column<float>(type: "real", nullable: false),
                     quantity = table.Column<int>(type: "int", nullable: false),
@@ -431,54 +428,6 @@ namespace OrderService.Infrastructure.Migrations
                         principalColumn: "Id");
                 });
 
-            migrationBuilder.CreateTable(
-                name: "ProductReturn",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    isExchangeForNewProduct = table.Column<bool>(type: "bit", nullable: false),
-                    returnQuantity = table.Column<int>(type: "int", nullable: false),
-                    returnReason = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    customerMessage = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    supplierMessage = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    shippingStatus = table.Column<int>(type: "int", nullable: false),
-                    shippingEstimatedDay = table.Column<int>(type: "int", nullable: false),
-                    returnCost = table.Column<float>(type: "real", nullable: false),
-                    returnDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    OrderDetailId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductReturn", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ProductReturn_OrderDetail_OrderDetailId",
-                        column: x => x.OrderDetailId,
-                        principalTable: "OrderDetail",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ReturnPayment",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    cost = table.Column<float>(type: "real", nullable: false),
-                    paymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    paymentDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProductReturnId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ReturnPayment", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ReturnPayment_ProductReturn_ProductReturnId",
-                        column: x => x.ProductReturnId,
-                        principalTable: "ProductReturn",
-                        principalColumn: "Id");
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_Chat_employeeId",
                 table: "Chat",
@@ -488,6 +437,16 @@ namespace OrderService.Infrastructure.Migrations
                 name: "IX_ChatMessage_ChatId",
                 table: "ChatMessage",
                 column: "ChatId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IssueMedia_ProductIssueId",
+                table: "IssueMedia",
+                column: "ProductIssueId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IssuePayment_ProductIssueId",
+                table: "IssuePayment",
+                column: "ProductIssueId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Order_chatId",
@@ -541,14 +500,19 @@ namespace OrderService.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductProductTax_productsId",
-                table: "ProductProductTax",
-                column: "productsId");
+                name: "IX_ProductIssue_assignedEmployeeId",
+                table: "ProductIssue",
+                column: "assignedEmployeeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductReturn_OrderDetailId",
-                table: "ProductReturn",
-                column: "OrderDetailId");
+                name: "IX_ProductIssue_customerId",
+                table: "ProductIssue",
+                column: "customerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductIssue_productId",
+                table: "ProductIssue",
+                column: "productId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductShipCost_productCategoryId",
@@ -557,20 +521,10 @@ namespace OrderService.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ReturnPayment_ProductReturnId",
-                table: "ReturnPayment",
-                column: "ProductReturnId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Shippers_userId",
                 table: "Shippers",
                 column: "userId",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ToDoItems_ProjectId",
-                table: "ToDoItems",
-                column: "ProjectId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_roleId",
@@ -585,7 +539,13 @@ namespace OrderService.Infrastructure.Migrations
                 name: "ChatMessage");
 
             migrationBuilder.DropTable(
-                name: "Contributors");
+                name: "IssueMedia");
+
+            migrationBuilder.DropTable(
+                name: "IssuePayment");
+
+            migrationBuilder.DropTable(
+                name: "OrderDetail");
 
             migrationBuilder.DropTable(
                 name: "OrderPayment");
@@ -597,37 +557,19 @@ namespace OrderService.Infrastructure.Migrations
                 name: "ProductCurrencyExchange");
 
             migrationBuilder.DropTable(
-                name: "ProductProductTax");
-
-            migrationBuilder.DropTable(
                 name: "ProductShipCost");
 
             migrationBuilder.DropTable(
-                name: "ReturnPayment");
+                name: "ProductIssue");
 
             migrationBuilder.DropTable(
-                name: "ToDoItems");
+                name: "Order");
 
             migrationBuilder.DropTable(
                 name: "Shippers");
 
             migrationBuilder.DropTable(
                 name: "CurrencyExchanges");
-
-            migrationBuilder.DropTable(
-                name: "ProductTax");
-
-            migrationBuilder.DropTable(
-                name: "ProductReturn");
-
-            migrationBuilder.DropTable(
-                name: "Projects");
-
-            migrationBuilder.DropTable(
-                name: "OrderDetail");
-
-            migrationBuilder.DropTable(
-                name: "Order");
 
             migrationBuilder.DropTable(
                 name: "Product");

@@ -419,13 +419,84 @@ namespace OrderService.Infrastructure.Migrations
                     b.ToTable("ProductShipCost");
                 });
 
-            modelBuilder.Entity("OrderService.Core.ProductReturnAggregate.ProductReturn", b =>
+            modelBuilder.Entity("OrderService.Core.ProductReturnAggregate.IssueMedia", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ProductIssueId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("mediaUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductIssueId");
+
+                    b.ToTable("IssueMedia");
+                });
+
+            modelBuilder.Entity("OrderService.Core.ProductReturnAggregate.IssuePayment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ProductIssueId")
+                        .HasColumnType("int");
+
+                    b.Property<float>("cost")
+                        .HasColumnType("real");
+
+                    b.Property<bool>("isPaid")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("paymentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("paymentDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("paymentStatus")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductIssueId");
+
+                    b.ToTable("IssuePayment");
+                });
+
+            modelBuilder.Entity("OrderService.Core.ProductReturnAggregate.ProductIssue", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("assignedEmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("customerEmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("customerFullname")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("customerPhonenumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("finishStatus")
                         .ValueGeneratedOnAdd()
@@ -456,65 +527,11 @@ namespace OrderService.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("assignedEmployeeId");
+
                     b.HasIndex("productId");
 
-                    b.ToTable("ProductReturn");
-                });
-
-            modelBuilder.Entity("OrderService.Core.ProductReturnAggregate.ReturnMedia", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("ProductReturnId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("mediaUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductReturnId");
-
-                    b.ToTable("ReturnMedia");
-                });
-
-            modelBuilder.Entity("OrderService.Core.ProductReturnAggregate.ReturnPayment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("ProductReturnId")
-                        .HasColumnType("int");
-
-                    b.Property<float>("cost")
-                        .HasColumnType("real");
-
-                    b.Property<bool>("isPaid")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("paymentDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("paymentDescription")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("paymentStatus")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductReturnId");
-
-                    b.ToTable("ReturnPayment");
+                    b.ToTable("ProductIssue");
                 });
 
             modelBuilder.Entity("OrderService.Core.ShipperAggregate.Shipper", b =>
@@ -744,29 +761,37 @@ namespace OrderService.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("OrderService.Core.ProductReturnAggregate.ProductReturn", b =>
+            modelBuilder.Entity("OrderService.Core.ProductReturnAggregate.IssueMedia", b =>
                 {
+                    b.HasOne("OrderService.Core.ProductReturnAggregate.ProductIssue", null)
+                        .WithMany("issueMedias")
+                        .HasForeignKey("ProductIssueId");
+                });
+
+            modelBuilder.Entity("OrderService.Core.ProductReturnAggregate.IssuePayment", b =>
+                {
+                    b.HasOne("OrderService.Core.ProductReturnAggregate.ProductIssue", null)
+                        .WithMany("issuePayments")
+                        .HasForeignKey("ProductIssueId");
+                });
+
+            modelBuilder.Entity("OrderService.Core.ProductReturnAggregate.ProductIssue", b =>
+                {
+                    b.HasOne("OrderService.Core.UserAggregate.User", "assignedEmployee")
+                        .WithMany()
+                        .HasForeignKey("assignedEmployeeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("OrderService.Core.ProductAggregate.Product", "product")
                         .WithMany()
                         .HasForeignKey("productId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("assignedEmployee");
+
                     b.Navigation("product");
-                });
-
-            modelBuilder.Entity("OrderService.Core.ProductReturnAggregate.ReturnMedia", b =>
-                {
-                    b.HasOne("OrderService.Core.ProductReturnAggregate.ProductReturn", null)
-                        .WithMany("ReturnMedias")
-                        .HasForeignKey("ProductReturnId");
-                });
-
-            modelBuilder.Entity("OrderService.Core.ProductReturnAggregate.ReturnPayment", b =>
-                {
-                    b.HasOne("OrderService.Core.ProductReturnAggregate.ProductReturn", null)
-                        .WithMany("returnPayments")
-                        .HasForeignKey("ProductReturnId");
                 });
 
             modelBuilder.Entity("OrderService.Core.ShipperAggregate.Shipper", b =>
@@ -815,11 +840,11 @@ namespace OrderService.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("OrderService.Core.ProductReturnAggregate.ProductReturn", b =>
+            modelBuilder.Entity("OrderService.Core.ProductReturnAggregate.ProductIssue", b =>
                 {
-                    b.Navigation("ReturnMedias");
+                    b.Navigation("issueMedias");
 
-                    b.Navigation("returnPayments");
+                    b.Navigation("issuePayments");
                 });
 
             modelBuilder.Entity("OrderService.Core.ShipperAggregate.Shipper", b =>
