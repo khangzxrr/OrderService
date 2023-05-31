@@ -9,6 +9,5 @@ public class OrderDetailConfiguration : IEntityTypeConfiguration<OrderDetail>
 {
   public void Configure(EntityTypeBuilder<OrderDetail> builder)
   {
-    builder.HasOne(od => od.productReturn).WithOne().HasForeignKey<ProductReturn>(pr => pr.orderDetailId);
   }
 }

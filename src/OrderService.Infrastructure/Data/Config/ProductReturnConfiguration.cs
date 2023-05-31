@@ -11,7 +11,14 @@ public class ProductReturnConfiguration : IEntityTypeConfiguration<ProductReturn
       .HasConversion(
         p => p.Value,
         p => ProductReturnStatus.FromValue(p)
-      ).IsRequired();
+      ).IsRequired().HasDefaultValue(ProductReturnStatus.request);
 
+    builder.HasOne(pr => pr.product).WithMany();
+
+    builder.Property(pr => pr.finishStatus)
+        .HasConversion(
+          p => p.Value,
+          p => ProductReturnFinishStatus.FromValue(p)
+        ).IsRequired().HasDefaultValue(ProductReturnFinishStatus.onGoing);
   }
 }

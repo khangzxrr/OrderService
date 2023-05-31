@@ -34,5 +34,8 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
       )
         .IsRequired()
         .HasDefaultValue(ProductResellStatus.notForSale);
+
   }
+
+
 }
