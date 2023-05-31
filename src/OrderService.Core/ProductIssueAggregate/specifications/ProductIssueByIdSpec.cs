@@ -2,9 +2,9 @@
 using Ardalis.Specification;
 
 namespace OrderService.Core.ProductReturnAggregate.specifications;
-public class ProductReturnByIdSpec: Specification<ProductReturn>, ISingleResultSpecification
+public class ProductIssueByIdSpec: Specification<ProductIssue>, ISingleResultSpecification
 {
-  public ProductReturnByIdSpec(int id)
+  public ProductIssueByIdSpec(int id)
   {
     Query
       .Include(pr => pr.product)
@@ -12,7 +12,7 @@ public class ProductReturnByIdSpec: Specification<ProductReturn>, ISingleResultS
       .Include(pr => pr.product)
         .ThenInclude(p => p.currencyExchange)
           .ThenInclude(ce => ce.currency)
-      .Include(pr => pr.ReturnMedias)
+      .Include(pr => pr.issueMedias)
 
       .Where(pr => pr.Id == id);
   }

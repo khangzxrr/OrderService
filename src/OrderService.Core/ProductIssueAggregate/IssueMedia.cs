@@ -2,11 +2,11 @@
 using OrderService.SharedKernel;
 
 namespace OrderService.Core.ProductReturnAggregate;
-public class ReturnMedia : EntityBase
+public class IssueMedia : EntityBase
 {
   public string mediaUrl { get; set;  }
 
-  public ReturnMedia(string mediaUrl)
+  public IssueMedia(string mediaUrl)
   {
     this.mediaUrl = Guard.Against.NullOrEmpty(mediaUrl);
   }
