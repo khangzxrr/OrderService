@@ -18,8 +18,6 @@ public class OrderDetail : EntityBase
   public float totalCost { get; private set; }
   public int quantity { get; private set; }
 
-  public virtual ProductReturn productReturn { get; private set; }
-
   public void setProduct(Product product)
   {
     Guard.Against.Null(product.productCategory);
