@@ -104,5 +104,8 @@ public class DefaultInfrastructureModule : Module
     // NOTE: Add any production only services here
     builder.RegisterType<SmtpEmailSender>().As<IEmailSender>()
       .InstancePerLifetimeScope();
+
+    builder.RegisterType<MediaService>().As<IMediaService>()
+      .InstancePerLifetimeScope();
   }
 }
