@@ -40,7 +40,7 @@ public class PaymentService : IPaymentService
     return hash.ToString();
   }
 
-  public async Task<Result<string>> GeneratePaymentUrl(int orderId, string hostName)
+  public async Task<Result<string>> GeneratePaymentUrl(int orderId, string hostname)
   {
 
     var orderSpec = new OrderByIdSpec(orderId);
@@ -88,7 +88,7 @@ public class PaymentService : IPaymentService
     string paymentTurn = (isFirstPayment) ? PaymentStatus.firstPayment.Name : PaymentStatus.SecondPayment.Name; //determine if this is the first or the second payment
 
     
-    string encodedCallback = WebUtility.UrlEncode(hostName);
+    string encodedCallback = WebUtility.UrlEncode($"{hostname}/count-redirect-payment");
 
     string query = $"vnp_Amount={roundAmount}&vnp_BankCode=VNBANK&vnp_Command=pay&vnp_CreateDate={DateTime.Now.ToString("yyyyMMddHHmmss")}&vnp_CurrCode=VND&vnp_IpAddr=127.0.0.1&vnp_Locale=vn&vnp_OrderInfo={paymentTurn}_{order.Id}&vnp_OrderType=other&vnp_ReturnUrl={encodedCallback!}&vnp_TmnCode={TmnCode}&vnp_TxnRef={order.Id}{DateTime.Now.Ticks}&vnp_Version=2.1.0";
 
