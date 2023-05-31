@@ -1,4 +1,5 @@
 ﻿using Ardalis.ApiEndpoints;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OrderService.Core.ProductReturnAggregate;
 using OrderService.Core.ProductReturnAggregate.specifications;
@@ -26,6 +27,7 @@ public class IsExistActiveProductReturn : EndpointBaseAsync
     OperationId = "ProductReturn.CheckExist",
     Tags = new[] { "ProductReturnEndpoints" })
   ]
+  [Authorize(Roles = "CUSTOMER")]
   public override async Task<ActionResult<IsExistActiveProductReturnResponse>> HandleAsync([FromQuery] IsExistActiveProductReturnRequest request, CancellationToken cancellationToken = default)
   {
     var spec = new ProductReturnByProductIdSpec(request.productId);

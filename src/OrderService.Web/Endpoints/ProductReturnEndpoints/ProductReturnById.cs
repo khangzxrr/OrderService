@@ -1,4 +1,5 @@
 ﻿using Ardalis.ApiEndpoints;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OrderService.Core.ProductReturnAggregate;
 using OrderService.Core.ProductReturnAggregate.specifications;
@@ -27,6 +28,7 @@ public class ProductReturnById : EndpointBaseAsync
     OperationId = "ProductReturn.GetById",
     Tags = new[] { "ProductReturnEndpoints" })
   ]
+  [Authorize(Roles = "CUSTOMER")]
   public override async Task<ActionResult<ProductReturnByIdResponse>> HandleAsync([FromQuery] ProductReturnByIdRequest request, CancellationToken cancellationToken = default)
   {
 
