@@ -13,7 +13,11 @@ public class OrderByOrderDetailIdSpec : Specification<Order>
       .Include(o => o.orderDetails.Where(od => od.Id == orderDetailId))
         .ThenInclude(od => od.product)
           .ThenInclude(p => p.currencyExchange)
-            .ThenInclude(p => p.currency);
+            .ThenInclude(p => p.currency)
+
+      .Include(o => o.chat)
+        .ThenInclude(c => c.employee)
+      .Include(o => o.user);
 
 
 
