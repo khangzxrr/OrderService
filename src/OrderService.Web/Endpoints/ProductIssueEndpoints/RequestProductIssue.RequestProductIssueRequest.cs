@@ -1,12 +1,11 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Mvc;
 
-namespace OrderService.Web.Endpoints.ProductReturnEndpoints;
+namespace OrderService.Web.Endpoints.ProductIssueEndpoints;
 
-public class RequestProductReturnRequest
+public class RequestProductIssueRequest
 {
-  public const string Route = "/productReturn/request";
+  public const string Route = "/productIssue/request";
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
@@ -19,6 +18,7 @@ public class RequestProductReturnRequest
 
   [Required]
   public int orderDetailId { get; set; }
+
 
   public string? series { get; set; }
   public string? description { get; set; }
