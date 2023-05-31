@@ -24,6 +24,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" PrivateAssets="All" />
+    <PackageReference Include="Minio.AspNetCore" />
     <PackageReference Include="Serilog.Sinks.ApplicationInsights" />
     <PackageReference Include="StackExchange.Redis.Extensions.AspNetCore" />
     <PackageReference Include="StackExchange.Redis.Extensions.Newtonsoft" />

@@ -16,6 +16,8 @@ using OrderService.Web.SignalR;
 using StackExchange.Redis.Extensions.Newtonsoft;
 using StackExchange.Redis.Extensions.Core.Configuration;
 using Hangfire;
+using Minio.AspNetCore;
+using Minio;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -76,6 +78,20 @@ builder.Services.AddHangfire(configuration =>
   configuration.UseSqlServerStorage(connectionString));
 
 builder.Services.AddHangfireServer();
+
+builder.Services.AddMinio(options =>
+{
+  options.Endpoint = "host.docker.internal:9000";
+
+  options.ConfigureClient(client =>
+  {
+    var accessKey = builder.Configuration["MINIO_ACCESSKEY"];
+    var secretKey = builder.Configuration["MINIO_SECRETKEY"];
+
+    client.WithCredentials(accessKey, secretKey);
+  });
+
+});
 
 builder.Services.AddControllers(); 
 
