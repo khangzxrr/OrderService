@@ -19,6 +19,8 @@ public static class SeedData
 
   public static readonly User manager = new User("manager@fastship.com", "0988111737", "4297f44b13955235245b2497399d7a93", "123123", "Đạt", "Nguyễn Quốc", DateTime.Now, "111 Huỳnh Tấn Phát, quận 7, tp hồ chí minh");
 
+  public static readonly User admin = new User("admin@fastship.com", "0988111737", "4297f44b13955235245b2497399d7a93", "123123", "Duy", "Đoàn Diễn", DateTime.Now, "159 xa lộ hà nội, tp hồ chí minh");
+
   public static void Initialize(IServiceProvider serviceProvider)
   {
     using (var dbContext = new AppDbContext(
@@ -35,8 +37,10 @@ public static class SeedData
   public static void PopulateCurrencies(AppDbContext dbContext)
   {
     var US = new CurrencyExchange("US", 24.5f);
+    var AUD = new CurrencyExchange("AUD", 23.0f);
 
     dbContext.CurrencyExchanges.Add(US);
+    dbContext.CurrencyExchanges.Add(AUD);
   }
 
   public static void PopulateUsers(AppDbContext dbContext)
@@ -50,10 +54,13 @@ public static class SeedData
 
     manager.setRole(dbContext.Roles.Where(r => r.roleName == RoleEnum.MANAGER.ToString()).First());
 
+    admin.setRole(dbContext.Roles.Where(r => r.roleName == RoleEnum.ADMIN.ToString()).First()); 
+
     dbContext.Users.Add(employee);
     dbContext.Users.Add(customer);
     dbContext.Users.Add(shipper);
     dbContext.Users.Add(manager);
+    dbContext.Users.Add(admin);
 
     dbContext.SaveChanges();
 
