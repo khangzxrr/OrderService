@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OrderService.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using OrderService.Infrastructure.Data;
 namespace OrderService.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230531100328_AddNavigateToOrderDetailFromProductReturn")]
+    partial class AddNavigateToOrderDetailFromProductReturn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -427,15 +430,10 @@ namespace OrderService.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("finishStatus")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
-
-                    b.Property<bool>("isWarranty")
+                    b.Property<bool>("isFinished")
                         .HasColumnType("bit");
 
-                    b.Property<int>("productId")
+                    b.Property<int>("orderDetailId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("returnDate")
@@ -445,18 +443,13 @@ namespace OrderService.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("series")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("productId");
+                    b.HasIndex("orderDetailId")
+                        .IsUnique();
 
                     b.ToTable("ProductReturn");
                 });
@@ -515,6 +508,28 @@ namespace OrderService.Infrastructure.Migrations
                     b.HasIndex("ProductReturnId");
 
                     b.ToTable("ReturnPayment");
+                });
+
+            modelBuilder.Entity("OrderService.Core.ProductReturnAggregate.ReturnSpecificSeriNumber", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ProductReturnId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("seriNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductReturnId");
+
+                    b.ToTable("ReturnSpecificSeriNumber");
                 });
 
             modelBuilder.Entity("OrderService.Core.ShipperAggregate.Shipper", b =>
@@ -746,13 +761,13 @@ namespace OrderService.Infrastructure.Migrations
 
             modelBuilder.Entity("OrderService.Core.ProductReturnAggregate.ProductReturn", b =>
                 {
-                    b.HasOne("OrderService.Core.ProductAggregate.Product", "product")
-                        .WithMany()
-                        .HasForeignKey("productId")
+                    b.HasOne("OrderService.Core.OrderAggregate.OrderDetail", "orderDetail")
+                        .WithOne("productReturn")
+                        .HasForeignKey("OrderService.Core.ProductReturnAggregate.ProductReturn", "orderDetailId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("product");
+                    b.Navigation("orderDetail");
                 });
 
             modelBuilder.Entity("OrderService.Core.ProductReturnAggregate.ReturnMedia", b =>
@@ -766,6 +781,13 @@ namespace OrderService.Infrastructure.Migrations
                 {
                     b.HasOne("OrderService.Core.ProductReturnAggregate.ProductReturn", null)
                         .WithMany("returnPayments")
+                        .HasForeignKey("ProductReturnId");
+                });
+
+            modelBuilder.Entity("OrderService.Core.ProductReturnAggregate.ReturnSpecificSeriNumber", b =>
+                {
+                    b.HasOne("OrderService.Core.ProductReturnAggregate.ProductReturn", null)
+                        .WithMany("returnSpecificSeriNumbers")
                         .HasForeignKey("ProductReturnId");
                 });
 
@@ -803,6 +825,12 @@ namespace OrderService.Infrastructure.Migrations
                     b.Navigation("orderPayments");
                 });
 
+            modelBuilder.Entity("OrderService.Core.OrderAggregate.OrderDetail", b =>
+                {
+                    b.Navigation("productReturn")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("OrderService.Core.ProductAggregate.Product", b =>
                 {
                     b.Navigation("currencyExchange")
@@ -820,6 +848,8 @@ namespace OrderService.Infrastructure.Migrations
                     b.Navigation("ReturnMedias");
 
                     b.Navigation("returnPayments");
+
+                    b.Navigation("returnSpecificSeriNumbers");
                 });
 
             modelBuilder.Entity("OrderService.Core.ShipperAggregate.Shipper", b =>

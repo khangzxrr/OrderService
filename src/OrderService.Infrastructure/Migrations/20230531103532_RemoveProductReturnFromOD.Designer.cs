@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OrderService.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using OrderService.Infrastructure.Data;
 namespace OrderService.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230531103532_RemoveProductReturnFromOD")]
+    partial class RemoveProductReturnFromOD
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -427,12 +430,7 @@ namespace OrderService.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("finishStatus")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
-
-                    b.Property<bool>("isWarranty")
+                    b.Property<bool>("isFinished")
                         .HasColumnType("bit");
 
                     b.Property<int>("productId")
@@ -445,14 +443,8 @@ namespace OrderService.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("series")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -515,6 +507,28 @@ namespace OrderService.Infrastructure.Migrations
                     b.HasIndex("ProductReturnId");
 
                     b.ToTable("ReturnPayment");
+                });
+
+            modelBuilder.Entity("OrderService.Core.ProductReturnAggregate.ReturnSpecificSeriNumber", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ProductReturnId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("seriNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductReturnId");
+
+                    b.ToTable("ReturnSpecificSeriNumber");
                 });
 
             modelBuilder.Entity("OrderService.Core.ShipperAggregate.Shipper", b =>
@@ -769,6 +783,13 @@ namespace OrderService.Infrastructure.Migrations
                         .HasForeignKey("ProductReturnId");
                 });
 
+            modelBuilder.Entity("OrderService.Core.ProductReturnAggregate.ReturnSpecificSeriNumber", b =>
+                {
+                    b.HasOne("OrderService.Core.ProductReturnAggregate.ProductReturn", null)
+                        .WithMany("returnSpecificSeriNumbers")
+                        .HasForeignKey("ProductReturnId");
+                });
+
             modelBuilder.Entity("OrderService.Core.ShipperAggregate.Shipper", b =>
                 {
                     b.HasOne("OrderService.Core.UserAggregate.User", "user")
@@ -820,6 +841,8 @@ namespace OrderService.Infrastructure.Migrations
                     b.Navigation("ReturnMedias");
 
                     b.Navigation("returnPayments");
+
+                    b.Navigation("returnSpecificSeriNumbers");
                 });
 
             modelBuilder.Entity("OrderService.Core.ShipperAggregate.Shipper", b =>
