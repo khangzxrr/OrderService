@@ -1,5 +1,4 @@
 ﻿using Ardalis.GuardClauses;
-using Ardalis.SmartEnum.Exceptions;
 using Newtonsoft.Json;
 using OrderService.Core.CurrencyAggregate;
 using OrderService.SharedKernel;
