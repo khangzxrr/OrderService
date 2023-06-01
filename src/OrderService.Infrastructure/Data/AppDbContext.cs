@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using OrderService.Core.UserAggregate;
 using OrderService.Core.CurrencyAggregate;
 using OrderService.Core.ShipperAggregate;
+using OrderService.Core.ProductIssueAggregate;
 
 namespace OrderService.Infrastructure.Data;
 
@@ -25,6 +26,8 @@ public class AppDbContext : DbContext
   public DbSet<Role> Roles => Set<Role>();
 
   public DbSet<CurrencyExchange> CurrencyExchanges => Set<CurrencyExchange>();
+
+  public DbSet<ProductIssueRefundConfiguration> ProductIssueRefundConfigurations => Set<ProductIssueRefundConfiguration>();
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
