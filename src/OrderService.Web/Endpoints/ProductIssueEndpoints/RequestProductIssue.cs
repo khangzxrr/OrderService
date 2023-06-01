@@ -71,17 +71,18 @@ public class RequestProductIssue : EndpointBaseAsync
     }
 
 
-    var newProductIssue = new ProductIssue();
+    var newProductIssue = new ProductIssue(
+      isWarranty: request.isWarranty,
+      series: request.series == null ? "" : request.series,
+      returnReason: request.description == null ? "" : request.description,
+      customerEmail: order.user.email,
+      customerFullname: order.user.fullname,
+      customerPhonenumber: order.contactPhonenumber
+      );
 
     //important field
-    newProductIssue.AssignCustomerInfo(order.user.email, order.contactPhonenumber, order.user.fullname);
     newProductIssue.AssignEmployee(order.chat.employee);
     newProductIssue.SetProduct(orderDetail.product);
-    newProductIssue.SetIsWarranty(request.isWarranty);
-
-
-    newProductIssue.SetSeries(request.series);
-    newProductIssue.SetReturnReason(request.description);
     newProductIssue.SetMedias(request.medias);
     
 
