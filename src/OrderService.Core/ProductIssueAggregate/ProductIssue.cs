@@ -19,7 +19,6 @@ public class ProductIssue : EntityBase, IAggregateRoot
 
   public bool isWarranty { get; set; }
   public ProductIssueStatus status { get; private set; }
-  public ProductIssueFinishStatus finishStatus { get; set; }
 
   public string series { get; set; }
 
@@ -31,12 +30,18 @@ public class ProductIssue : EntityBase, IAggregateRoot
   public IReadOnlyCollection<IssuePayment> issuePayments => _issuePayments.AsReadOnly();
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-  public ProductIssue()
+  public ProductIssue(bool isWarranty, string series, string returnReason, string customerEmail, string customerFullname, string customerPhonenumber)
   {
+    
+    this.isWarranty = Guard.Against.Null(isWarranty);
+    this.series = Guard.Against.Null(series);
+    this.returnReason = Guard.Against.NullOrEmpty(returnReason);
+    this.customerEmail = Guard.Against.NullOrEmpty(customerEmail);
+    this.customerFullname = Guard.Against.NullOrEmpty(customerFullname);
+    this.customerPhonenumber = Guard.Against.NullOrEmpty(customerPhonenumber);
+
     returnDate = DateTime.Now;
-    isWarranty = false;
     status = ProductIssueStatus.request;
-    finishStatus = ProductIssueFinishStatus.onGoing;
   }
 
 
@@ -45,12 +50,6 @@ public class ProductIssue : EntityBase, IAggregateRoot
     assignedEmployee = Guard.Against.Null(user);
   }
 
-  public void AssignCustomerInfo(string customerEmail, string customerPhonenumber, string customerFullname)
-  {
-    this.customerEmail = Guard.Against.Null(customerEmail);
-    this.customerFullname = Guard.Against.Null(customerFullname);
-    this.customerPhonenumber = Guard.Against.Null(customerPhonenumber);
-  }
   public void SetProduct(Product product)
   {
      this.product = Guard.Against.Null(product);
@@ -67,15 +66,6 @@ public class ProductIssue : EntityBase, IAggregateRoot
     _issuePayments.Add(returnPayment);
   }
 
-  public void SetReturnReason(string? description)
-  {
-    returnReason = description.IsNullOrEmpty() ? "" : description!;
-  }
-  public void SetSeries(string? series)
-  {
-    this.series = series.IsNullOrEmpty() ? "" : series!;
-  }
-
   public void SetMedias(string[] medias)
   {
 
@@ -87,13 +77,4 @@ public class ProductIssue : EntityBase, IAggregateRoot
 
   }
 
-  public void SetFinishStatus(ProductIssueFinishStatus finishStatus)
-  {
-    this.finishStatus = Guard.Against.Null(finishStatus);
-  }
-
-  public void SetIsWarranty(bool isWarranty)
-  {
-    this.isWarranty = Guard.Against.Null(isWarranty);
-  }
 }
