@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using OrderService.Core.UserAggregate;
 using OrderService.Core.CurrencyAggregate;
 using OrderService.Core.ShipperAggregate;
+using OrderService.Core.ProductIssueAggregate;
+using OrderService.Core.ProductReturnAggregate;
 
 namespace OrderService.Web;
 
@@ -83,6 +85,17 @@ public static class SeedData
     dbContext.Roles.Add(manager);
     
   }
+
+  public static void PopulateIssueRefundConfig(AppDbContext dbContext)
+  {
+    var customerFault = new ProductIssueRefundConfiguration(ProductIssueStatus.acceptReturnCustomerFault, 40.0f);
+    var sellerFault = new ProductIssueRefundConfiguration(ProductIssueStatus.acceptReturnSellerFault, 60.0f);
+    var employeeFault = new ProductIssueRefundConfiguration(ProductIssueStatus.acceptReturnEmployeeFault, 100.0f);
+
+    dbContext.ProductIssueRefundConfigurations.Add(customerFault);
+    dbContext.ProductIssueRefundConfigurations.Add(sellerFault);
+    dbContext.ProductIssueRefundConfigurations.Add(employeeFault);
+  }
   public static void PopulateTestData(AppDbContext dbContext)
   {
     if (!dbContext.Roles.Any())
@@ -98,6 +111,12 @@ public static class SeedData
     if (!dbContext.Users.Any())
     {
       PopulateUsers(dbContext);
+    }
+
+    if (!dbContext.ProductIssueRefundConfigurations.Any())
+    {
+      PopulateIssueRefundConfig(dbContext);
+      dbContext.SaveChanges();
     }
 
     dbContext.SaveChanges();
