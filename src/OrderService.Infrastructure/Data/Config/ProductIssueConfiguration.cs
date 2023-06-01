@@ -16,10 +16,5 @@ public class ProductIssueConfiguration : IEntityTypeConfiguration<ProductIssue>
     builder.HasOne(pr => pr.product).WithMany();
     builder.HasOne(pr => pr.assignedEmployee).WithMany().OnDelete(DeleteBehavior.Restrict);
 
-    builder.Property(pr => pr.finishStatus)
-        .HasConversion(
-          p => p.Value,
-          p => ProductIssueFinishStatus.FromValue(p)
-        ).IsRequired().HasDefaultValue(ProductIssueFinishStatus.onGoing);
   }
 }
