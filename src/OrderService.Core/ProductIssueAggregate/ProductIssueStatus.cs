@@ -9,6 +9,8 @@ public class ProductIssueStatus : SmartEnum<ProductIssueStatus>
   public static ProductIssueStatus acceptReturnCustomerFault = new(nameof(acceptReturnCustomerFault), 3);
   public static ProductIssueStatus acceptReturnSellerFault = new(nameof(acceptReturnSellerFault), 4);
 
+  public static ProductIssueStatus finish = new(nameof(finish), 99);
+
   public ProductIssueStatus(string name, int value) : base(name, value)
   {
   }

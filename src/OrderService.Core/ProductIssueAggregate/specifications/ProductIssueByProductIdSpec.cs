@@ -9,7 +9,7 @@ public class ProductIssueByProductIdSpec : Specification<ProductIssue>, ISingleR
     Query
       .Include(pr => pr.product)
       .Where(pr => pr.product.Id == productId)
-      .Where(pr => pr.finishStatus == ProductIssueFinishStatus.onGoing);
+      .Where(pr => pr.status == ProductIssueStatus.finish);
 
   }
 }

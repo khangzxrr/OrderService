@@ -2,7 +2,7 @@
 
 namespace OrderService.Web.Endpoints.Records;
 
-public record ProductIssueRecord( ProductRecord productRecord, int id, string status, int statusCode, IEnumerable<string> medias, DateTime returnDate, string returnReason, bool isWarranty, string customerEmail, string customerFullname, string customerPhonenumber, string series, string finishStatus)
+public record ProductIssueRecord( ProductRecord productRecord, int id, string status, int statusCode, IEnumerable<string> medias, DateTime returnDate, string returnReason, bool isWarranty, string customerEmail, string customerFullname, string customerPhonenumber, string series)
 {
   public static ProductIssueRecord FromEntity(ProductIssue productReturn)
   {
@@ -18,8 +18,7 @@ public record ProductIssueRecord( ProductRecord productRecord, int id, string st
       productReturn.customerEmail,
       productReturn.customerFullname,
       productReturn.customerPhonenumber,
-      productReturn.series,
-      productReturn.finishStatus.Name
+      productReturn.series
       );
   }
 }
