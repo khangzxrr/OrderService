@@ -16,9 +16,6 @@ public class Product: EntityBase, IAggregateRoot
   public string productURL { get; set; }
   public float productWeight { get; private set; }
 
-  public string productSellerAddress { get; set; }
-  public string productSellerEmail { get; set; }
-
   public bool productWarrantable { get; set; }
   public string productWarrantyDescription { get; set; }
   public int productWarrantyDuration { get; set; }
@@ -41,9 +38,7 @@ public class Product: EntityBase, IAggregateRoot
     string productDescription, 
     float productPrice, 
     string productURL, 
-    float productWeight, 
-    string productSellerAddress, 
-    string productSellerEmail, 
+    float productWeight,
     bool productWarrantable, 
     string productWarrantyDescription, 
     int productWarrantyDuration, 
@@ -60,8 +55,6 @@ public class Product: EntityBase, IAggregateRoot
     this.productURL = Guard.Against.NullOrEmpty(productURL);
     this.productWeight = Guard.Against.Negative(productWeight);
     
-    this.productSellerAddress = Guard.Against.NullOrEmpty(productSellerAddress);
-    this.productSellerEmail = Guard.Against.NullOrEmpty(productSellerEmail);
     this.productWarrantable = productWarrantable;
     this.productWarrantyDescription = Guard.Against.NullOrEmpty(productWarrantyDescription);
     this.productWarrantyDuration = Guard.Against.Negative(productWarrantyDuration);
