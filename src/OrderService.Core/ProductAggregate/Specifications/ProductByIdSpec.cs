@@ -9,7 +9,6 @@ public class ProductByIdSpec: Specification<Product>, ISingleResultSpecification
       .Where(p => p.Id == productId)
       .Include(p => p.currencyExchange)
         .ThenInclude(ce => ce.currency)
-      .Include(p => p.productCategory)
-      .ThenInclude(pc => pc.productShipCost);
+      .Include(p => p.productCategory);
   }
 }

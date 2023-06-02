@@ -17,6 +17,6 @@ public record OrderDetailRecord(
 {
   public static OrderDetailRecord FromEntity(OrderDetail orderDetail)
   {
-    return new OrderDetailRecord(orderDetail.Id, orderDetail.additionalCost, orderDetail.shipCost, orderDetail.costPerWeight, orderDetail.product.productPrice, orderDetail.processCost, orderDetail.totalCost, orderDetail.quantity, ProductRecord.FromEntity(orderDetail.product));
+    return new OrderDetailRecord(orderDetail.Id, orderDetail.additionalCost, orderDetail.product.productShipCost, orderDetail.product.productCostPerWeight, orderDetail.product.productPrice, orderDetail.processCost, orderDetail.totalCost, orderDetail.quantity, ProductRecord.FromEntity(orderDetail.product));
   }
 }

@@ -70,7 +70,7 @@ public class UpdateOrderDetail : EndpointBaseAsync
 
     if (request.shipCost.HasValue)
     {
-      orderDetail.setShipCost(request.shipCost!.Value);
+      orderDetail.product.setShipCost(request.shipCost.Value);
     }
 
     if (request.productCost.HasValue)
@@ -90,7 +90,7 @@ public class UpdateOrderDetail : EndpointBaseAsync
 
     if (request.costPerWeight.HasValue)
     {
-      orderDetail.setCostPerWeight(request.costPerWeight!.Value);
+      orderDetail.product.setCostPerWeight(request.costPerWeight!.Value);
     }
 
     if (request.productWarrantable.HasValue)

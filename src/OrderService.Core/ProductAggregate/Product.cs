@@ -13,6 +13,8 @@ public class Product: EntityBase, IAggregateRoot
   public string productImageUrl { get; set; }
   public string productDescription { get; set; }
   public float productPrice { get; set; }
+  public float productShipCost { get; set; }
+  public float productCostPerWeight { get; set; }
   public string productURL { get; set; }
   public float productWeight { get; private set; }
 
@@ -37,6 +39,8 @@ public class Product: EntityBase, IAggregateRoot
     string productImageUrl, 
     string productDescription, 
     float productPrice, 
+    float productShipCost,
+    float productCostPerWeight,
     string productURL, 
     float productWeight,
     bool productWarrantable, 
@@ -81,9 +85,19 @@ public class Product: EntityBase, IAggregateRoot
     return "product_" + productURL;
   }
 
+
   public void setProductCategory(ProductCategory productCategory)
   {
     this.productCategory = Guard.Against.Null(productCategory);
+  }
+
+  public void setCostPerWeight(float  costPerWeight)
+  {
+    this.productCostPerWeight = Guard.Against.Negative(costPerWeight);
+  }
+
+  public void setShipCost(float shipCost) {
+    this.productShipCost = Guard.Against.Negative(shipCost);
   }
 
   public void setProductWeight(float weight)

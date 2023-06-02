@@ -27,11 +27,11 @@ public class AddOrderDetailService : IAddOrderDetailService
     foreach(var orderDetail in order.orderDetails)
     {
 
-      var additionalCostWithWeightCost = (orderDetail.product.productWeight * orderDetail.costPerWeight);
+      var additionalCostWithWeightCost = (orderDetail.product.productWeight * orderDetail.product.productCostPerWeight);
 
       orderDetail.setAdditionalCost(additionalCostWithWeightCost);
 
-      var totalOrderDetailCost = orderDetail.shipCost;
+      var totalOrderDetailCost = orderDetail.product.productShipCost;
       totalOrderDetailCost += orderDetail.product.productPrice * orderDetail.quantity;
       totalOrderDetailCost += orderDetail.additionalCost;
       totalOrderDetailCost += orderDetail.processCost;

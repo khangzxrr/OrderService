@@ -13,8 +13,7 @@ public class ProductByUrlSpec : Specification<Product>, ISingleResultSpecificati
     Query
       .Where(p => p.productURL == url)
       .Include(p => p.currencyExchange)
-      .Include(p => p.productCategory)
-      .ThenInclude(pc => pc.productShipCost);
+      .Include(p => p.productCategory);
       
   }
 }

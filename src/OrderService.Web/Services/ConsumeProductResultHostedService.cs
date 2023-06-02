@@ -64,7 +64,6 @@ public class ConsumeProductResultHostedService : BackgroundService, IConsumeProd
 
     var catalogSpec = new ProductCatalogByNameSpec(productResult!.catalog);
     ProductCategory? category = await _categoryRepository.FirstOrDefaultAsync(catalogSpec);
-    ProductShipCost? productShipCost = (category != null) ? category.productShipCost : null;
 
     var currencySpec = new CurrencyExchangeByName("US");
     var currency = await _currencyExchange.FirstOrDefaultAsync(currencySpec);
@@ -74,9 +73,6 @@ public class ConsumeProductResultHostedService : BackgroundService, IConsumeProd
       Console.WriteLine("add new catalog");
 
       category = new ProductCategory(productResult!.catalog);
-
-      productShipCost = new ProductShipCost((float)productResult!.shipCost, 12.0f);
-      category.SetProductShipCost(productShipCost);
 
       category = await _categoryRepository.AddAsync(category);
     }
@@ -90,6 +86,8 @@ public class ConsumeProductResultHostedService : BackgroundService, IConsumeProd
       uploadImage,
       "yo this is description",
       (float)productResult!.price,
+      (float)productResult!.shipCost,
+      12.0f,
       productResult!.url,
       0,
       false,
