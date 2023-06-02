@@ -4,7 +4,7 @@ namespace OrderService.Web.Endpoints.Records;
 
 public record OrderRecord(
   int orderId,
-  DateTime orderDate,
+  long orderDate,
   string status,
   string customerName,
   int progressStatus,

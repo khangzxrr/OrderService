@@ -4,7 +4,7 @@ namespace OrderService.Web.Endpoints.Records;
 
 public record GeneralOrderRecord(
   int orderId,
-  DateTime orderDate,
+  long orderDate,
   string orderStatus,
   string customerName,
   string orderDescription,
@@ -18,6 +18,6 @@ public record GeneralOrderRecord(
 {
   public static GeneralOrderRecord FromEntity(Order order)
   {
-    return new GeneralOrderRecord(order.Id, order.orderDate, order.status.Name, order.user.fullname, order.orderDescription, order.customerDescription, order.deliveryAddress, order.contactPhonenumber, order.shippingEstimatedDays, order.price, order.remainCost);
+    return new GeneralOrderRecord(order.Id, Utils.Utils.toUnixTime(order.orderDate), order.status.Name, order.user.fullname, order.orderDescription, order.customerDescription, order.deliveryAddress, order.contactPhonenumber, order.shippingEstimatedDays, order.price, order.remainCost);
   }
 }
