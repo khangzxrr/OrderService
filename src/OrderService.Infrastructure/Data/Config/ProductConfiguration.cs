@@ -16,8 +16,6 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
     builder.Property(p => p.productURL).IsRequired();
     builder.Property(p => p.productWeight).IsRequired();
 
-    builder.Property(p => p.productSellerAddress).HasMaxLength(200).IsRequired();
-    builder.Property(p => p.productSellerEmail).HasMaxLength(200).IsRequired();
 
     builder.Property(p => p.productWarrantable).IsRequired();
     builder.Property(p => p.productWarrantyDescription).IsRequired();
