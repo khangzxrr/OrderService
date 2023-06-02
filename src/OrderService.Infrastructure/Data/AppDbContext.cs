@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using OrderService.Core.UserAggregate;
 using OrderService.Core.CurrencyAggregate;
 using OrderService.Core.ShipperAggregate;
-using OrderService.Core.ProductIssueAggregate;
+using OrderService.Core.ProductIssueRefundConfiguration;
 
 namespace OrderService.Infrastructure.Data;
 
