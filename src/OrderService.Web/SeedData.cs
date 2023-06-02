@@ -6,6 +6,7 @@ using OrderService.Core.CurrencyAggregate;
 using OrderService.Core.ShipperAggregate;
 using OrderService.Core.ProductIssueAggregate;
 using OrderService.Core.ProductReturnAggregate;
+using OrderService.Core.ProductIssueRefundConfiguration;
 
 namespace OrderService.Web;
 
@@ -88,13 +89,15 @@ public static class SeedData
 
   public static void PopulateIssueRefundConfig(AppDbContext dbContext)
   {
-    var customerFault = new ProductIssueRefundConfiguration(ProductIssueStatus.acceptReturnCustomerFault, 40.0f);
-    var sellerFault = new ProductIssueRefundConfiguration(ProductIssueStatus.acceptReturnSellerFault, 60.0f);
-    var employeeFault = new ProductIssueRefundConfiguration(ProductIssueStatus.acceptReturnEmployeeFault, 100.0f);
+    var customerFault = new ProductIssueRefundConfiguration(ProductIssueStatus.acceptCustomerFault, 40.0f);
+    var sellerFault = new ProductIssueRefundConfiguration(ProductIssueStatus.acceptSellerFault, 60.0f);
+    var failToExchangeNewProduct = new ProductIssueRefundConfiguration(ProductIssueStatus.failedExchangeSellerRejectReturnToVN, 60.0f);
+    var employeeFault = new ProductIssueRefundConfiguration(ProductIssueStatus.acceptEmployeeFault, 100.0f);
 
     dbContext.ProductIssueRefundConfigurations.Add(customerFault);
     dbContext.ProductIssueRefundConfigurations.Add(sellerFault);
     dbContext.ProductIssueRefundConfigurations.Add(employeeFault);
+    dbContext.ProductIssueRefundConfigurations.Add(failToExchangeNewProduct);
   }
   public static void PopulateTestData(AppDbContext dbContext)
   {
