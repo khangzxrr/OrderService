@@ -6,5 +6,7 @@ public interface IMediaService
 {
   Task<string[]> uploadFiles(MediaFile[] files);
   Task<string> uploadFile(MediaFile file);
-  Task<Stream> getFile(string fileName);
+  Task<MemoryStream> getFile(string fileName);
+
+  Task<string> downloadImage(string imageUrl);
 }
