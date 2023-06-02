@@ -17,5 +17,6 @@ public class ShipperConfiguration : IEntityTypeConfiguration<Shipper>
        ).IsRequired();
 
     builder.HasMany(s => s.OrderShippings);
+    builder.HasMany(s => s.ProductIssueShippings);
   }
 }
