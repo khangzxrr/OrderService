@@ -23,5 +23,8 @@ public class DefaultCoreModule : Module
 
     builder.RegisterType<AuthenticationService>()
         .As<IAuthenticationService>().InstancePerLifetimeScope();
+
+    builder.RegisterType<DetermineNextStateProductIssueService>()
+        .As<IDetermineNextStateProductIssueService>().InstancePerLifetimeScope();
   }
 }
