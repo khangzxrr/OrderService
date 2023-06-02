@@ -85,7 +85,7 @@ public class UpdateWeight : EndpointBaseAsync
 
     await _productRepository.SaveChangesAsync();
 
-    await _addOrderDetailService.UpdateOrderDetails(order);
+    _addOrderDetailService.UpdateOrderDetails(order);
 
     await _orderRepository.SaveChangesAsync();
 
