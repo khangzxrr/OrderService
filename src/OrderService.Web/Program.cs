@@ -81,7 +81,7 @@ builder.Services.AddHangfireServer();
 
 builder.Services.AddMinio(options =>
 {
-  options.Endpoint = "host.docker.internal:9000";
+  options.Endpoint = $"{builder.Configuration["HOSTNAME"]}:9000";
 
   options.ConfigureClient(client =>
   {
