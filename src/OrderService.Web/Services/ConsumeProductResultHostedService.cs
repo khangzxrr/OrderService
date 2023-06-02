@@ -30,7 +30,9 @@ public class ConsumeProductResultHostedService : BackgroundService, IConsumeProd
 
   private readonly IRedisClient _redisClient;
 
-  public ConsumeProductResultHostedService(IRepository<ProductCategory> categoryRepository, IRepository<Product> productRepository, IRepository<CurrencyExchange> currencyExchange, IHubContext<ProductFetchingHub> notificationHub, IConfiguration configuration, IRedisClient redisClient)
+  private readonly IMediaService _mediaService;
+
+  public ConsumeProductResultHostedService(IRepository<ProductCategory> categoryRepository, IRepository<Product> productRepository, IRepository<CurrencyExchange> currencyExchange, IHubContext<ProductFetchingHub> notificationHub, IConfiguration configuration, IRedisClient redisClient, IMediaService mediaService)
   {
     _categoryRepository = categoryRepository;
     _productRepository = productRepository;
@@ -42,7 +44,7 @@ public class ConsumeProductResultHostedService : BackgroundService, IConsumeProd
 
     Console.WriteLine("init rabbitmq");
     InitRabbitMQ();
-
+    _mediaService = mediaService;
   }
 
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
@@ -73,7 +75,7 @@ public class ConsumeProductResultHostedService : BackgroundService, IConsumeProd
 
       category = new ProductCategory(productResult!.catalog);
 
-      productShipCost = new ProductShipCost((float)productResult!.shipCost, 12.0f, "[  {    \"WorkflowName\": \"AdditionalCost\",    \"Rules\": [      {        \"RuleName\": \"Price_over\",        \"Enabled\": true,        \"Expression\": \"orderDetail.productCost > 200\",        \"Actions\": {          \"OnSuccess\": {            \"Name\": \"OutputExpression\",            \"Context\": {              \"Expression\": \"orderDetail.productCost * 0.05\"            }          },          \"OnFailure\": {            \"Name\": \"OutputExpression\",            \"Context\": {              \"Expression\": \"0\"            }          }        }      }    ]  }]");
+      productShipCost = new ProductShipCost((float)productResult!.shipCost, 12.0f);
       category.SetProductShipCost(productShipCost);
 
       category = await _categoryRepository.AddAsync(category);
@@ -81,17 +83,15 @@ public class ConsumeProductResultHostedService : BackgroundService, IConsumeProd
 
     Console.WriteLine("add new product");
 
-    
+    var uploadImage = await _mediaService.downloadImage(productResult!.imageUrl);
 
     var product = new Product(
       productResult!.product,
-      productResult!.imageUrl,
+      uploadImage,
       "yo this is description",
       (float)productResult!.price,
       productResult!.url,
       0,
-      "seller address",
-      "seller email",
       false,
       "warranty description",
       0,
