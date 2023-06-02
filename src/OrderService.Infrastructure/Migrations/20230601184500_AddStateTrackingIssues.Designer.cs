@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OrderService.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using OrderService.Infrastructure.Data;
 namespace OrderService.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230601184500_AddStateTrackingIssues")]
+    partial class AddStateTrackingIssues
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -433,9 +436,6 @@ namespace OrderService.Infrastructure.Migrations
                     b.Property<DateTime>("changeDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("productIssueStatus")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ProductIssueId");
@@ -443,28 +443,7 @@ namespace OrderService.Infrastructure.Migrations
                     b.ToTable("IssueStateTracking");
                 });
 
-            modelBuilder.Entity("OrderService.Core.ProductIssueAggregate.ProductIssueShipping", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("shipperId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("shippingStatus")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("shipperId");
-
-                    b.ToTable("ProductIssueShipping");
-                });
-
-            modelBuilder.Entity("OrderService.Core.ProductIssueRefundConfiguration.ProductIssueRefundConfiguration", b =>
+            modelBuilder.Entity("OrderService.Core.ProductIssueAggregate.ProductIssueRefundConfiguration", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -552,10 +531,6 @@ namespace OrderService.Infrastructure.Migrations
                     b.Property<int>("assignedEmployeeId")
                         .HasColumnType("int");
 
-                    b.Property<string>("customerAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("customerEmail")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -574,9 +549,6 @@ namespace OrderService.Infrastructure.Migrations
                     b.Property<int>("productId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("productIssueShippingId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("returnDate")
                         .HasColumnType("datetime2");
 
@@ -593,16 +565,11 @@ namespace OrderService.Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasDefaultValue(0);
 
-                    b.Property<float>("totalOrderDetailPrice")
-                        .HasColumnType("real");
-
                     b.HasKey("Id");
 
                     b.HasIndex("assignedEmployeeId");
 
                     b.HasIndex("productId");
-
-                    b.HasIndex("productIssueShippingId");
 
                     b.ToTable("ProductIssue");
                 });
@@ -841,17 +808,6 @@ namespace OrderService.Infrastructure.Migrations
                         .HasForeignKey("ProductIssueId");
                 });
 
-            modelBuilder.Entity("OrderService.Core.ProductIssueAggregate.ProductIssueShipping", b =>
-                {
-                    b.HasOne("OrderService.Core.ShipperAggregate.Shipper", "shipper")
-                        .WithMany("ProductIssueShippings")
-                        .HasForeignKey("shipperId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("shipper");
-                });
-
             modelBuilder.Entity("OrderService.Core.ProductReturnAggregate.IssueMedia", b =>
                 {
                     b.HasOne("OrderService.Core.ProductReturnAggregate.ProductIssue", null)
@@ -880,15 +836,9 @@ namespace OrderService.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("OrderService.Core.ProductIssueAggregate.ProductIssueShipping", "productIssueShipping")
-                        .WithMany()
-                        .HasForeignKey("productIssueShippingId");
-
                     b.Navigation("assignedEmployee");
 
                     b.Navigation("product");
-
-                    b.Navigation("productIssueShipping");
                 });
 
             modelBuilder.Entity("OrderService.Core.ShipperAggregate.Shipper", b =>
@@ -949,8 +899,6 @@ namespace OrderService.Infrastructure.Migrations
             modelBuilder.Entity("OrderService.Core.ShipperAggregate.Shipper", b =>
                 {
                     b.Navigation("OrderShippings");
-
-                    b.Navigation("ProductIssueShippings");
                 });
 
             modelBuilder.Entity("OrderService.Core.UserAggregate.User", b =>
