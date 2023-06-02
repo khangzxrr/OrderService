@@ -1,6 +1,4 @@
 ﻿using Ardalis.SmartEnum;
-using OrderService.SharedKernel;
-using OrderService.SharedKernel.Interfaces;
 
 namespace OrderService.Core.OrderShippingAggregate;
 public class OrderShippingStatus : SmartEnum<OrderShippingStatus>
