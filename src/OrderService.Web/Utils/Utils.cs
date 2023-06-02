@@ -2,6 +2,12 @@
 
 public class Utils
 {
+
+  public static long toUnixTime(DateTime dateTime)
+  {
+    return ((DateTimeOffset)dateTime).ToUnixTimeMilliseconds();
+  }
+
   public static int getPageCount(int totalCount, int pageSize)
   {
     if (pageSize == 0)
