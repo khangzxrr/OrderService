@@ -12,16 +12,21 @@ public class IssuePayment : EntityBase
 
   public bool isPaid { get; private set; }
 
-  public IssuePayment(float cost, string paymentDescription)
+  public IssuePayment(float cost, IssuePaymentStatus paymentStatus, string paymentDescription, bool isPaid = false)
   {
     this.cost = Guard.Against.Negative(cost);
     
     this.paymentDescription = Guard.Against.NullOrEmpty(paymentDescription);
 
-    paymentStatus = IssuePaymentStatus.customerPay;
+    this.paymentStatus = Guard.Against.Null(paymentStatus);
 
     paymentDate = DateTime.Now;
-    isPaid = false;
+    this.isPaid = Guard.Against.Null(isPaid);
+  }
+
+  public void setIsPaid(bool isPaid)
+  {
+    this.isPaid = Guard.Against.Null(isPaid);
   }
 
 
