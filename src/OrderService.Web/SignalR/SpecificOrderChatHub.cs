@@ -1,6 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using OrderService.Core.Interfaces;
 using OrderService.Core.OrderAggregate;
 using OrderService.Core.OrderAggregate.Specifications;
 using OrderService.SharedKernel.Interfaces;
@@ -15,10 +16,15 @@ public class SpecificOrderChatHub: Hub
   private static ConcurrentDictionary<string, string> _userInGroup = new ConcurrentDictionary<string, string>();
 
   private readonly IRepository<Order> _orderRepository;
+  private readonly IEmailSender _emailSender;
 
-  public SpecificOrderChatHub(IRepository<Order> orderRepository)
+  private readonly IConfiguration _configuration;
+
+  public SpecificOrderChatHub(IRepository<Order> orderRepository, IConfiguration configuration, IEmailSender emailSender)
   {
     _orderRepository = orderRepository;
+    _configuration = configuration;
+    _emailSender = emailSender;
   }
 
   private async Task SendMessageToOrderByEmployee(int orderId, int userId, string message)
@@ -45,6 +51,8 @@ public class SpecificOrderChatHub: Hub
     {
       throw new Exception("order is not found");
     }
+
+    _emailSender.SendEmail(order.chat.employee.email, "[FastShip] Bạn có tin nhắn mới", $"Bạn có tin nhắn mới đến từ order {orderId} <a href='{_configuration["SERVER_ORIGIN"]}/employee-orderdetail?orderId={orderId}'>Nhấn vào đây để xem chi tiết</a>");
 
     order.chat.AddMessageFromCustomer(message);
   }  
