@@ -19,16 +19,15 @@ public class AddOrderDetailService : IAddOrderDetailService
     _productRepository = productRepository;
   }
 
-  public async Task<Result> UpdateOrderDetails(Order order)
+  public Result UpdateOrderDetails(Order order)
   {
 
     double totalOrderCost = 0.0f;
 
     foreach(var orderDetail in order.orderDetails)
     {
-      var additionalCostRuleEngine = await runRuleEngine(orderDetail);
 
-      var additionalCostWithWeightCost = additionalCostRuleEngine  + (orderDetail.product.productWeight * orderDetail.costPerWeight);
+      var additionalCostWithWeightCost = (orderDetail.product.productWeight * orderDetail.costPerWeight);
 
       orderDetail.setAdditionalCost(additionalCostWithWeightCost);
 
@@ -53,29 +52,6 @@ public class AddOrderDetailService : IAddOrderDetailService
     return Result.Success();
   }
 
-  private async Task<float> runRuleEngine(OrderDetail orderDetail)
-  {
-    var conditionString = orderDetail.product.productCategory.productShipCost.additionalCostCondition.Replace('\t', ' ');
-    var workflow = JsonConvert.DeserializeObject<List<Workflow>>(conditionString);
-
-    var re = new RulesEngine.RulesEngine(workflow!.ToArray(), null);
-
-
-    var rule1 = new RuleParameter("orderDetail", new
-    {
-      productCost = orderDetail.product.productPrice
-    });
-    List<RuleParameter> ruleParameters = new List<RuleParameter>
-    {
-      rule1
-    };
-
-    var result = await re.ExecuteActionWorkflowAsync("AdditionalCost", "Price_over", ruleParameters.ToArray());
-
-    float additionalCost = (float)Convert.ToDouble(result.Output);
-
-    return additionalCost;
-  }
 
   public async Task<Result> AddOrderDetail(Order order, int productId, int quantity)
   {
@@ -100,9 +76,8 @@ public class AddOrderDetailService : IAddOrderDetailService
     orderDetail.setProduct(product);
     orderDetail.setQuantity(quantity);
 
-    float additionalCost = await runRuleEngine(orderDetail);
+    orderDetail.setAdditionalCost(0);
 
-    orderDetail.setAdditionalCost(additionalCost);
     order.addOrderDetail(orderDetail);
 
     return Result.Success();
