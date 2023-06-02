@@ -16,7 +16,7 @@ public class RegisterRequest
   public string Email { get; set; }
 
   [Required]
-  [MaxLength(100)]
+  [MaxLength(13)]
   [MinLength(9)]
   public string PhoneNumber { get; set; }
 
