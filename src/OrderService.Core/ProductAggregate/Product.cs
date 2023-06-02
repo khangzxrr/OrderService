@@ -58,6 +58,8 @@ public class Product: EntityBase, IAggregateRoot
     this.productPrice = Guard.Against.Negative(productPrice);
     this.productURL = Guard.Against.NullOrEmpty(productURL);
     this.productWeight = Guard.Against.Negative(productWeight);
+    this.productShipCost = Guard.Against.Negative(productShipCost);
+    this.productCostPerWeight = Guard.Against.Negative(productCostPerWeight);
     
     this.productWarrantable = productWarrantable;
     this.productWarrantyDescription = Guard.Against.NullOrEmpty(productWarrantyDescription);
