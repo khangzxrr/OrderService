@@ -15,8 +15,6 @@ public record ProductRecord(
 
   string url,
   float weight,
-  string sellerAddress,
-  string sellerEmail,
   bool warrantable,
   string warrantyDescription,
   int warrantyDuration,
@@ -39,8 +37,6 @@ public record ProductRecord(
       product.productPrice,
       product.productURL,
       product.productWeight,
-      product.productSellerAddress,
-      product.productSellerEmail,
       product.productWarrantable,
       product.productWarrantyDescription,
       product.productWarrantyDuration,
