@@ -1,5 +1,4 @@
 ﻿
-using Azure.Core;
 using Minio;
 using Minio.Exceptions;
 using OrderService.Core.Dtos;
@@ -18,9 +17,24 @@ public class MediaService : IMediaService
     _minioClient = minioClient;
   }
 
-  public Task<Stream> getFile(string fileName)
+  public async Task<MemoryStream> getFile(string fileName)
   {
-    throw new NotImplementedException();
+    MemoryStream imageStream = new MemoryStream();
+
+    var existObjectArgs = new GetObjectArgs()
+        .WithBucket(bucketName)
+        .WithObject(fileName)
+        .WithCallbackStream(async (stream, cancellationToken) =>
+        {
+          await stream.CopyToAsync(imageStream).ConfigureAwait(false);
+          
+          stream.Dispose();
+        });
+
+
+    var obj = await _minioClient.GetObjectAsync(existObjectArgs);
+
+    return imageStream;
   }
 
   private string generateObjectname(string fileExtension)
@@ -66,6 +80,31 @@ public class MediaService : IMediaService
 
   }
 
+  public async Task<string> downloadImage(string imageUrl)
+  {
+    await makeSureBucketExist();
+
+    using (HttpClient webClient = new HttpClient())
+    {
+      var response = await webClient.GetAsync(imageUrl); 
+
+      response.EnsureSuccessStatusCode();
+
+      var contentType = response.Content.Headers.ContentType!.ToString();
+
+      var stream = response.Content.ReadAsStream();
+
+      var newFileName = generateObjectname("jpg");
+
+      long length = long.Parse(response.Content.Headers.First(h => h.Key.Equals("Content-Length")).Value.First());
+
+      var mediaFile = new MediaFile(newFileName, stream, length);
+
+      var newUpload = await uploadFile(mediaFile);
+
+      return newUpload;
+    }
+  }
   public async Task<string[]> uploadFiles(MediaFile[] files)
   {
     await makeSureBucketExist();
