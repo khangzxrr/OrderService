@@ -40,9 +40,26 @@ public class RequestProductIssue : EndpointBaseAsync
   public override async Task<ActionResult<RequestProductIssueResponse>> HandleAsync([FromBody] RequestProductIssueRequest request, CancellationToken cancellationToken = default)
   {
 
-    var orderSpec = new OrderByOrderDetailIdSpec(request.orderDetailId);
+    var orderSpec = new OrderOrderDetailSpec();
 
-    var order = await _orderRepository.FirstOrDefaultAsync(orderSpec);
+    var orders = await _orderRepository.ListAsync(orderSpec);
+
+    OrderDetail? orderDetail = null;
+    Order? order = null;
+    
+    foreach(var currentOrder in orders)
+    {
+      orderDetail = currentOrder.orderDetails.Where(od => od.Id == request.orderDetailId).FirstOrDefault();
+
+      if (orderDetail != null)
+      {
+
+        order = currentOrder;
+
+        break;
+      }
+    }
+
 
     if (order == null)
     {
@@ -54,7 +71,7 @@ public class RequestProductIssue : EndpointBaseAsync
       return BadRequest("order is not in correct state");
     }
 
-    var orderDetail = order.orderDetails.Where(od => od.Id == request.orderDetailId).FirstOrDefault();
+    
 
     if (orderDetail == null)
     {
@@ -72,12 +89,14 @@ public class RequestProductIssue : EndpointBaseAsync
 
 
     var newProductIssue = new ProductIssue(
+      totalOrderDetailPrice: orderDetail.totalCost,
       isWarranty: request.isWarranty,
       series: request.series == null ? "" : request.series,
       returnReason: request.description == null ? "" : request.description,
       customerEmail: order.user.email,
       customerFullname: order.user.fullname,
-      customerPhonenumber: order.contactPhonenumber
+      customerPhonenumber: order.contactPhonenumber,
+      customerAddress: order.deliveryAddress
       );
 
     //important field
