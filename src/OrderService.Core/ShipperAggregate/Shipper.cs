@@ -1,5 +1,6 @@
 ﻿using Ardalis.GuardClauses;
 using OrderService.Core.OrderShippingAggregate;
+using OrderService.Core.ProductIssueAggregate;
 using OrderService.Core.UserAggregate;
 using OrderService.SharedKernel;
 using OrderService.SharedKernel.Interfaces;
@@ -15,6 +16,9 @@ public class Shipper : EntityBase, IAggregateRoot
 
   private List<OrderShipping> _orderShippings = new List<OrderShipping>();
   public IReadOnlyCollection<OrderShipping> OrderShippings => _orderShippings.AsReadOnly();
+
+  private List<ProductIssueShipping> _productIssueShippings = new List<ProductIssueShipping>();
+  public IReadOnlyCollection<ProductIssueShipping> ProductIssueShippings => _productIssueShippings.AsReadOnly();
 
   public int userId { get; set; }
   public User user { get; set; }
