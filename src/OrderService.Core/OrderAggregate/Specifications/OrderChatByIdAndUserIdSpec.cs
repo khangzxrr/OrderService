@@ -8,6 +8,8 @@ public class OrderChatByIdAndUserIdSpec : Specification<Order>, ISingleResultSpe
     Query
       .Where(o => o.Id == orderId && o.userId == userId)
       .Include(o => o.chat)
+        .ThenInclude(c => c.employee)
+      .Include(o => o.chat)
         .ThenInclude(c => c.chatMessages);
   }
 }
