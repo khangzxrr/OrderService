@@ -6,6 +6,7 @@ using OrderService.Core.UserAggregate;
 using OrderService.Core.CurrencyAggregate;
 using OrderService.Core.ShipperAggregate;
 using OrderService.Core.ProductIssueRefundConfiguration;
+using OrderService.Core.ConfigurationAggregates;
 
 namespace OrderService.Infrastructure.Data;
 
@@ -28,6 +29,7 @@ public class AppDbContext : DbContext
   public DbSet<CurrencyExchange> CurrencyExchanges => Set<CurrencyExchange>();
 
   public DbSet<ProductIssueRefundConfiguration> ProductIssueRefundConfigurations => Set<ProductIssueRefundConfiguration>();
+  public DbSet<PriceTableConfiguration> priceTableConfigurations => Set<PriceTableConfiguration>();
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
