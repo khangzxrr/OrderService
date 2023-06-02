@@ -17,6 +17,9 @@ public class ProductIssuePagingatedFilterByEmployeeIdSpec : Specification<Produc
       .Include(pi => pi.product)
         .ThenInclude(p => p.currencyExchange)
           .ThenInclude(ce => ce.currency)
+
+      .Include(pr => pr.issueStateTrackings)
+
       .Take(take)
       .Skip(skip);
   }
