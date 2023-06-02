@@ -1,10 +1,6 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
 using OrderService.Core.Interfaces;
 using OrderService.Core.RabbitMqDto;
-using OrderService.Web.Interfaces;
-using StackExchange.Redis;
 using StackExchange.Redis.Extensions.Core.Abstractions;
 
 namespace OrderService.Web.SignalR;
@@ -50,8 +46,8 @@ public class ProductFetchingHub : Hub
       return;
     }
 
-     //send to fetching queue if product is not fetched yet
-     _produceProductRequestService.SendToQueue(rabbitRequestProductData);
+    //send to fetching queue if product is not fetched yet
+    _produceProductRequestService.SendToQueue(rabbitRequestProductData);
     
   }
 
