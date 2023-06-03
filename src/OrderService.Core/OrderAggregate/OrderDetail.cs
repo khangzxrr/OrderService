@@ -16,6 +16,15 @@ public class OrderDetail : EntityBase
   public float totalCost { get; private set; }
   public int quantity { get; private set; }
 
+  public void disableOrderDetail()
+  {
+    product.disable();
+
+    additionalCost = 0;
+    processCost = 0;
+    totalCost = 0;
+    quantity = 0;
+  }
   public void setProduct(Product product)
   {
     Guard.Against.Null(product.productCategory);

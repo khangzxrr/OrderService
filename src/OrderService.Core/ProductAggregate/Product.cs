@@ -87,6 +87,15 @@ public class Product: EntityBase, IAggregateRoot
     return "product_" + productURL;
   }
 
+  public void disable()
+  {
+    productStatus = ProductStatus.disable;
+    productShipCost = 0;
+    productCostPerWeight = 0;
+    productWeight = 0;
+    productPrice = 0;
+  }
+
 
   public void setProductCategory(ProductCategory productCategory)
   {
