@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.Extensions.Configuration;
 using OrderService.Core.Interfaces;
 using OrderService.Core.OrderAggregate.Events;
 using OrderService.Core.OrderAggregate.Specifications;
@@ -12,12 +13,14 @@ public class OrderPaymentCreatedHandler : INotificationHandler<OrderPaymentCreat
   private readonly IRepository<Order> _repository;
 
   private readonly IEmailSender _emailSender;
+  private readonly IConfiguration _configuration;
 
  
-  public OrderPaymentCreatedHandler(IRepository<Order> repository, IEmailSender emailSender)
+  public OrderPaymentCreatedHandler(IRepository<Order> repository, IEmailSender emailSender, IConfiguration configuration)
   {
     _repository = repository;
     _emailSender = emailSender;
+    _configuration = configuration;
   }
 
   public async Task Handle(OrderPaymentCreatedEvent notification, CancellationToken cancellationToken)
@@ -39,7 +42,7 @@ public class OrderPaymentCreatedHandler : INotificationHandler<OrderPaymentCreat
 
     order.SetRemainCost(order.remainCost - orderPayment.paymentCost);
 
-    _emailSender.SendEmail(order.user.email, "[FastShip] Cập nhật trạng thái đơn hàng", $"<p>Xin chào bạn, đơn hàng #{notification.OrderId} đã được thanh toán thành công với số tiền: {orderPayment.paymentCost}! <a href='http://localhost:3000/detailod?orderId={notification.OrderId}'>Để xem chi tiết vui lòng nhấn vào đây</a></p>");
+    _emailSender.SendEmail(order.user.email, "[FastShip] Cập nhật thanh toán", $"<p>Xin chào bạn, đơn hàng #{notification.OrderId} đã được thanh toán thành công với số tiền: {orderPayment.paymentCost}! <a href='{_configuration["SERVER_ORIGIN"]}/detailod?orderId={notification.OrderId}'>Để xem chi tiết vui lòng nhấn vào đây</a></p>");
 
     await _repository.SaveChangesAsync();
   }

@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.Extensions.Configuration;
 using OrderService.Core.Interfaces;
 using OrderService.Core.OrderAggregate.Events;
 using OrderService.SharedKernel.Interfaces;
@@ -8,11 +9,13 @@ public class OrderDetailUpdateEventHandler : INotificationHandler<OrderDetailUpd
 {
   private readonly IRepository<Order> _orderRepository;
   private readonly IEmailSender _emailSender;
+  private readonly IConfiguration _configuration;
 
-  public OrderDetailUpdateEventHandler(IRepository<Order> orderRepository, IEmailSender emailSender)
+  public OrderDetailUpdateEventHandler(IRepository<Order> orderRepository, IEmailSender emailSender, IConfiguration configuration)
   {
     _orderRepository = orderRepository;
     _emailSender = emailSender;
+    _configuration = configuration;
   }
 
   public async Task Handle(OrderDetailUpdateEvent notification, CancellationToken cancellationToken)
@@ -41,6 +44,6 @@ public class OrderDetailUpdateEventHandler : INotificationHandler<OrderDetailUpd
 
     await _orderRepository.SaveChangesAsync();
 
-    _emailSender.SendEmail(order.user.email, "[FastShip] Cập nhật mới!", $"<p>Đơn hàng của bạn có cập nhật mới!  <a href='http://localhost:3000/detailod?orderId={order.Id}'>Để xem chi tiết vui lòng nhấn vào đây</a></p>");
+    _emailSender.SendEmail(order.user.email, "[FastShip] Cập nhật giá mới", $"<p>Đơn hàng của bạn có cập nhật mới!  <a href='{_configuration["SERVER_ORIGIN"]}/detailod?orderId={order.Id}'>Để xem chi tiết vui lòng nhấn vào đây</a></p>");
   }
 }

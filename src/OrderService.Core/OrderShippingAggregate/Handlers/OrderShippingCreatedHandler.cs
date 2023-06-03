@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.Extensions.Configuration;
 using OrderService.Core.Interfaces;
 using OrderService.Core.OrderAggregate;
 using OrderService.Core.OrderAggregate.Specifications;
@@ -14,10 +15,13 @@ public class OrderShippingCreatedHandler : INotificationHandler<OrderShippingCre
 
   private readonly IEmailSender _emailSender;
 
-  public OrderShippingCreatedHandler(IRepository<Order> orderRepository, IEmailSender emailSender)
+  private readonly IConfiguration _configuration;
+
+  public OrderShippingCreatedHandler(IRepository<Order> orderRepository, IEmailSender emailSender, IConfiguration configuration)
   {
     _orderRepository = orderRepository;
     _emailSender = emailSender;
+    _configuration = configuration;
   }
 
 
@@ -32,7 +36,7 @@ public class OrderShippingCreatedHandler : INotificationHandler<OrderShippingCre
       throw new Exception("Order is not found");
     }
 
-    _emailSender.SendEmail(order.user.email, "[FastShip] Hàng đang đến bạn", $"<p>Xin chào bạn, đơn hàng #{notification.OrderId} đã được giao cho shipper để đưa đến bạn <a href='http://localhost:3000/detailod?orderId={notification.OrderId}'>Để xem chi tiết vui lòng nhấn vào đây</a></p>");
+    _emailSender.SendEmail(order.user.email, "[FastShip] Hàng đang đến bạn", $"<p>Xin chào bạn, đơn hàng #{notification.OrderId} đã được giao cho shipper để đưa đến bạn <a href='{_configuration["SERVER_ORIGIN"]}/detailod?orderId={notification.OrderId}'>Để xem chi tiết vui lòng nhấn vào đây</a></p>");
 
 
     await _orderRepository.SaveChangesAsync();
