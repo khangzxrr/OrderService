@@ -20,7 +20,10 @@ public class RequestProductIssueRequest
   public int orderDetailId { get; set; }
 
 
+  [Required]
   public string? series { get; set; }
+
+  [Required]
   public string? description { get; set; }
 
 

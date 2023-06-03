@@ -2,10 +2,10 @@
 
 namespace OrderService.Web.Endpoints.Records;
 
-public record PriceTableRecord(int id, string addtionalCostDescription, string processCostDescription)
+public record PriceTableRecord(int id, string category, string addtionalCostDescription, string processCostDescription)
 {
   public static PriceTableRecord FromEntity(PriceTableConfiguration priceTableConfiguration)
   {
-    return new PriceTableRecord(priceTableConfiguration.Id, priceTableConfiguration.additionalCostDescription, priceTableConfiguration.processCostDescription);
+    return new PriceTableRecord(priceTableConfiguration.Id, priceTableConfiguration.categoryName, priceTableConfiguration.additionalCostDescription, priceTableConfiguration.processCostDescription);
   }
 }

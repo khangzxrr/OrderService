@@ -15,6 +15,8 @@ public class OrderStatus : SmartEnum<OrderStatus>
 
   public static readonly OrderStatus reselling = new(nameof(reselling), 8);
 
+  public static readonly OrderStatus failToDelivery = new(nameof(failToDelivery), 10);
+
   public static readonly OrderStatus denied = new(nameof(denied), 9);
 
   public OrderStatus(string name, int value): base(name, value) { }

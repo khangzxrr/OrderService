@@ -62,17 +62,17 @@ public class Product: EntityBase, IAggregateRoot
     this.productCostPerWeight = Guard.Against.Negative(productCostPerWeight);
     
     this.productWarrantable = productWarrantable;
-    this.productWarrantyDescription = Guard.Against.NullOrEmpty(productWarrantyDescription);
+    this.productWarrantyDescription = Guard.Against.Null(productWarrantyDescription);
     this.productWarrantyDuration = Guard.Against.Negative(productWarrantyDuration);
     this.productReturnable = productReturnable;
 
     if (productReturnable)
     {
-      this.productReturnDescription = Guard.Against.NullOrEmpty(productReturnDescription);
+      this.productReturnDescription = Guard.Against.Null(productReturnDescription);
       this.productReturnDuration = Guard.Against.Negative(productReturnDuration);
     } else
     {
-      this.productReturnDescription = "";
+      this.productReturnDescription = "  ";
       this.productReturnDuration = 0;
     }
     
@@ -146,7 +146,7 @@ public class Product: EntityBase, IAggregateRoot
 
   public void setProductReturnDescription(string returnDescription)
   {
-    productReturnDescription = Guard.Against.NullOrEmpty(returnDescription);
+    productReturnDescription = Guard.Against.Null(returnDescription);
   }
 
   public void setProductResellingStatus(ProductStatus productResellStatus)
