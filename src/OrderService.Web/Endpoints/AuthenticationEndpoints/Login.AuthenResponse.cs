@@ -8,12 +8,16 @@ public class AuthenResponse
   public string phoneNumber { get; set; }
 
   public string roleName { get; set; }
-  public AuthenResponse(string token, string email, string address, string phoneNumber, string roleName)
+
+  public string fullName { get; set; }
+
+  public AuthenResponse(string token, string email, string address, string phoneNumber, string roleName, string fullName)
   {
     this.token = token;
     this.email = email;
     this.address = address;
     this.phoneNumber = phoneNumber;
-    this.roleName = roleName; 
+    this.roleName = roleName;
+    this.fullName = fullName;
   }
 }

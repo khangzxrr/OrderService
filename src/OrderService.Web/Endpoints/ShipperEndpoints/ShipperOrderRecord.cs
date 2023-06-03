@@ -8,6 +8,6 @@ public record ShipperOrderRecord(int orderShippingId, string customerName, strin
 
   public static ShipperOrderRecord FromEntity(OrderShipping orderShipping)
   {
-    return new ShipperOrderRecord(orderShipping.Id, orderShipping.order.user.firstname, orderShipping.order.user.address, orderShipping.order.user.phoneNumber, orderShipping.orderShippingStatus.Name, orderShipping.order.remainCost, orderShipping.orderId);
+    return new ShipperOrderRecord(orderShipping.Id, orderShipping.order.user.fullName, orderShipping.order.user.address, orderShipping.order.user.phoneNumber, orderShipping.orderShippingStatus.Name, orderShipping.order.remainCost, orderShipping.orderId);
   }
 }

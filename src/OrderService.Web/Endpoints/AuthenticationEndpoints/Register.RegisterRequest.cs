@@ -7,6 +7,9 @@ public class RegisterRequest
 
   public const string Route = "/register";
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
+
   [Required]
   [MaxLength(100)]
   [MinLength(6)]
@@ -26,19 +29,7 @@ public class RegisterRequest
   [Required]
   public string Address { get; set; }
   [Required]
-  public string FirstName { get; set; }
-  [Required]
-  public string LastName { get; set; }
+  public string FullName { get; set; }
 
-  public RegisterRequest(string email, string phoneNumber, string password, DateTime? dateOfBirth, string address, string firstName, string lastName)
-  {
-    
-    Password = password;
-    Email = email;
-    DateOfBirth = dateOfBirth;
-    Address = address;
-    FirstName = firstName;
-    LastName = lastName;
-    PhoneNumber = phoneNumber;
-  }
+
 }

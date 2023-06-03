@@ -13,8 +13,8 @@ public class User: EntityBase, IAggregateRoot
   public string phoneNumber { get; private set; }
   public string passwordHash { get; private set; }
   public string passwordSalt { get; private set; }
-  public string firstname { get; private set; }
-  public string lastname { get; private set; }
+
+  public string fullName { get; private set; }
   public DateTime dateOfBirth { get; private set; }
   public string address { get; private set; }
 
@@ -31,8 +31,7 @@ public class User: EntityBase, IAggregateRoot
     string phoneNumber,
     string passwordHash,
     string passwordSalt,
-    string firstname,
-    string lastname,
+    string fullName,
     DateTime dateOfBirth,
     string address
     )
@@ -41,17 +40,14 @@ public class User: EntityBase, IAggregateRoot
     this.phoneNumber = Guard.Against.NullOrEmpty(phoneNumber);
     this.passwordHash = Guard.Against.NullOrEmpty(passwordHash, nameof(passwordHash));
     this.passwordSalt = Guard.Against.NullOrEmpty(passwordSalt, nameof(passwordSalt));
-    this.firstname = Guard.Against.NullOrEmpty(firstname, nameof(firstname));
-    this.lastname = Guard.Against.NullOrEmpty(lastname, nameof(lastname));
     this.dateOfBirth = Guard.Against.OutOfSQLDateRange(dateOfBirth, nameof(dateOfBirth));
     this.address = Guard.Against.NullOrEmpty(address, nameof(address));
+    this.fullName = Guard.Against.NullOrEmpty(fullName, nameof(fullName));
 
     this.guid = "NOT_USING_GOOGLE";
 
     this.verify = UserVerify.actived;
   }
-
-  public string fullname => firstname + " " + lastname;
 
   public void setRole(Role role)
   {

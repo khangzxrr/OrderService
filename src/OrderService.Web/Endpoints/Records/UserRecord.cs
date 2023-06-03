@@ -2,10 +2,10 @@
 
 namespace OrderService.Web.Endpoints.Records;
 
-public record UserRecord(int id, string address, string firstName, string lastName, string email, string passwordHash, string phoneNumber, DateTime dateOfBirth, string roleName)
+public record UserRecord(int id, string address, string fullName, string email, string passwordHash, string phoneNumber, DateTime dateOfBirth, string roleName)
 {
   public static UserRecord FromEntity(User user)
   {
-    return new UserRecord(user.Id, user.address, user.firstname, user.lastname, user.email, user.passwordHash, user.phoneNumber, user.dateOfBirth, user.role.roleName);
+    return new UserRecord(user.Id, user.address, user.fullName, user.email, user.passwordHash, user.phoneNumber, user.dateOfBirth, user.role.roleName);
   }
 }

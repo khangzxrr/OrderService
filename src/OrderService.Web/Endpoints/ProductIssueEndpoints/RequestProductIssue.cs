@@ -94,7 +94,7 @@ public class RequestProductIssue : EndpointBaseAsync
       series: request.series == null ? "" : request.series,
       returnReason: request.description == null ? "" : request.description,
       customerEmail: order.user.email,
-      customerFullname: order.user.fullname,
+      customerFullname: order.user.fullName,
       customerPhonenumber: order.contactPhonenumber,
       customerAddress: order.deliveryAddress
       );

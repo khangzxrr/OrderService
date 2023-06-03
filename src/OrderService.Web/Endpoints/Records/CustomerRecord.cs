@@ -6,6 +6,6 @@ public record CustomerRecord(int id, string fullname, string address, string pho
 {
   public static CustomerRecord FromEntity(User user, int totalOrdersCount, double totalPaymentAmount)
   {
-    return new CustomerRecord(user.Id, user.fullname, user.address, user.phoneNumber, user.email, user.verify.Name, totalOrdersCount, totalPaymentAmount);
+    return new CustomerRecord(user.Id, user.fullName, user.address, user.phoneNumber, user.email, user.verify.Name, totalOrdersCount, totalPaymentAmount);
   }
 }
