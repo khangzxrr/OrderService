@@ -24,9 +24,6 @@ public class RegisterRequest
   public string PhoneNumber { get; set; }
 
   [Required]
-  [DataType(DataType.Date)]
-  public DateTime? DateOfBirth { get; set; }
-  [Required]
   public string Address { get; set; }
   [Required]
   public string FullName { get; set; }
