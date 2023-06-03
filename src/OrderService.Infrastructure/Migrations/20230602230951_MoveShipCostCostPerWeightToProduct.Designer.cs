@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OrderService.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using OrderService.Infrastructure.Data;
 namespace OrderService.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230602230951_MoveShipCostCostPerWeightToProduct")]
+    partial class MoveShipCostCostPerWeightToProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -405,6 +408,28 @@ namespace OrderService.Infrastructure.Migrations
                     b.ToTable("ProductCategory");
                 });
 
+            modelBuilder.Entity("OrderService.Core.ProductAggregate.ProductShipCost", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<float>("costPerWeight")
+                        .HasColumnType("real");
+
+                    b.Property<int>("productCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<float>("shipCost")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProductShipCost");
+                });
+
             modelBuilder.Entity("OrderService.Core.ProductIssueAggregate.IssueStateTracking", b =>
                 {
                     b.Property<int>("Id")
@@ -655,18 +680,27 @@ namespace OrderService.Infrastructure.Migrations
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
+                    b.Property<DateTime>("dateOfBirth")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("email")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("fullName")
+                    b.Property<string>("firstname")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("guid")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("lastname")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("passwordHash")
                         .IsRequired()

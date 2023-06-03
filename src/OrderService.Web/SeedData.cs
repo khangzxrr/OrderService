@@ -13,16 +13,16 @@ namespace OrderService.Web;
 public static class SeedData
 {
 
-  public static readonly User employee = new User("employee@fastship.com", "091092211", "4297f44b13955235245b2497399d7a93", "123123", "Đoàn Văn Tiến ", DateTime.Now, "157 xa lộ hà nội, quận 2, TP  Hồ Chí Minh");
+  public static readonly User employee = new User("employee@fastship.com", "091092211", "4297f44b13955235245b2497399d7a93", "123123", "Đoàn Văn Tiến ", "157 xa lộ hà nội, quận 2, TP  Hồ Chí Minh");
 
-  public static readonly User shipper = new User("shipper@fastship.com", "0955111533", "4297f44b13955235245b2497399d7a93", "123123", "Đinh Văn Dũng", DateTime.Now, "14 Nguyễn Tri Phương, TP Hồ Chí Minh");
+  public static readonly User shipper = new User("shipper@fastship.com", "0955111533", "4297f44b13955235245b2497399d7a93", "123123", "Đinh Văn Dũng", "14 Nguyễn Tri Phương, TP Hồ Chí Minh");
   public static readonly Shipper shipperEmployee = new Shipper("Q9", DateTime.Now, DateTime.Now, ShippingStatus.online);
 
-  public static readonly User customer = new User("customer@gmail.com", "091092233", "4297f44b13955235245b2497399d7a93", "123123", "Võ Ngọc Định", DateTime.Now, "1426 nguyễn duy trinh, quận 9, tp hồ chí minh");
+  public static readonly User customer = new User("customer@gmail.com", "091092233", "4297f44b13955235245b2497399d7a93", "123123", "Võ Ngọc Định", "1426 nguyễn duy trinh, quận 9, tp hồ chí minh");
 
-  public static readonly User manager = new User("manager@fastship.com", "0988111737", "4297f44b13955235245b2497399d7a93", "123123", "Nguyễn Quốc Đạt ", DateTime.Now, "111 Huỳnh Tấn Phát, quận 7, tp hồ chí minh");
+  public static readonly User manager = new User("manager@fastship.com", "0988111737", "4297f44b13955235245b2497399d7a93", "123123", "Nguyễn Quốc Đạt ", "111 Huỳnh Tấn Phát, quận 7, tp hồ chí minh");
 
-  public static readonly User admin = new User("admin@fastship.com", "0988111737", "4297f44b13955235245b2497399d7a93", "123123", "Đoàn Diễn Duy", DateTime.Now, "159 xa lộ hà nội, tp hồ chí minh");
+  public static readonly User admin = new User("admin@fastship.com", "0988111737", "4297f44b13955235245b2497399d7a93", "123123", "Đoàn Diễn Duy", "159 xa lộ hà nội, tp hồ chí minh");
 
   public static void Initialize(IServiceProvider serviceProvider)
   {

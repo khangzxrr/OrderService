@@ -64,7 +64,7 @@ internal class AuthenticationService : IAuthenticationService
     return Result.Success(user);
   }
 
-  public async Task<Result<User>> CreateNewUserAsync(string email, string phoneNumber, string password, string fullName, DateTime dateofbirth, string address)
+  public async Task<Result<User>> CreateNewUserAsync(string email, string phoneNumber, string password, string fullName, string address)
   {
     Guard.Against.NullOrEmpty(email);
     Guard.Against.NullOrEmpty(password);
@@ -86,12 +86,33 @@ internal class AuthenticationService : IAuthenticationService
       return Result.Error("Role is not exist");
     }
 
-    user = new User(email, phoneNumber, GenerateMD5(password), "salt", fullName, dateofbirth, address);
+    user = new User(email, phoneNumber, GenerateMD5(password), "salt", fullName, address);
     user.setRole(role!);
 
     await _userRepository.AddAsync(user);
     await _userRepository.SaveChangesAsync();
     
+    return Result.Success(user);
+  }
+
+  public async Task<Result<User>> UpdateUser(int userId, string phoneNumber, string fullName, string address, string password)
+  {
+    var spec = new UserByIdSpec(userId);
+
+    var user = await _userRepository.FirstOrDefaultAsync(spec);
+
+    if (user == null)
+    {
+      return Result.Error("User not found");
+    }
+
+    user.SetPhoneNumber(phoneNumber);
+    user.SetFullName(fullName);
+    user.SetAdress(address);
+    user.SetPassword(GenerateMD5(password));
+
+    await _userRepository.SaveChangesAsync();
+
     return Result.Success(user);
   }
 }

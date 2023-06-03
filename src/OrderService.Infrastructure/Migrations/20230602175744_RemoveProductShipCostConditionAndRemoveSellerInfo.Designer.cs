@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OrderService.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using OrderService.Infrastructure.Data;
 namespace OrderService.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230602175744_RemoveProductShipCostConditionAndRemoveSellerInfo")]
+    partial class RemoveProductShipCostConditionAndRemoveSellerInfo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -218,6 +221,9 @@ namespace OrderService.Infrastructure.Migrations
                     b.Property<float>("additionalCost")
                         .HasColumnType("real");
 
+                    b.Property<float>("costPerWeight")
+                        .HasColumnType("real");
+
                     b.Property<float>("processCost")
                         .HasColumnType("real");
 
@@ -226,6 +232,9 @@ namespace OrderService.Infrastructure.Migrations
 
                     b.Property<int>("quantity")
                         .HasColumnType("int");
+
+                    b.Property<float>("shipCost")
+                        .HasColumnType("real");
 
                     b.Property<float>("totalCost")
                         .HasColumnType("real");
@@ -323,9 +332,6 @@ namespace OrderService.Infrastructure.Migrations
                     b.Property<int>("productCategoryId")
                         .HasColumnType("int");
 
-                    b.Property<float>("productCostPerWeight")
-                        .HasColumnType("real");
-
                     b.Property<DateTime>("productCreateAt")
                         .HasColumnType("datetime2");
 
@@ -359,9 +365,6 @@ namespace OrderService.Infrastructure.Migrations
 
                     b.Property<bool>("productReturnable")
                         .HasColumnType("bit");
-
-                    b.Property<float>("productShipCost")
-                        .HasColumnType("real");
 
                     b.Property<string>("productURL")
                         .IsRequired()
@@ -403,6 +406,31 @@ namespace OrderService.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ProductCategory");
+                });
+
+            modelBuilder.Entity("OrderService.Core.ProductAggregate.ProductShipCost", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<float>("costPerWeight")
+                        .HasColumnType("real");
+
+                    b.Property<int>("productCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<float>("shipCost")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("productCategoryId")
+                        .IsUnique();
+
+                    b.ToTable("ProductShipCost");
                 });
 
             modelBuilder.Entity("OrderService.Core.ProductIssueAggregate.IssueStateTracking", b =>
@@ -655,18 +683,27 @@ namespace OrderService.Infrastructure.Migrations
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
+                    b.Property<DateTime>("dateOfBirth")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("email")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("fullName")
+                    b.Property<string>("firstname")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("guid")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("lastname")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("passwordHash")
                         .IsRequired()
@@ -802,6 +839,15 @@ namespace OrderService.Infrastructure.Migrations
                     b.Navigation("productCategory");
                 });
 
+            modelBuilder.Entity("OrderService.Core.ProductAggregate.ProductShipCost", b =>
+                {
+                    b.HasOne("OrderService.Core.ProductAggregate.ProductCategory", null)
+                        .WithOne("productShipCost")
+                        .HasForeignKey("OrderService.Core.ProductAggregate.ProductShipCost", "productCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("OrderService.Core.ProductIssueAggregate.IssueStateTracking", b =>
                 {
                     b.HasOne("OrderService.Core.ProductReturnAggregate.ProductIssue", null)
@@ -896,6 +942,12 @@ namespace OrderService.Infrastructure.Migrations
             modelBuilder.Entity("OrderService.Core.ProductAggregate.Product", b =>
                 {
                     b.Navigation("currencyExchange")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OrderService.Core.ProductAggregate.ProductCategory", b =>
+                {
+                    b.Navigation("productShipCost")
                         .IsRequired();
                 });
 

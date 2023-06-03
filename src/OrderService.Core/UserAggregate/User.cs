@@ -15,7 +15,6 @@ public class User: EntityBase, IAggregateRoot
   public string passwordSalt { get; private set; }
 
   public string fullName { get; private set; }
-  public DateTime dateOfBirth { get; private set; }
   public string address { get; private set; }
 
   public UserVerify verify { get; }
@@ -32,7 +31,6 @@ public class User: EntityBase, IAggregateRoot
     string passwordHash,
     string passwordSalt,
     string fullName,
-    DateTime dateOfBirth,
     string address
     )
   {
@@ -40,13 +38,32 @@ public class User: EntityBase, IAggregateRoot
     this.phoneNumber = Guard.Against.NullOrEmpty(phoneNumber);
     this.passwordHash = Guard.Against.NullOrEmpty(passwordHash, nameof(passwordHash));
     this.passwordSalt = Guard.Against.NullOrEmpty(passwordSalt, nameof(passwordSalt));
-    this.dateOfBirth = Guard.Against.OutOfSQLDateRange(dateOfBirth, nameof(dateOfBirth));
     this.address = Guard.Against.NullOrEmpty(address, nameof(address));
     this.fullName = Guard.Against.NullOrEmpty(fullName, nameof(fullName));
 
     this.guid = "NOT_USING_GOOGLE";
 
     this.verify = UserVerify.actived;
+  }
+
+  public void SetPhoneNumber(string phoneNumber )
+  {
+    this.phoneNumber = Guard.Against.NullOrEmpty(phoneNumber);
+  }
+
+  public void SetAdress(string address)
+  {
+    this.address = Guard.Against.NullOrEmpty(address);
+  }
+
+  public void SetFullName(string fullName)
+  {
+    this.fullName = Guard.Against.NullOrEmpty(fullName);
+  }
+
+  public void SetPassword(string password)
+  {
+    this.passwordHash = password;
   }
 
   public void setRole(Role role)
