@@ -29,9 +29,11 @@ public class OrderDetailUpdateEventHandler : INotificationHandler<OrderDetailUpd
     foreach (var orderDetail in order.orderDetails)
     {
       totalCostOfOrderDetail = orderDetail.product.productShipCost;
-      totalCostOfOrderDetail += orderDetail.product.productPrice * orderDetail.quantity;
+      totalCostOfOrderDetail += orderDetail.product.productPrice;
       totalCostOfOrderDetail += orderDetail.additionalCost;
       totalCostOfOrderDetail += orderDetail.processCost;
+
+      totalCostOfOrderDetail *= orderDetail.quantity;
 
       orderDetail.setTotalCost(totalCostOfOrderDetail);
 

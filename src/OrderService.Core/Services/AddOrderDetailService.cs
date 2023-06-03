@@ -32,9 +32,11 @@ public class AddOrderDetailService : IAddOrderDetailService
       orderDetail.setAdditionalCost(additionalCostWithWeightCost);
 
       var totalOrderDetailCost = orderDetail.product.productShipCost;
-      totalOrderDetailCost += orderDetail.product.productPrice * orderDetail.quantity;
+      totalOrderDetailCost += orderDetail.product.productPrice;
       totalOrderDetailCost += orderDetail.additionalCost;
       totalOrderDetailCost += orderDetail.processCost;
+
+      totalOrderDetailCost *= orderDetail.quantity;
 
       orderDetail.setTotalCost(totalOrderDetailCost);
 
