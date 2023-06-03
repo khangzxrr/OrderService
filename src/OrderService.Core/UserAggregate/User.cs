@@ -77,5 +77,10 @@ public class User: EntityBase, IAggregateRoot
     Guard.Against.Null(order);
     _orders.Add(order);
   }
+
+  public void setShipper(Shipper shipper)
+  {
+    this.shipper = Guard.Against.Null(shipper);
+  }
 }
 

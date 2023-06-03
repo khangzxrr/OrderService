@@ -23,7 +23,7 @@ internal class AuthenticationService : IAuthenticationService
   }
 
 
-  private string GenerateMD5(string text)
+  public string GenerateMD5(string text)
   {
     var hashPassword = "";
 

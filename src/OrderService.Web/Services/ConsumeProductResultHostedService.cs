@@ -84,7 +84,7 @@ public class ConsumeProductResultHostedService : BackgroundService, IConsumeProd
     var product = new Product(
       productResult!.product,
       uploadImage,
-      "yo this is description",
+      "description",
       (float)productResult!.price,
       (float)productResult!.shipCost,
       12.0f,
@@ -117,7 +117,7 @@ public class ConsumeProductResultHostedService : BackgroundService, IConsumeProd
 
     await _redisClient.Db0.AddAsync(generatedProductRedisHashKey, productResult);
 
-    await _redisClient.Db0.UpdateExpiryAsync(generatedProductRedisHashKey, DateTimeOffset.Now.AddMinutes(60));
+    await _redisClient.Db0.UpdateExpiryAsync(generatedProductRedisHashKey, DateTimeOffset.Now.AddDays(2.0));
 
     //=====
 
