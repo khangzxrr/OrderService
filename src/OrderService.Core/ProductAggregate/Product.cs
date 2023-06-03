@@ -28,7 +28,7 @@ public class Product: EntityBase, IAggregateRoot
 
   public DateTime productCreateAt { get; set; }
 
-  public ProductResellStatus productResellStatus { get; private set; }
+  public ProductStatus productStatus { get; private set; }
 
   [JsonIgnore]
   public ProductCurrencyExchange currencyExchange { get; private set; }
@@ -78,7 +78,7 @@ public class Product: EntityBase, IAggregateRoot
     
     
     productCreateAt = DateTime.Now;
-    productResellStatus = ProductResellStatus.notForSale;
+    productStatus = ProductStatus.notForSale;
   }
 
 
@@ -140,8 +140,8 @@ public class Product: EntityBase, IAggregateRoot
     productReturnDescription = Guard.Against.NullOrEmpty(returnDescription);
   }
 
-  public void setProductResellingStatus(ProductResellStatus productResellStatus)
+  public void setProductResellingStatus(ProductStatus productResellStatus)
   {
-    this.productResellStatus = Guard.Against.Null(productResellStatus);
+    this.productStatus = Guard.Against.Null(productResellStatus);
   }
 }

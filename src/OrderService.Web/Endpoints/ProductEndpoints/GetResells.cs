@@ -35,10 +35,10 @@ public class GetResells : EndpointBaseAsync
   public override async Task<ActionResult<GetResellsResponse>> HandleAsync([FromQuery] GetResellsRequest request, CancellationToken cancellationToken = default)
   {
 
-    var countSpec = new ProductResellPaginatedSpec(request.totalTake, request.totalSkip, ProductResellStatus.selling);
+    var countSpec = new ProductResellPaginatedSpec(request.totalTake, request.totalSkip, ProductStatus.selling);
     var totalCount = await _productRepository.CountAsync(countSpec);
 
-    var listSpec = new ProductResellPaginatedSpec(request.take, request.skip, ProductResellStatus.selling);
+    var listSpec = new ProductResellPaginatedSpec(request.take, request.skip, ProductStatus.selling);
     var products = await _productRepository.ListAsync(listSpec);
 
     var productRecords = products.Select(ProductRecord.FromEntity);

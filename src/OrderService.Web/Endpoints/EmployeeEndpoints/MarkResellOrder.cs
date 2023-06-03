@@ -48,7 +48,7 @@ public class MarkResellOrder : EndpointBaseAsync
 
     foreach (var orderDetail in order.orderDetails)
     {
-      orderDetail.product.setProductResellingStatus(ProductResellStatus.selling);
+      orderDetail.product.setProductResellingStatus(ProductStatus.selling);
     }
 
     await _orderRepository.SaveChangesAsync();
