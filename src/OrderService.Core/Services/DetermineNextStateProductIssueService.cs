@@ -17,10 +17,13 @@ public class DetermineNextStateProductIssueService : IDetermineNextStateProductI
       nextStates.Add(ProductIssueStatus.acceptSellerFault);
     }
 
-    else if (productIssueStatus == ProductIssueStatus.acceptEmployeeFault ||
-             productIssueStatus == ProductIssueStatus.acceptCustomerFault)
+    else if (productIssueStatus == ProductIssueStatus.acceptEmployeeFault)
     {
       nextStates.Add(ProductIssueStatus.refund);
+    }
+    else if (productIssueStatus == ProductIssueStatus.acceptCustomerFault)
+    {
+      nextStates.Add(ProductIssueStatus.finish);
     }
 
     else if (productIssueStatus == ProductIssueStatus.acceptSellerFault)
