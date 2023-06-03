@@ -14,7 +14,7 @@ public class Order : EntityBase, IAggregateRoot
   public OrderStatus status { get; private set; }
   public string orderDescription { get; }
   public string customerDescription { get; private set; }
-  public string deliveryAddress { get; }
+  public string deliveryAddress { get; private set; }
   public string contactPhonenumber { get; }
   public int shippingEstimatedDays { get; }
 
@@ -66,6 +66,11 @@ public class Order : EntityBase, IAggregateRoot
   public void SetCustomerDescription(string customerDescription)
   {
     this.customerDescription = Guard.Against.NullOrEmpty(customerDescription);
+  }
+
+  public void SetDeliveryAdress(string address)
+  {
+    deliveryAddress = Guard.Against.NullOrEmpty(address);
   }
 
   public void SetChat(Chat chat)
