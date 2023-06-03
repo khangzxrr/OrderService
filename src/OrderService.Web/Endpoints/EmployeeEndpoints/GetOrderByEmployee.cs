@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OrderService.Core.OrderAggregate;
 using OrderService.Core.OrderAggregate.Specifications;
+using OrderService.Core.ProductAggregate;
 using OrderService.SharedKernel.Interfaces;
 using OrderService.Web.Endpoints.Records;
 using Swashbuckle.AspNetCore.Annotations;
@@ -43,6 +44,7 @@ public class GetOrderByEmployee : EndpointBaseAsync
       return BadRequest("Order not found");
     }
 
+    
     var orderRecord = _mapper.Map<OrderRecord>(order);
 
     var response = new GetOrderByEmployeeResponse(orderRecord);

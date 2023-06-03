@@ -7,13 +7,14 @@ public class UpdateOrderDetailRequest
   public const string Route = "/employee/orders";
 
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
   [Required]
   public int orderId { get; set; }
 
   [Required]
   public int orderDetailId { get; set; }
+
+  public bool? disable { get; set; } = null;
 
   public string? productDescription { get; set; }
 

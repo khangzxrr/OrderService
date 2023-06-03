@@ -113,6 +113,20 @@ public class UpdateOrderDetail : EndpointBaseAsync
       orderDetail.product.setProductReturnDescription(request.returnDescription!);
     }
 
+    if (request.disable.HasValue)
+    {
+
+      orderDetail.disableOrderDetail();
+
+      int countOrderDetails = order.orderDetails.Count();
+
+      if (countOrderDetails == 1)
+      {
+        order.SetStatus(OrderStatus.denied);
+      }
+
+    }
+
 
     await _orderRepository.SaveChangesAsync();
 
