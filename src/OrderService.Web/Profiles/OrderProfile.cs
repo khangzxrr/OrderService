@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using OrderService.Core.OrderAggregate;
+using OrderService.Core.ProductAggregate;
 using OrderService.Web.Endpoints.OrderEndpoints;
 using OrderService.Web.Endpoints.Records;
 
@@ -22,7 +23,7 @@ public class OrderProfile : Profile
       .ForCtorParam(nameof(OrderRecord.orderId), options => options.MapFrom(or => or.Id))
       .ForCtorParam(nameof(OrderRecord.shipEstimatedDays), options => options.MapFrom(or => or.shippingEstimatedDays))
       .ForCtorParam(nameof(OrderRecord.employeeName), options => options.MapFrom(or => or.chat.employee.fullName))
-      .ForCtorParam(nameof(OrderRecord.orderDetails), options => options.MapFrom(or => (or.orderDetails == null) ? null : or.orderDetails.Select(od => OrderDetailRecord.FromEntity(od))))
+      .ForCtorParam(nameof(OrderRecord.orderDetails), options => options.MapFrom(or => (or.orderDetails == null) ? null : or.orderDetails.Where(od => od.product.productStatus != ProductStatus.disable).Select(od => OrderDetailRecord.FromEntity(od))))
       .ForCtorParam(nameof(OrderRecord.localOrderShippingStatus), options => options.MapFrom(or => or.localShippingStatus.Name))
       .ForCtorParam(nameof(OrderRecord.firstPaymentAmount), options => options.MapFrom(or => or.GetFirstPaymentAmount())); ;
       
